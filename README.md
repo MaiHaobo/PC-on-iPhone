@@ -9,7 +9,7 @@
 - **终端** —— SSH 客户端：连接你的 PC / 服务器，逐条执行命令（已实现）
   - 里程碑 1b：完整交互式 TTY（vim/top 等）+ 密钥认证
   - 里程碑 2：VNC 图形远程桌面
-  - 里程碑 3：QEMU 虚拟机引擎（对标 UTM SE 的核心路线）
+  - 里程碑 3：QEMU 虚拟机引擎（对标 UTM SE 的核心路线，源码参考见 `UTM/`）
 - **桌面** —— 主功能入口（规划中）
 - **设置** —— 应用配置（规划中）
 
@@ -26,9 +26,12 @@ PC-on-iPhone/
 ├── PC-on-iPhone.xcodeproj
 ├── scripts/
 │   └── build-ipa.sh              # 云端打包脚本（编译/签名/导出/发 Release）
+├── UTM/                          # UTM 完整源码快照（参考实现，不参与编译）
 └── .github/workflows/
     └── build-ipa.yml             # GitHub Actions 工作流
 ```
+
+> 📚 **`UTM/` 目录**：完整搬运的 [UTM](https://github.com/utmapp/UTM) 源码（Apache-2.0），作为里程碑 3「QEMU 虚拟机引擎」的参考实现。它**不参与本工程编译**，只用于对照阅读 TCTI 无 JIT 解释器、QEMU 独立进程 IPC、SPICE/VNC 显示解耦等关键设计。详见 [`UTM/README-PCONIPHONE.md`](UTM/README-PCONIPHONE.md)。
 
 ## 云端自动打包 IPA（无需 Mac）
 
