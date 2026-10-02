@@ -88,6 +88,25 @@ if [ "$ARCHIVE_EXIT" -ne 0 ]; then
   echo "════════ 编译日志末尾 120 行 ════════"
   tail -120 "$TMP/archive.log"
   echo "════════ 日志结束 ════════"
+
+  # 把日志回传到仓库的 build-logs 分支，方便远程排查（artifact 下载受限时很有用）
+  if [ -n "${GITHUB_TOKEN:-}" ]; then
+    echo "→ 正在把日志回传到 build-logs 分支…"
+    LOGDIR="$TMP/logpush"
+    rm -rf "$LOGDIR"; mkdir -p "$LOGDIR"
+    cp "$TMP/archive.log" "$LOGDIR/" 2>/dev/null || true
+    (
+      cd "$LOGDIR" || exit 0
+      git init -q -b build-logs
+      git config user.email "actions@github.com"
+      git config user.name "GitHub Actions"
+      git add -A
+      git commit -q -m "build log $(date -u +%Y%m%d-%H%M%S) run=${GITHUB_RUN_ID:-local}"
+      git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+      git push -f origin build-logs >/dev/null 2>&1 && echo "  ✓ 日志已推送到 build-logs 分支" || echo "  ✗ 日志回传失败"
+    )
+  fi
+
   die "编译失败（完整日志见 build-logs 产物）"
 fi
 
