@@ -67,9 +67,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # DEBUG: ios-tci disabled while the sysroot build is being debugged —
+        # it fails at the same place as ios and doubles the cost of every
+        # iteration. Restore once `Build Sysroot (ios, arm64)` is green:
+        #   - { platform: ios-tci, arch: arm64, label: iOS SE }
         include:
-          - { platform: ios,     arch: arm64,  label: iOS }
-          - { platform: ios-tci, arch: arm64,  label: iOS SE }
+          - { platform: ios, arch: arm64, label: iOS }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -128,50 +131,63 @@ jobs:
           # TCI builds OOM on the default parallelism, so pin it to 1 worker.
           NCPU: ${{ endsWith(matrix.platform, '-tci') && '1' || '0' }}
 
-      # The step summary and the raw log download are both unreachable from
-      # some networks (Blob storage), but check-run *annotations* are served
-      # by the API host itself. Emit the interesting lines as ::error::
-      # commands so they survive as annotations.
-      - name: Publish build log to job summary
+      # Diagnostics on failure. Two quirks of GitHub Actions shape this step:
+      #   1. `shell: bash` runs with `-e -o pipefail`, so a grep with no
+      #      matches would kill the whole step — every pipeline ends in
+      #      `|| true` and no raw pipeline feeds a loop.
+      #   2. Annotations are capped at 10 errors per step, so the output is
+      #      prioritized: the non-trace tail (where the failing command's
+      #      actual message lives) and the last trace lines (which command
+      #      failed). The full detail goes to the job summary, which is
+      #      visible in the run page even though it is not readable via API.
+      - name: Publish build diagnostics
         if: failure() && steps.build-sysroot.outcome == 'failure'
+        continue-on-error: true
         shell: bash
         run: |
+          LOG=/tmp/sysroot-build.log
+          emit () { echo "::error::$(printf '%s' "$1" | tail -c 900)"; }
+
+          TAIL=$(grep -av '^+' "$LOG" 2>/dev/null | grep -av '^[[:space:]]*$' | tail -n 30 || true)
+          TRACE=$(grep '^+' "$LOG" 2>/dev/null | tail -n 6 || true)
+          ERRS=$(grep -aiE 'error|fatal|Traceback|FAILED:' "$LOG" 2>/dev/null | grep -av '^+' | tail -n 40 || true)
+
           {
             echo "## Sysroot build failed: ${{ matrix.platform }}-${{ matrix.arch }}"
             echo ""
-            echo "Total log lines: \`$(wc -l < /tmp/sysroot-build.log 2>/dev/null || echo 0)\`"
+            echo "Log lines: $(wc -l < "$LOG" 2>/dev/null || echo 0)"
             echo ""
-            echo "### Last 120 lines"
+            echo "### Last trace commands (which command failed)"
             echo '```text'
-            tail -n 120 /tmp/sysroot-build.log 2>/dev/null || echo "(no log captured)"
+            printf '%s\n' "$TRACE"
             echo '```'
             echo ""
-            echo "### Last failing commands (+ lines from the trace)"
+            echo "### Last 30 non-trace lines (the actual error)"
             echo '```text'
-            grep -n '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 60 || echo "(none)"
+            printf '%s\n' "$TAIL"
+            echo '```'
+            echo ""
+            echo "### Error-ish lines (last 40)"
+            echo '```text'
+            printf '%s\n' "$ERRS"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # Mirror the informative lines into annotations (the API only shows
-          # a limited number). The tail alone is not enough here: Xcode buries
-          # the real compile error in thousands of lines of build output, so
-          # grep for the diagnostic shapes xcodebuild emits.
-          emit () {
-            # Truncate to stay under the annotation length limit.
-            echo "::error::$(printf '%s' "$1" | tail -c 900)"
-          }
+          # Annotation budget: 10 errors per step. Spend it on what matters.
+          # Content comes from variables (never re-expanded) and `<<<` feeds
+          # the loop without pipes, so pipefail cannot kill this step.
+          TAIL7=$(printf '%s\n' "$TAIL" | tail -n 7)
+          TRACE2=$(printf '%s\n' "$TRACE" | tail -n 2)
 
-          echo "::error::=== (1) TRACE TAIL: last script commands ==="
-          grep '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 10 | while IFS= read -r l; do emit "$l"; done
+          echo "::error::--- last non-trace lines (the actual error) ---"
+          while IFS= read -r l; do
+            if [ -n "$l" ]; then emit "$l"; fi
+          done <<< "$TAIL7"
 
-          echo "::error::=== (2) COMPILER ERRORS ==="
-          grep -nE 'error:|fatal error:|error :|ERROR:' /tmp/sysroot-build.log 2>/dev/null | grep -v '^[0-9]*:$' | tail -n 25 | while IFS= read -r l; do emit "$l"; done
-
-          echo "::error::=== (3) XCTOOL / ARCHIVE FAILURES ==="
-          grep -nE '\*\* ARCHIVE FAILED|\*\* BUILD FAILED|xcodebuild: error|The following build commands failed|Command .* failed' /tmp/sysroot-build.log 2>/dev/null | tail -n 15 | while IFS= read -r l; do emit "$l"; done
-
-          echo "::error::=== (4) LAST 20 NON-TRACE LINES ==="
-          grep -v '^+' /tmp/sysroot-build.log 2>/dev/null | grep -v '^$' | tail -n 20 | while IFS= read -r l; do emit "$l"; done
+          echo "::error::--- last trace commands ---"
+          while IFS= read -r l; do
+            if [ -n "$l" ]; then emit "$l"; fi
+          done <<< "$TRACE2"
 
       - name: Publish environment info to job summary
         if: always()
@@ -231,9 +247,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # DEBUG: mirrors build-sysroot — re-add the iOS-SE entry when the
+        # sysroot build is green again:
+        #   - { arch: arm64, sdk: iphoneos, platform: ios-tci, scheme: iOS-SE, label: 'iOS SE' }
         include:
-          - { arch: arm64, sdk: iphoneos, platform: ios,     scheme: iOS,    label: 'iOS' }
-          - { arch: arm64, sdk: iphoneos, platform: ios-tci, scheme: iOS-SE, label: 'iOS SE' }
+          - { arch: arm64, sdk: iphoneos, platform: ios, scheme: iOS, label: 'iOS' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
