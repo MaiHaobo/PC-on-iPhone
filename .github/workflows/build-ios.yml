@@ -124,6 +124,10 @@ jobs:
           # TCI builds OOM on the default parallelism, so pin it to 1 worker.
           NCPU: ${{ endsWith(matrix.platform, '-tci') && '1' || '0' }}
 
+      # The step summary and the raw log download are both unreachable from
+      # some networks (Blob storage), but check-run *annotations* are served
+      # by the API host itself. Emit the interesting lines as ::error::
+      # commands so they survive as annotations.
       - name: Publish build log to job summary
         if: failure() && steps.build-sysroot.outcome == 'failure'
         shell: bash
@@ -143,6 +147,22 @@ jobs:
             grep -n '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 60 || echo "(none)"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+          # Mirror the tail into annotations (max ~10 annotations are shown).
+          n=0
+          while IFS= read -r line && [ "$n" -lt 12 ]; do
+            # Skip blank lines and the -*- trace noise.
+            case "$line" in
+              ''|'+ '*|'++ '*) continue;;
+            esac
+            echo "::error::${line}"
+            n=$((n + 1))
+          done < <(tail -n 40 /tmp/sysroot-build.log 2>/dev/null | tac)
+
+          echo "::error::=== TRACE TAIL (last commands) ==="
+          grep '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 8 | while IFS= read -r l; do
+            echo "::error::${l}"
+          done
 
       - name: Publish environment info to job summary
         if: always()
