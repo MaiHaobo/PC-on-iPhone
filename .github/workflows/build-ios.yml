@@ -105,12 +105,37 @@ jobs:
 
       - name: Install Requirements
         if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event.inputs.rebuild_sysroot == 'true'
+        shell: bash
         run: |
           brew uninstall --ignore-dependencies cmake || true
           brew install bison pkg-config gettext glib-utils libgpg-error nasm meson cmake
-          brew install llvm spirv-llvm-translator libxcb libxrandr
+          # `spirv-tools` is separate from `spirv-llvm-translator` and is NOT
+          # pulled in as a dependency of it. Mesa's KosmicKrisp driver needs
+          # BOTH when built with -Dllvm=enabled: the translator provides
+          # `llvmspirvlib` and SPIRV-Tools provides the `spirv-tools` library
+          # plus its pkg-config file. Without it `meson setup` dies at
+          # meson.build:2092 with:
+          #   Dependency "SPIRV-Tools" not found (tried pkg-config, framework and cmake)
+          brew install llvm spirv-llvm-translator spirv-tools libxcb libxrandr
           pip3 install --break-system-packages --user six pyparsing pyyaml setuptools distlib mako
           rm -f /usr/local/lib/pkgconfig/*.pc || true
+
+          # Probe the toolchain into annotations (the console log itself is not
+          # reachable through the API, annotations are). If Mesa's configure
+          # step restarts or its log can't be found, the cause is usually a
+          # second meson on PATH.
+          echo "::notice::diag: $(command -v meson) | meson $(meson --version 2>&1) | ninja $(ninja --version 2>&1) | cmake $(cmake --version 2>&1 | head -1)"
+          which -a meson 2>&1 | while IFS= read -r p; do echo "::notice::meson on PATH: $p"; done || true
+          for m in mesonbuild.mesonmain mesonbuild.coredata; do
+            python3 -c "import $m, os; print('$m', os.path.dirname($m.__file__))" 2>&1 | head -1 | while IFS= read -r l; do echo "::notice::module: $l"; done
+          done
+          for d in "$(brew --prefix meson 2>/dev/null)/libexec/lib/python3.14/site-packages/mesonbuild" \
+                   "$(python3 -c 'import site;print(site.getusersitepackages())' 2>/dev/null)/mesonbuild" \
+                   /opt/homebrew/lib/python3*/site-packages/mesonbuild; do
+            if [ -d "$d" ]; then echo "::notice::mesonbuild dir: $d"; fi
+          done
+          pkg-config --exists spirv-tools && echo "::notice::pkg-config spirv-tools: $(pkg-config --modversion spirv-tools)" || echo "::error::pkg-config cannot see spirv-tools"
+          ls "$(brew --prefix spirv-tools 2>/dev/null)/lib/pkgconfig" 2>&1 | head -5 | while IFS= read -r l; do echo "::notice::spirv-tools pc: $l"; done
 
       # Capture the build output so a failure can be surfaced in the job
       # summary. The raw log download endpoint redirects to Azure Blob storage,
@@ -152,6 +177,12 @@ jobs:
           TRACE=$(grep '^+' "$LOG" 2>/dev/null | tail -n 6 || true)
           ERRS=$(grep -aiE 'error|fatal|Traceback|FAILED:' "$LOG" 2>/dev/null | grep -av '^+' | tail -n 40 || true)
 
+          # Meson keeps its own log, and it is complete where the streamed
+          # stdout is not (meson re-runs `setup` after a failed configure and
+          # truncates the visible output). Grab the newest one under the build
+          # dir so the real "ERROR:" block is available even when stdout lost it.
+          MESONLOG=$(find . -maxdepth 6 -name meson-log.txt -newermt '-90 minutes' 2>/dev/null | head -3 || true)
+
           {
             echo "## Sysroot build failed: ${{ matrix.platform }}-${{ matrix.arch }}"
             echo ""
@@ -171,23 +202,40 @@ jobs:
             echo '```text'
             printf '%s\n' "$ERRS"
             echo '```'
+            echo ""
+            for f in $MESONLOG; do
+              echo "### $f (last 120 lines)"
+              echo '```text'
+              tail -n 120 "$f" 2>/dev/null || true
+              echo '```'
+              echo ""
+            done
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # Annotation budget: 10 errors per step. Spend it on what matters.
-          # Content comes from variables (never re-expanded) and `<<<` feeds
-          # the loop without pipes, so pipefail cannot kill this step.
-          TAIL7=$(printf '%s\n' "$TAIL" | tail -n 7)
+          # Annotation budget: 10 errors per step. #7 burned 4 of them on
+          # meson's `WARNING: ... deprecated` and its `Run-time dependency X
+          # found: YES` chatter, so the budget now goes to the trace first
+          # (which command died) and only then to lines that look like real
+          # errors. Content comes from variables (never re-expanded) and `<<<`
+          # feeds the loop without pipes, so pipefail cannot kill this step.
           TRACE2=$(printf '%s\n' "$TRACE" | tail -n 2)
+          FATAL=$(printf '%s\n' "$ERRS" | grep -aiE 'ERROR|: error|error:|fatal|Traceback|FAILED:|not found|No such file' | tail -n 6 || true)
 
-          echo "::error::--- last non-trace lines (the actual error) ---"
-          while IFS= read -r l; do
-            if [ -n "$l" ]; then emit "$l"; fi
-          done <<< "$TAIL7"
+          emit_block () {
+            echo "::error::$1"
+            while IFS= read -r l; do
+              if [ -n "$l" ]; then emit "$l"; fi
+            done <<< "$2"
+          }
 
-          echo "::error::--- last trace commands ---"
-          while IFS= read -r l; do
-            if [ -n "$l" ]; then emit "$l"; fi
-          done <<< "$TRACE2"
+          emit_block "--- last trace commands (which command failed) ---" "$TRACE2"
+          emit_block "--- error lines ---" "$FATAL"
+
+          # Anything left over (a failure whose only clue is the raw output).
+          if [ -z "$FATAL" ]; then
+            emit_block "--- last non-trace lines (no ERROR:-style line found) ---" \
+              "$(printf '%s\n' "$TAIL" | tail -n 5)"
+          fi
 
       - name: Publish environment info to job summary
         if: always()
