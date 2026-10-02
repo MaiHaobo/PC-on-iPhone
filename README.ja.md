@@ -5,7 +5,7 @@
 
 -- <cite>Alan Turing, 1936</cite>
 
-UTMは、QEMUベースのiOSとmacOSのためのフル機能システムエミュレータと仮想マシンホストです。Mac、iPhone及びiPad上でWindows、Linuxなどを実行することができます。詳細については、[https://getutm.app/](https://getutm.app/) および [https://mac.getutm.app/](https://mac.getutm.app/) をご覧ください。
+PC on iPhoneは、QEMUベースのiOSとmacOSのためのフル機能システムエミュレータと仮想マシンホストです。Mac、iPhone及びiPad上でWindows、Linuxなどを実行することができます。詳細については、[https://getutm.app/](https://getutm.app/) および [https://mac.getutm.app/](https://mac.getutm.app/) をご覧ください。
 
 <p align="center">
   <img width="450px" alt="PC on iPhone running on an iPhone" src="screen.png">
@@ -39,9 +39,9 @@ UTM SE ("slow edition") は従来のインタープリタよりは性能が良�
 
 ## インストール
 
-iOSのためのUTM (SE): [https://getutm.app/install/](https://getutm.app/install/)
+iOSのためのPC on iPhone (SE): [https://getutm.app/install/](https://getutm.app/install/)
 
-macOSのためのUTM: [https://mac.getutm.app/](https://mac.getutm.app/)
+macOSのためのPC on iPhone: [https://mac.getutm.app/](https://mac.getutm.app/)
 
 ## Development
 
@@ -56,11 +56,11 @@ macOSのためのUTM: [https://mac.getutm.app/](https://mac.getutm.app/)
 
 ## License
 
-UTMは、寛容なApache 2.0ライセンスで配布されています。しかし、いくつかの (L)GPL コンポーネントを使用しています。ほとんどは動的にリンクされていますが、gstreamerプラグインは静的にリンクされており、コードの一部はqemuから取得されています。このアプリケーションを再配布するつもりであれば、このことに注意してください。
+PC on iPhoneは、寛容なApache 2.0ライセンスで配布されています。しかし、いくつかの (L)GPL コンポーネントを使用しています。ほとんどは動的にリンクされていますが、gstreamerプラグインは静的にリンクされており、コードの一部はqemuから取得されています。このアプリケーションを再配布するつもりであれば、このことに注意してください。
 
 いくつかのアイコンは[www.flaticon.com](https://www.flaticon.com/)からの[Freepik](https://www.freepik.com)によって作られたものです
 
-さらに、UTMフロントエンドは、以下のMIT/BSDライセンスのコンポーネントに依存しています:
+さらに、PC on iPhoneフロントエンドは、以下のMIT/BSDライセンスのコンポーネントに依存しています:
 
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
 * [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)

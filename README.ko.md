@@ -5,7 +5,7 @@
 
 -- <cite>엘런 튜링, 1936</cite>
 
-UTM은 QEMU를 기반으로 하는, iOS와 macOS를 위한 완전한 시스템 에뮬레이터 및 가상 머신 호스트 프로그램입니다. 이 프로그램을 이용해 Windows나 Linux와 같은 운영체제들을 Mac, iPhone, iPad 등에서 구동할 수 있습니다. 자세한 내용은 https://getutm.app/ 및 https://mac.getutm.app/ 를 참고해주세요.
+PC on iPhone은 QEMU를 기반으로 하는, iOS와 macOS를 위한 완전한 시스템 에뮬레이터 및 가상 머신 호스트 프로그램입니다. 이 프로그램을 이용해 Windows나 Linux와 같은 운영체제들을 Mac, iPhone, iPad 등에서 구동할 수 있습니다. 자세한 내용은 https://getutm.app/ 및 https://mac.getutm.app/ 를 참고해주세요.
 
 <p align="center">
   <img width="450px" alt="iPhone에서 동작하는 PC on iPhone" src="screen.png">
@@ -56,7 +56,7 @@ macOS용 PC on iPhone: https://mac.getutm.app/
 
 ## 라이선스
 
-UTM은 Permissive 형태인 Apache 2.0 라이선스 하에 배포됩니다. (L)GPL 라이선스를 사용하는 컴포넌트가 있지만, 대부분은 동적으로 링크하여 사용합니다. 예외적으로 GStreamer 플러그인은 정적 링크하여 사용하고, 코드 일부분은 QEMU에서 가져와 사용합니다. 이 프로그램을 재배포하고자 한다면 이에 주의해주시기 바랍니다.
+PC on iPhone은 Permissive 형태인 Apache 2.0 라이선스 하에 배포됩니다. (L)GPL 라이선스를 사용하는 컴포넌트가 있지만, 대부분은 동적으로 링크하여 사용합니다. 예외적으로 GStreamer 플러그인은 정적 링크하여 사용하고, 코드 일부분은 QEMU에서 가져와 사용합니다. 이 프로그램을 재배포하고자 한다면 이에 주의해주시기 바랍니다.
 
 [Freepik](https://www.freepik.com) 산하 [www.flaticon.com](https://www.flaticon.com/)에서 제공되는 아이콘을 일부 사용하였습니다.
 
