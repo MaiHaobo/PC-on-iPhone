@@ -80,14 +80,17 @@ jobs:
           [[ "$(xcode-select -p)" == "$TARGET"* ]] || sudo xcode-select -s "$TARGET"
           xcodebuild -version
 
-      - name: Check Cache
+      # Cache the sysroot keyed only on the inputs that actually change its
+      # contents (scripts + patches). The commit SHA is deliberately NOT part
+      # of the key, so a Release on a new commit can still reuse a sysroot
+      # built by an earlier CI run. To force a rebuild, pass
+      # rebuild_sysroot=true from workflow_dispatch.
+      - name: Restore Sysroot Cache
         id: cache-sysroot
         uses: actions/cache/restore@v4
         with:
           path: ./sysroot-${{ matrix.platform }}-${{ matrix.arch }}
-          key: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}-${{ github.sha }}
-          restore-keys: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
-          lookup-only: ${{ github.event_name != 'release' && github.event.inputs.rebuild_sysroot != 'true' }}
+          key: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
 
       - name: Setup Path
         shell: bash
@@ -110,11 +113,11 @@ jobs:
           NCPU: ${{ endsWith(matrix.platform, '-tci') && '1' || '0' }}
 
       - name: Compress Sysroot
-        if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event_name == 'release' || github.event.inputs.rebuild_sysroot == 'true'
+        if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event.inputs.rebuild_sysroot == 'true'
         run: tar -acf sysroot.tgz sysroot*
 
       - name: Upload Sysroot
-        if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event_name == 'release' || github.event.inputs.rebuild_sysroot == 'true'
+        if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event.inputs.rebuild_sysroot == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: Sysroot-${{ matrix.platform }}-${{ matrix.arch }}
