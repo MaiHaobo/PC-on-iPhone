@@ -56,6 +56,9 @@
 			isa = PBXGroup;
 			children = (
 				2F0000000000000000000201 /* PCOnIPhoneApp.swift */,
+				2F0000000000000000000203 /* ContentView.swift */,
+				2F0000000000000000000211 /* SSHConnection.swift */,
+				2F0000000000000000000212 /* TerminalView.swift */,
 				2F0000000000000000000209 /* Assets.xcassets */,
 				2F000000000000000000020A /* Info.plist */,
 				2F000000000000000000020C /* PC-on-iPhone.entitlements */,
