@@ -28,8 +28,14 @@ on:
         options: ['false', 'true']
 
 env:
-  # Xcode 27 runner image (macOS 27, Xcode 27.0 default)
-  RUNNER_IMAGE: xcode-27
+  # macOS 26 image, which ships Xcode 26.6 (Build 17F113) as the default at
+  # /Applications/Xcode_26.6.app; /Applications/Xcode.app symlinks to it.
+  #
+  # Xcode 27 was tried first (via the `xcode-27` preview image) and could not
+  # build WebKit's ANGLE with `xcodebuild archive` — it failed with exit code
+  # 65 inside build_angle(). ANGLE is upstream-verified against the Xcode 26
+  # line, so this workflow targets that instead.
+  RUNNER_IMAGE: macos-26
   SEGMENT_DOWNLOAD_TIMEOUT_MINS: 60
 
 jobs:
@@ -47,8 +53,6 @@ jobs:
           IS_SELF_HOSTED_RUNNER: ${{ vars.IS_SELF_HOSTED_RUNNER || 'false' }}
           HOST_XCODE_PATH: ${{ vars.HOST_XCODE_PATH }}
         run: |
-          # Xcode 27 image ships Xcode 27.0 at /Applications/Xcode_27.app,
-          # which /Applications/Xcode.app also symlinks to.
           echo "xcode-path=${HOST_XCODE_PATH:-/Applications/Xcode.app}" >> $GITHUB_OUTPUT
           if [ "$IS_SELF_HOSTED_RUNNER" == "true" ]; then
             echo "runner=['self-hosted', 'macOS']" >> $GITHUB_OUTPUT
