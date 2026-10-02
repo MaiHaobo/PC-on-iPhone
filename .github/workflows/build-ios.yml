@@ -316,6 +316,17 @@ jobs:
           key: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
           fail-on-cache-miss: true
 
+      # SwiftPM clones 17 dependencies from scratch on every run, and with the
+      # matrix above that download happens twice in parallel. The key is the
+      # resolved file, so a dependency bump invalidates the cache but anything
+      # else reuses it.
+      - name: Restore SwiftPM Cache
+        id: cache-swiftpm
+        uses: actions/cache/restore@v4
+        with:
+          path: .swiftpm-cache
+          key: swiftpm-${{ runner.os }}-${{ hashFiles('UTM.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
       - name: Setup Xcode
         shell: bash
         run: |
@@ -325,8 +336,19 @@ jobs:
 
       - name: Build
         run: |
-          ./scripts/build_utm.sh -k ${{ matrix.sdk }} -s ${{ matrix.scheme }} -a ${{ matrix.arch }} -o UTM
+          ./scripts/build_utm.sh -k ${{ matrix.sdk }} -s ${{ matrix.scheme }} -a ${{ matrix.arch }} -o UTM -d "$PWD/.swiftpm-cache"
           tar -acf UTM.xcarchive.tgz UTM.xcarchive
+
+      # Both matrix entries race to save this key. GitHub only accepts the
+      # first write for a given key and fails the loser, which is harmless —
+      # the cache is populated either way, so don't let the race fail the job.
+      - name: Save SwiftPM Cache
+        if: steps.cache-swiftpm.outputs.cache-matched-key == ''
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: .swiftpm-cache
+          key: ${{ steps.cache-swiftpm.outputs.cache-primary-key }}
 
       - name: Upload Archive
         uses: actions/upload-artifact@v4

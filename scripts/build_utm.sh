@@ -7,13 +7,15 @@ command -v realpath >/dev/null 2>&1 || realpath() {
 BASEDIR="$(dirname "$(realpath $0)")"
 
 usage () {
-    echo "Usage: $(basename $0)  [-t teamid] [-k SDK] [-s scheme] [-a architecture] [-o output]"
+    echo "Usage: $(basename $0)  [-t teamid] [-k SDK] [-s scheme] [-a architecture] [-o output] [-d derivedData]"
     echo ""
     echo "  -t teamid        Team Identifier for app groups. Optional for iOS. Required for macOS."
     echo "  -k sdk           Target SDK. Default iphoneos. [iphoneos|iphonesimulator|xros|xrsimulator|macosx]"
     echo "  -s scheme        Target scheme. Default iOS/macOS depending on platform. [iOS|iOS-TCI|iOS-Remote|macOS]"
     echo "  -a architecture  Target architecture. Default arm64. [arm64|x86_64]"
     echo "  -o output        Output archive path. Default is current directory."
+    echo "  -d derivedData   DerivedData path. Set this to a stable location so the"
+    echo "                   SwiftPM checkout can be cached between CI runs."
     echo ""
     exit 1
 }
@@ -24,6 +26,7 @@ ARCH=arm64
 OUTPUT=$PWD
 SDK=iphoneos
 SCHEME=
+DERIVED_DATA=
 
 while [ "x$1" != "x" ]; do
     case $1 in
@@ -45,6 +48,10 @@ while [ "x$1" != "x" ]; do
         ;;
     -o )
         OUTPUT=$2
+        shift
+        ;;
+    -d )
+        DERIVED_DATA=$2
         shift
         ;;
     * )
@@ -91,7 +98,11 @@ if [ ! -z "$TEAM_IDENTIFIER" ]; then
     TEAM_IDENTIFIER_PREFIX="TeamIdentifierPrefix=${TEAM_IDENTIFIER}."
 fi
 
-xcodebuild archive -archivePath "$OUTPUT" -scheme "$SCHEME" -destination "generic/platform=$PLATFORM" ARCHS="$ARCH" -configuration Release -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO $TEAM_IDENTIFIER_PREFIX
+if [ ! -z "$DERIVED_DATA" ]; then
+    DERIVED_DATA_ARG="-derivedDataPath $DERIVED_DATA"
+fi
+
+xcodebuild archive -archivePath "$OUTPUT" -scheme "$SCHEME" -destination "generic/platform=$PLATFORM" ARCHS="$ARCH" -configuration Release -skipPackagePluginValidation $DERIVED_DATA_ARG CODE_SIGNING_ALLOWED=NO $TEAM_IDENTIFIER_PREFIX
 BUILT_PATH=$(find $OUTPUT.xcarchive -name '*.app' -type d | head -1)
 # Only retain the target architecture to address < iOS 15 crash & save disk space
 if [ "$SDK" == "iphoneos" ]; then
