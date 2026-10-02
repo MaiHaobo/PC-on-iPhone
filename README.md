@@ -1,62 +1,78 @@
-# PC on iPhone
+#  UTM
+[![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
-把 PC 体验装进 iPhone —— SwiftUI 原生 iOS 应用（SwiftUI · iOS 16+ · 液态玻璃就绪）。
+> It is possible to invent a single machine which can be used to compute any computable sequence.
 
-> 🚧 **项目处于骨架阶段**：仓库已内置可编译的完整工程与云端打包流水线，欢迎在此之上开发。
+-- <cite>Alan Turing, 1936</cite>
 
-## 功能规划
+UTM is a full featured system emulator and virtual machine host for iOS and macOS. It is based off of QEMU. In short, it allows you to run Windows, Linux, and more on your Mac, iPhone, and iPad. More information at https://getutm.app/ and https://mac.getutm.app/
 
-- **终端** —— SSH 客户端：连接你的 PC / 服务器，逐条执行命令（已实现）
-  - 里程碑 1b：完整交互式 TTY（vim/top 等）+ 密钥认证
-  - 里程碑 2：VNC 图形远程桌面
-  - 里程碑 3：QEMU 虚拟机引擎（对标 UTM SE 的核心路线，源码参考见 `UTM/`）
-- **桌面** —— 主功能入口（规划中）
-- **设置** —— 应用配置（规划中）
+<p align="center">
+  <img width="450px" alt="UTM running on an iPhone" src="screen.png">
+  <br>
+  <img width="450px" alt="UTM running on a MacBook" src="screenmac.png">
+</p>
 
-## 项目结构
+## Features
 
-```
-PC-on-iPhone/
-├── PC-on-iPhone/                 # 源码（SwiftUI）
-│   ├── PCOnIPhoneApp.swift       # 应用入口
-│   ├── ContentView.swift         # TabView 主骨架（桌面/终端/设置）
-│   ├── Info.plist
-│   ├── PC-on-iPhone.entitlements
-│   └── Assets.xcassets           # 图标与颜色
-├── PC-on-iPhone.xcodeproj
-├── scripts/
-│   └── build-ipa.sh              # 云端打包脚本（编译/签名/导出/发 Release）
-├── UTM/                          # UTM 完整源码快照（参考实现，不参与编译）
-└── .github/workflows/
-    └── build-ipa.yml             # GitHub Actions 工作流
-```
+* Full system emulation (MMU, devices, etc) using QEMU
+* 30+ processors supported including x86_64, ARM64, and RISC-V
+* VGA graphics mode using SPICE and QXL
+* Text terminal mode
+* USB devices
+* JIT based acceleration using QEMU TCG
+* Frontend designed from scratch for macOS 11 and iOS 11+ using the latest and greatest APIs
+* Create, manage, run VMs directly from your device
 
-> 📚 **`UTM/` 目录**：完整搬运的 [UTM](https://github.com/utmapp/UTM) 源码（Apache-2.0），作为里程碑 3「QEMU 虚拟机引擎」的参考实现。它**不参与本工程编译**，只用于对照阅读 TCTI 无 JIT 解释器、QEMU 独立进程 IPC、SPICE/VNC 显示解耦等关键设计。详见 [`UTM/README-PCONIPHONE.md`](UTM/README-PCONIPHONE.md)。
+## Additional macOS Features
 
-## 云端自动打包 IPA（无需 Mac）
+* Hardware accelerated virtualization using Hypervisor.framework and QEMU
+* Boot macOS guests with Virtualization.framework on macOS 12+
 
-1. Fork/clone 本仓库后，到 **Settings → Secrets and variables → Actions** 配置 4 个 Secret：
-   | Secret 名 | 内容 |
-   |---|---|
-   | `BUILD_CERTIFICATE_BASE64` | .p12 证书文件转 base64 |
-   | `P12_PASSWORD` | .p12 的导出密码 |
-   | `BUILD_PROVISION_PROFILE_BASE64` | .mobileprovision 描述文件转 base64 |
-   | `KEYCHAIN_PASSWORD` | 临时钥匙串密码（随意设置） |
+## UTM SE
 
-2. **Bundle ID 说明**：本工程默认 `com.pcfoni.app`。请向你的证书供应商提供该 Bundle ID 获取对应的描述文件；若使用通配符描述文件则可直接使用。
+UTM/QEMU requires dynamic code generation (JIT) for maximum performance. JIT on iOS devices require either a jailbroken device, or one of the various workarounds found for specific versions of iOS (see "Install" for more details).
 
-3. 触发编译：推送一个 `v*` 标签（如 `v0.1`），或到 Actions 页面手动运行。构建成功后 IPA 会自动发布到 **Releases** 页。
+UTM SE ("slow edition") uses a [threaded interpreter][3] which performs better than a traditional interpreter but still slower than JIT. This technique is similar to what [iSH][4] does for dynamic execution. As a result, UTM SE does not require jailbreaking or any JIT workarounds and can be sideloaded as a regular app.
 
-## 本地开发
+To optimize for size and build times, only the following architectures are included in UTM SE: ARM, PPC, RISC-V, and x86 (all with both 32-bit and 64-bit variants).
 
-用 Xcode 15+ 打开 `PC-on-iPhone.xcodeproj`，选择模拟器直接 ⌘R 运行。
+## Install
 
-## 环境
+UTM (SE) for iOS: https://getutm.app/install/
 
-- Xcode 15+（云端编译使用 Xcode 26/27）
-- iOS 16.0+
-- Swift 5
+UTM is also available for macOS: https://mac.getutm.app/
+
+## Development
+
+### [macOS Development](Documentation/MacDevelopment.md)
+
+### [iOS Development](Documentation/iOSDevelopment.md)
+
+## Related
+
+* [iSH][4]: emulates a usermode Linux terminal interface for running x86 Linux applications on iOS
+* [a-shell][5]: packages common Unix commands and utilities built natively for iOS and accessible through a terminal interface
 
 ## License
 
-[MIT](LICENSE)
+UTM is distributed under the permissive Apache 2.0 license. However, it uses several (L)GPL components. Most are dynamically linked but the gstreamer plugins are statically linked and parts of the code are taken from qemu. Please be aware of this if you intend on redistributing this application.
+
+Some icons made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/).
+
+Additionally, UTM frontend depends on the following MIT/BSD License components:
+
+* [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
+* [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)
+* [ZIP Foundation](https://github.com/weichsel/ZIPFoundation)
+* [InAppSettingsKit](https://github.com/futuretap/InAppSettingsKit)
+
+Continuous integration hosting is provided by [MacStadium](https://macstadium.com/company/opensource)
+
+[<img src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png" alt="MacStadium logo" width="250">](https://www.macstadium.com)
+
+  [1]: https://github.com/utmapp/UTM/actions?query=event%3Arelease+workflow%3ABuild
+  [2]: screen.png
+  [3]: https://github.com/ktemkin/qemu/blob/with_tcti/tcg/aarch64-tcti/README.md
+  [4]: https://github.com/ish-app/ish
+  [5]: https://github.com/holzschu/a-shell
