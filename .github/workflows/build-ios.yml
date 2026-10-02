@@ -105,12 +105,75 @@ jobs:
           pip3 install --break-system-packages --user six pyparsing pyyaml setuptools distlib mako
           rm -f /usr/local/lib/pkgconfig/*.pc || true
 
+      # Capture the build output so a failure can be surfaced in the job
+      # summary. The raw log download endpoint redirects to Azure Blob storage,
+      # which is not reachable from every network, so the tail of the log is
+      # mirrored into $GITHUB_STEP_SUMMARY where it stays readable.
+      #
+      # `sh -x` is deliberately enabled: the script is long and only reports a
+      # bare exit code on failure, so the trace is what identifies the exact
+      # command that broke.
       - name: Build Sysroot
+        id: build-sysroot
         if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event.inputs.rebuild_sysroot == 'true'
-        run: ./scripts/build_dependencies.sh -p ${{ matrix.platform }} -a ${{ matrix.arch }}
+        shell: bash
+        run: |
+          set -o pipefail
+          sh -x ./scripts/build_dependencies.sh -p ${{ matrix.platform }} -a ${{ matrix.arch }} 2>&1 | tee /tmp/sysroot-build.log
         env:
           # TCI builds OOM on the default parallelism, so pin it to 1 worker.
           NCPU: ${{ endsWith(matrix.platform, '-tci') && '1' || '0' }}
+
+      - name: Publish build log to job summary
+        if: failure() && steps.build-sysroot.outcome == 'failure'
+        shell: bash
+        run: |
+          {
+            echo "## Sysroot build failed: ${{ matrix.platform }}-${{ matrix.arch }}"
+            echo ""
+            echo "Total log lines: \`$(wc -l < /tmp/sysroot-build.log 2>/dev/null || echo 0)\`"
+            echo ""
+            echo "### Last 120 lines"
+            echo '```text'
+            tail -n 120 /tmp/sysroot-build.log 2>/dev/null || echo "(no log captured)"
+            echo '```'
+            echo ""
+            echo "### Last failing commands (+ lines from the trace)"
+            echo '```text'
+            grep -n '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 60 || echo "(none)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish environment info to job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Sysroot environment: ${{ matrix.platform }}-${{ matrix.arch }}"
+            echo ""
+            echo '```text'
+            echo "python3         : $(python3 --version 2>&1)"
+            echo "python3 path    : $(command -v python3)"
+            echo "xcodebuild      : $(xcodebuild -version 2>&1 | tr '\n' ' ')"
+            echo "xcode-select -p : $(xcode-select -p)"
+            echo "bison           : $(bison -V 2>&1 | head -1)"
+            echo "cmake           : $(cmake --version 2>&1 | head -1)"
+            echo "meson           : $(meson --version 2>&1 | head -1)"
+            echo "NCPU            : ${NCPU}"
+            echo ""
+            echo "-- python module imports --"
+            for m in six pyparsing distutils yaml distlib mako setuptools; do
+              if python3 -c "import $m" 2>/dev/null; then
+                echo "  $m -> OK"
+              else
+                echo "  $m -> FAIL"
+              fi
+            done
+            echo ""
+            echo "-- distutils location --"
+            python3 -c "import distutils; print(distutils.__file__)" 2>&1 | head -3
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Compress Sysroot
         if: steps.cache-sysroot.outputs.cache-matched-key == '' || github.event.inputs.rebuild_sysroot == 'true'
