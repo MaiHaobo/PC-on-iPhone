@@ -53,7 +53,7 @@ final class TCPProbe {
     private let lock = NSLock()
     private var connection: NWConnection?
     private var hasResumed = false
-    private var continuation: CheckedContinuation<ProbeResult, Error>?
+    private var continuation: CheckedContinuation<String, Error>?
 
     /// 连接目标端口并读取服务端首行横幅
     func probe(host: String, port: Int, timeout: TimeInterval = 10) async throws -> ProbeResult {
@@ -67,6 +67,7 @@ final class TCPProbe {
         lock.lock()
         connection = conn
         hasResumed = false
+        continuation = nil
         lock.unlock()
 
         defer {

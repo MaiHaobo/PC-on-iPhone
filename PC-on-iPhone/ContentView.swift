@@ -66,23 +66,6 @@ struct HomeView: View {
     }
 }
 
-// MARK: - 终端（占位）
-
-struct TerminalView: View {
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 12) {
-                Image(systemName: "terminal")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.tint)
-                Text("终端功能待实现")
-                    .foregroundStyle(.secondary)
-            }
-            .navigationTitle("终端")
-        }
-    }
-}
-
 // MARK: - 设置（占位）
 
 struct SettingsView: View {
