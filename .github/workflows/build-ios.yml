@@ -148,21 +148,26 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # Mirror the tail into annotations (max ~10 annotations are shown).
-          n=0
-          while IFS= read -r line && [ "$n" -lt 12 ]; do
-            # Skip blank lines and the -*- trace noise.
-            case "$line" in
-              ''|'+ '*|'++ '*) continue;;
-            esac
-            echo "::error::${line}"
-            n=$((n + 1))
-          done < <(tail -n 40 /tmp/sysroot-build.log 2>/dev/null | tac)
+          # Mirror the informative lines into annotations (the API only shows
+          # a limited number). The tail alone is not enough here: Xcode buries
+          # the real compile error in thousands of lines of build output, so
+          # grep for the diagnostic shapes xcodebuild emits.
+          emit () {
+            # Truncate to stay under the annotation length limit.
+            echo "::error::$(printf '%s' "$1" | tail -c 900)"
+          }
 
-          echo "::error::=== TRACE TAIL (last commands) ==="
-          grep '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 8 | while IFS= read -r l; do
-            echo "::error::${l}"
-          done
+          echo "::error::=== (1) TRACE TAIL: last script commands ==="
+          grep '^+' /tmp/sysroot-build.log 2>/dev/null | tail -n 10 | while IFS= read -r l; do emit "$l"; done
+
+          echo "::error::=== (2) COMPILER ERRORS ==="
+          grep -nE 'error:|fatal error:|error :|ERROR:' /tmp/sysroot-build.log 2>/dev/null | grep -v '^[0-9]*:$' | tail -n 25 | while IFS= read -r l; do emit "$l"; done
+
+          echo "::error::=== (3) XCTOOL / ARCHIVE FAILURES ==="
+          grep -nE '\*\* ARCHIVE FAILED|\*\* BUILD FAILED|xcodebuild: error|The following build commands failed|Command .* failed' /tmp/sysroot-build.log 2>/dev/null | tail -n 15 | while IFS= read -r l; do emit "$l"; done
+
+          echo "::error::=== (4) LAST 20 NON-TRACE LINES ==="
+          grep -v '^+' /tmp/sysroot-build.log 2>/dev/null | grep -v '^$' | tail -n 20 | while IFS= read -r l; do emit "$l"; done
 
       - name: Publish environment info to job summary
         if: always()
