@@ -1,0 +1,75 @@
+/* Class = "NSToolbarItem"; label = "Shared Folder"; ObjectID = "7EC-GE-fIl"; */
+"7EC-GE-fIl.label" = "共有フォルダ";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Shared Folder"; ObjectID = "7EC-GE-fIl"; */
+"7EC-GE-fIl.paletteLabel" = "共有フォルダ";
+
+/* Class = "NSToolbarItem"; toolTip = "Shared folder"; ObjectID = "7EC-GE-fIl"; */
+"7EC-GE-fIl.toolTip" = "共有フォルダ";
+
+/* Class = "NSToolbarItem"; label = "Drives"; ObjectID = "bKL-Th-FFw"; */
+"bKL-Th-FFw.label" = "ドライブ";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Drives"; ObjectID = "bKL-Th-FFw"; */
+"bKL-Th-FFw.paletteLabel" = "ドライブ";
+
+/* Class = "NSToolbarItem"; toolTip = "Drive image options"; ObjectID = "bKL-Th-FFw"; */
+"bKL-Th-FFw.toolTip" = "ドライブイメージのオプション";
+
+/* Class = "NSToolbarItem"; label = "Toolbar Item"; ObjectID = "C8Y-BQ-Y6m"; */
+"C8Y-BQ-Y6m.label" = "ツールバー項目";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Toolbar Item"; ObjectID = "C8Y-BQ-Y6m"; */
+"C8Y-BQ-Y6m.paletteLabel" = "ツールバー項目";
+
+/* Class = "NSToolbarItem"; label = "Capture Mouse"; ObjectID = "FN7-zs-mWC"; */
+"FN7-zs-mWC.label" = "マウスをキャプチャ";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Capture Mouse"; ObjectID = "FN7-zs-mWC"; */
+"FN7-zs-mWC.paletteLabel" = "マウスをキャプチャ";
+
+/* Class = "NSToolbarItem"; toolTip = "Capture mouse cursor"; ObjectID = "FN7-zs-mWC"; */
+"FN7-zs-mWC.toolTip" = "マウスカーソルをキャプチャします";
+
+/* Class = "NSToolbarItem"; label = "Windows"; ObjectID = "MQ2-L1-yl7"; */
+"MQ2-L1-yl7.label" = "ウインドウ";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Windows"; ObjectID = "MQ2-L1-yl7"; */
+"MQ2-L1-yl7.paletteLabel" = "ウインドウ";
+
+/* Class = "NSToolbarItem"; toolTip = "Windows"; ObjectID = "MQ2-L1-yl7"; */
+"MQ2-L1-yl7.toolTip" = "ウインドウ";
+
+/* Class = "NSSegmentedCell"; Pwr-Ct-cel.ibShadowedToolTips[0] = "Shuts down and stops the VM"; ObjectID = "Pwr-Ct-cel"; */
+"Pwr-Ct-cel.ibShadowedToolTips[0]" = "仮想マシンをシステム終了し、停止します";
+
+/* Class = "NSSegmentedCell"; Pwr-Ct-cel.ibShadowedToolTips[1] = "Start/pause the VM"; ObjectID = "Pwr-Ct-cel"; */
+"Pwr-Ct-cel.ibShadowedToolTips[1]" = "仮想マシンを開始/一時停止します";
+
+/* Class = "NSSegmentedCell"; Pwr-Ct-cel.ibShadowedToolTips[2] = "Restarts the VM"; ObjectID = "Pwr-Ct-cel"; */
+"Pwr-Ct-cel.ibShadowedToolTips[2]" = "仮想マシンを再起動します";
+
+/* Class = "NSWindow"; title = "UTM"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "UTM";
+
+/* Class = "NSToolbarItem"; label = "USB"; ObjectID = "tlw-Fb-ne3"; */
+"tlw-Fb-ne3.label" = "USB";
+
+/* Class = "NSToolbarItem"; paletteLabel = "USB"; ObjectID = "tlw-Fb-ne3"; */
+"tlw-Fb-ne3.paletteLabel" = "USB";
+
+/* Class = "NSToolbarItem"; toolTip = "USB devices"; ObjectID = "tlw-Fb-ne3"; */
+"tlw-Fb-ne3.toolTip" = "USBデバイス";
+
+/* Class = "NSToolbarItem"; label = "Resize Console"; ObjectID = "Ulf-oT-4cP"; */
+"Ulf-oT-4cP.label" = "コンソールのサイズを変更";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Resize Console"; ObjectID = "Ulf-oT-4cP"; */
+"Ulf-oT-4cP.paletteLabel" = "コンソールのサイズを変更";
+
+/* Class = "NSToolbarItem"; toolTip = "Send console resize command"; ObjectID = "Ulf-oT-4cP"; */
+"Ulf-oT-4cP.toolTip" = "コンソールサイズ変更コマンドを送信します";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Starts/resumes the VM"; ObjectID = "ZTi-Hs-ge6"; */
+"ZTi-Hs-ge6.ibShadowedToolTip" = "仮想マシンを開始/再開します";
+

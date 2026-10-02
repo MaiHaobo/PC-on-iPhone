@@ -1,0 +1,225 @@
+//
+// Copyright © 2020 osy. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+import SwiftUI
+
+private let bytesInMib: Int64 = 1024 * 1024
+private let mibInGib: Int = 1024
+
+struct VMConfigDriveDetailsView: View {
+    private enum ConfirmItem: Identifiable {
+        case reclaim(URL)
+        case compress(URL)
+        
+        var id: Int {
+            switch self {
+            case .reclaim(_): return 1
+            case .compress(_): return 2
+            }
+        }
+    }
+    
+    @Binding var config: UTMQemuConfigurationDrive
+    
+    @EnvironmentObject private var data: UTMData
+    @State private var isImporterPresented: Bool = false
+    
+    @State private var confirmAlert: ConfirmItem?
+    @State private var isResizePopoverShown: Bool = false
+    
+    var body: some View {
+        Form {
+            Toggle(isOn: $config.isExternal.animation(), label: {
+                Text("Removable Drive")
+            }).disabled(true)
+            if !config.isExternal {
+                HStack {
+                    Text("Name")
+                    Spacer()
+                    if let imageName = config.imageURL?.lastPathComponent ?? config.imageName {
+                        Text(imageName)
+                            .lineLimit(1)
+                            .multilineTextAlignment(.trailing)
+                    } else {
+                        Text("(new)")
+                    }
+                }
+            } else {
+                FileBrowseField(url: $config.imageURL, isFileImporterPresented: $isImporterPresented)
+                .globalFileImporter(isPresented: $isImporterPresented, allowedContentTypes: [.item]) { result in
+                    data.busyWorkAsync {
+                        let url = try result.get()
+                        await MainActor.run {
+                            config.imageURL = url
+                        }
+                    }
+                }
+            }
+            Toggle("Read Only?", isOn: $config.isReadOnly)
+                .disabled(config.imageType != .none && config.imageType != .disk)
+            VMConfigConstantPicker("Image Type", selection: $config.imageType)
+                .onChange(of: config.imageType) { imageType in
+                    if imageType != .none && config.imageType != .disk {
+                        config.isReadOnly = true
+                    }
+                }
+            if config.imageType == .disk || config.imageType == .cd {
+                VMConfigConstantPicker("Interface", selection: $config.interface)
+                    .onChange(of: config.interface) { interface in
+                        config.interfaceVersion = UTMQemuConfigurationDrive.latestInterfaceVersion
+                        if interface == .floppy && config.imageType == .cd {
+                            config.imageType = .disk
+                        }
+                    }
+            }
+            if config.interface == .ide && config.interfaceVersion != UTMQemuConfigurationDrive.latestInterfaceVersion {
+                Button {
+                    config.interfaceVersion = UTMQemuConfigurationDrive.latestInterfaceVersion
+                } label: {
+                    Text("Update Interface")
+                }.help("Older versions of UTM added each IDE device to a separate bus. Check this to change the configuration to place two units on each bus.")
+            }
+            
+            if let imageUrl = config.imageURL {
+                let fileSize = data.computeSize(for: imageUrl)
+                DefaultTextField("Size", text: .constant(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .binary))).disabled(true)
+            } else if config.sizeMib > 0 {
+                DefaultTextField("Size", text: .constant(ByteCountFormatter.string(fromByteCount: Int64(config.sizeMib) * bytesInMib, countStyle: .binary))).disabled(true)
+            }
+            
+            #if !WITH_REMOTE
+            if UTMQemuImage.isSupported, let imageUrl = config.imageURL, FileManager.default.fileExists(atPath: imageUrl.path) {
+                #if os(macOS)
+                HStack {
+                    imageTools(for: imageUrl)
+                }
+                #else
+                imageTools(for: imageUrl)
+                #endif
+            }
+            #endif
+        }
+        #if !WITH_REMOTE
+        .alert(item: $confirmAlert) { item in
+            switch item {
+            case .reclaim(let imageURL):
+                return Alert(title: Text("Would you like to re-convert this disk image to reclaim unused space? Note this will require enough temporary space to perform the conversion. You are strongly encouraged to back-up this VM before proceeding."), primaryButton: .destructive(Text("Reclaim")) { reclaimSpace(for: imageURL, withCompression: false) }, secondaryButton: .cancel())
+            case .compress(let imageURL):
+                return Alert(title: Text("Would you like to re-convert this disk image to reclaim unused space and apply compression? Note this will require enough temporary space to perform the conversion. Compression only applies to existing data and new data will still be written uncompressed. You are strongly encouraged to back-up this VM before proceeding."), primaryButton: .destructive(Text("Reclaim")) { reclaimSpace(for: imageURL, withCompression: true) }, secondaryButton: .cancel())
+            }
+        }
+        #endif
+    }
+    
+    #if !WITH_REMOTE
+    @ViewBuilder
+    private func imageTools(for imageUrl: URL) -> some View {
+        Button {
+            confirmAlert = .reclaim(imageUrl)
+        } label: {
+            Label("Reclaim Space", systemImage: "arrow.3.trianglepath")
+        }.help("Reclaim disk space by re-converting the disk image.")
+        
+        Button {
+            confirmAlert = .compress(imageUrl)
+        } label: {
+            Label("Compress", systemImage: "arrowtriangle.right.and.line.vertical.and.arrowtriangle.left")
+        }.help("Compress by re-converting the disk image and compressing the data.")
+        
+        Button {
+            isResizePopoverShown.toggle()
+        } label: {
+            Label("Resize…", systemImage: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right")
+        }.help("Increase the size of the disk image.")
+        .popover(isPresented: $isResizePopoverShown) {
+            ResizePopoverView(imageURL: imageUrl) { sizeInMib in
+                resizeDrive(for: imageUrl, sizeInMib: sizeInMib)
+            }.padding()
+            .frame(minHeight: 100)
+        }
+    }
+
+    private func reclaimSpace(for driveUrl: URL, withCompression isCompressed: Bool) {
+        data.busyWorkAsync {
+            try await data.reclaimSpace(for: driveUrl, withCompression: isCompressed)
+        }
+    }
+    
+    private func resizeDrive(for driveUrl: URL, sizeInMib: Int) {
+        data.busyWorkAsync {
+            try await data.resizeQcow2Drive(for: driveUrl, sizeInMib: sizeInMib)
+        }
+    }
+    #endif
+}
+
+#if !WITH_REMOTE
+/// Asks for the new size and confirms it here, as an alert on the form under this view
+/// is dropped on iOS when it is set while the sheet closes.
+private struct ResizePopoverView: View {
+    let imageURL: URL
+    let onConfirm: (Int) -> Void
+    @EnvironmentObject private var data: UTMData
+    
+    @State private var currentSize: Int64?
+    @State private var proposedSizeMib: Int = 0
+    @State private var isConfirming: Bool = false
+    
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    
+    private var sizeString: String? {
+        if let currentSize = currentSize {
+            return ByteCountFormatter.string(fromByteCount: currentSize, countStyle: .binary)
+        } else {
+            return nil
+        }
+    }
+    
+    private var minSizeMib: Int {
+        Int((currentSize! + bytesInMib - 1) / bytesInMib)
+    }
+    
+    var body: some View {
+        VStack {
+            if let sizeString = sizeString {
+                Text("Minimum size: \(sizeString)")
+                Form {
+                    SizeTextField($proposedSizeMib, minSizeMib: minSizeMib)
+                    Button("Resize") {
+                        if proposedSizeMib > minSizeMib {
+                            isConfirming = true
+                        } else {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                }
+            } else {
+                ProgressView("Calculating current size...")
+            }
+        }.alert(isPresented: $isConfirming) {
+            Alert(title: Text("Resizing is experimental and could result in data loss. You are strongly encouraged to back-up this VM before proceeding. Would you like to resize to \(proposedSizeMib / mibInGib) GiB?"), primaryButton: .destructive(Text("Resize")) {
+                onConfirm(proposedSizeMib)
+                presentationMode.wrappedValue.dismiss()
+            }, secondaryButton: .cancel())
+        }.onAppear {
+            Task { @MainActor in
+                currentSize = await data.qcow2DriveSize(for: imageURL)
+                proposedSizeMib = minSizeMib
+            }
+        }
+    }
+}
+#endif

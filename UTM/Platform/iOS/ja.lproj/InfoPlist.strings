@@ -1,0 +1,18 @@
+/* Privacy - Local Network Usage Description */
+"NSLocalNetworkUsageDescription" = "仮想マシンがローカルネットワークにアクセスできるようになります。UTMもローカルサーバと通信するためにネットワークを使用することがあります。";
+
+/* Privacy - Location Always and When In Use Usage Description */
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "UTMは定期的に位置データを要求することで、システムがバックグラウンドプロセスをアクティブに保つようにします。位置データが送信されることはありません。";
+
+/* Privacy - Location Always Usage Description */
+"NSLocationAlwaysUsageDescription" = "UTMは定期的に位置データを要求することで、システムがバックグラウンドプロセスをアクティブに保つようにします。位置データが送信されることはありません。";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "UTMは定期的に位置データを要求することで、システムがバックグラウンドプロセスをアクティブに保つようにします。位置データが送信されることはありません。";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "仮想マシンがマイクから録音するには、アクセス許可が必要です。";
+
+/* (No Comment) */
+"UTM virtual machine" = "UTM仮想マシン";
+
