@@ -1,6 +1,6 @@
 ---
 name: utm-test
-description: Build, run, and debug a UTM change for real. Covers building UTM, building all dependencies or just one after changing it, creating a disposable test VM by scripting and deleting it afterwards, where logs go, debugging, headless GUI checks, and the iOS simulator. Use this when you need to run UTM, reproduce a bug, or check that a change works in the app and not just that it compiles. Run it before /utm-review.
+description: Build, run, and debug a PC on iPhone change for real. Covers building PC on iPhone, building all dependencies or just one after changing it, creating a disposable test VM by scripting and deleting it afterwards, where logs go, debugging, headless GUI checks, and the iOS simulator. Use this when you need to run PC on iPhone, reproduce a bug, or check that a change works in the app and not just that it compiles. Run it before /utm-review.
 ---
 
 # utm-test
@@ -13,9 +13,9 @@ as the working directory. `$SCRATCH` means your agent's scratch directory, or
 ## Ground rules
 
 - **Test only on VMs you created, and delete them when you're done.** Never start,
-  change, or delete the user's VMs. Other agent sessions may be using UTM on the
-  same machine. Ask before you kill a UTM process that you didn't launch.
-- **Run one UTM instance: your dev build.** `/Applications/UTM.app` has the same
+  change, or delete the user's VMs. Other agent sessions may be using PC on iPhone on the
+  same machine. Ask before you kill a PC on iPhone process that you didn't launch.
+- **Run one PC on iPhone instance: your dev build.** `/Applications/UTM.app` has the same
   bundle id. Scripting then goes to whichever instance is running, and it can
   launch the release app instead of yours. A stale binary also silently ignores
   scripting parameters it doesn't know, so a new parameter can turn into a plain
@@ -26,7 +26,7 @@ as the working directory. `$SCRATCH` means your agent's scratch directory, or
   a failure pre-existing, build `main` in a worktree and compare, and check the
   issue tracker.
 
-## Build UTM
+## Build PC on iPhone
 
 ```sh
 xcodebuild -project UTM.xcodeproj -scheme macOS -configuration Debug \
@@ -81,7 +81,7 @@ grep -a "Building \|All done" "$SCRATCH/deps.log" | tail
 - A successful run ends with `All done` and writes `build-*/BUILD_SUCCESS`.
 - If a build dies from memory pressure (LLVM and Mesa are the heavy parts), set
   `NCPU=4`.
-- Source versions are pinned in `patches/sources`, and UTM's changes to them are
+- Source versions are pinned in `patches/sources`, and PC on iPhone's changes to them are
   in `patches/*.patch`. If you change a patch, check that it still applies to a
   fresh extract of the tarball: `patch -p1 --dry-run`.
 - If a staged sysroot crashes inside a framework on an older macOS, suspect the
@@ -122,7 +122,7 @@ grep -a "Building \|All done" "$SCRATCH/deps.log" | tail
      `libexec/virgl_render_server`, in place.
    - For iOS, pass `-p ios` and the iOS sysroot. That produces the flat framework
      layout.
-3. **Check the framework, then rebuild UTM** so Xcode copies it into the app:
+3. **Check the framework, then rebuild PC on iPhone** so Xcode copies it into the app:
 
    ```sh
    otool -L sysroot-macos-arm64/Frameworks/<name>.framework/Versions/A/<name> | tail -n +2 | grep -v '@rpath\|/System/\|/usr/lib/'   # prints nothing
@@ -192,13 +192,13 @@ utm "get status of virtual machine named \"$VM\""   # stopped|starting|started|p
   - `duplicate virtual machine named "X" with properties {configuration:{name:"Y"}}`.
     `duplicate` returns before the bundle exists on disk.
   - `$APP/Contents/MacOS/utmctl` has the same verbs. It exits 0 even when it
-    fails, so read its output. It hangs if UTM's main thread is blocked.
+    fails, so read its output. It hangs if PC on iPhone's main thread is blocked.
 - **When testing a new verb or parameter, try it on your throwaway VM first.**
   Confirm that the new parameter takes effect before you point it anywhere else.
   A `delete` on a child object that can't be resolved has been applied to the
   parent VM.
 - **Bundles** are at `~/Library/Containers/com.utmapp.UTM/Data/Documents/<name>.utm`
-  (`config.plist`, `Data/`). If you edit `config.plist` by hand, quit UTM first.
+  (`config.plist`, `Data/`). If you edit `config.plist` by hand, quit PC on iPhone first.
   For plists that contain dates or data, use `plutil -p` or PlistBuddy; `plutil -convert json`
   fails on them.
 
@@ -247,7 +247,7 @@ pgrep -fl "MacOS/UTM|QEMULauncher"                 # expect nothing of yours
 
 - `quit` fails with -128 while any VM is running or paused, because a
   confirmation dialog blocks it.
-- `pkill` on UTM can orphan `QEMULauncher`, which keeps `efi_vars.fd` locked
+- `pkill` on PC on iPhone can orphan `QEMULauncher`, which keeps `efi_vars.fd` locked
   ("Is another process using the image"). Kill any leftover launcher of yours.
 - Remove every temporary hook, log line, and dependency-tree edit. `/utm-review`
   flags stray diagnostics, and `git status` doesn't see the gitignored `build-*`
@@ -286,7 +286,7 @@ pgrep -fl "MacOS/UTM|QEMULauncher"                 # expect nothing of yours
 - **lldb:** the Debug build has `get-task-allow`, so you can attach and script it:
   `lldb -p $(pgrep -f "Debug/UTM.app/Contents/MacOS/UTM$") --batch -o '…' -o detach`.
   - Give breakpoints `-G true` (auto-continue). A breakpoint that stops freezes
-    UTM, and every scripted step then hangs.
+    PC on iPhone, and every scripted step then hangs.
   - A slow app may simply have a debugger attached.
 - **Hard-to-reach UI states:** add a temporary environment-variable hook, such as
   selecting a VM or switching a tab in `ContentView.onAppear`. Launch with
@@ -303,7 +303,7 @@ pgrep -fl "MacOS/UTM|QEMULauncher"                 # expect nothing of yours
   `CGEvent(mouseEventSource:…).post(tap: .cghidEventTap)`.
 - **Coordinates are points.** Retina screenshots are 2× that, so downscale with
   `sips -Z <screen width in points>` to make image pixels match points.
-- **Bring UTM to the front** before each click, and take a screenshot after each
+- **Bring PC on iPhone to the front** before each click, and take a screenshot after each
   click to check what happened:
   `tell application "System Events" to set frontmost of process "UTM" to true`.
 - **Typing into guests:** send text slowly. The Virtualization.framework view
@@ -315,7 +315,7 @@ pgrep -fl "MacOS/UTM|QEMULauncher"                 # expect nothing of yours
   - Fall back to serial or logs, or ask the user to unlock.
   - System consent dialogs belong to `UserNotificationCenter` and don't appear
     while the display sleeps.
-- **Launch method:** `open -a "$APP"` makes UTM the responsible process for
+- **Launch method:** `open -a "$APP"` makes PC on iPhone the responsible process for
   privacy prompts. Launching the binary from a shell makes the terminal
   responsible instead, but `open` loses the stdout log.
 
@@ -343,6 +343,6 @@ xcrun simctl spawn $UDID defaults write com.utmapp.UTM ReleaseNotesLastVersion \
   run with `test-without-building`.
 - **Observe:** `xcrun simctl io $UDID screenshot out.png`, and
   `xcrun simctl spawn $UDID log show --last 2m --style compact --predicate 'process == "UTM"'`.
-  lldb can't attach, because UTM ptraces itself for JIT.
+  lldb can't attach, because PC on iPhone ptraces itself for JIT.
 - **iOS runs QEMU in-process, once per process.** Stopping a VM quits the app.
 - **Clean up:** `xcrun simctl shutdown $UDID`, and delete any device you created.

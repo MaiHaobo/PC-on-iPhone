@@ -1,16 +1,16 @@
-# UTM
+# PC on iPhone
 [![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
 > 發明一台可以用來計算任何可計算序列的機器是完全有可能的。
 
 -- <cite>艾倫·圖靈（Alan Turing），1936年</cite>
 
-UTM 是一個功能完整的系統模擬器和虛擬機器主機，適用於 iOS 和 macOS，基於 QEMU 開發。簡單來說，它讓你能在你的 Mac、iPhone 和 iPad 上執行 Windows、Linux 等作業系統。更多資訊請參考 [https://getutm.app/](https://getutm.app/) 和 [https://mac.getutm.app/](https://mac.getutm.app/)。
+PC on iPhone 是一個功能完整的系統模擬器和虛擬機器主機，適用於 iOS 和 macOS，基於 QEMU 開發。簡單來說，它讓你能在你的 Mac、iPhone 和 iPad 上執行 Windows、Linux 等作業系統。更多資訊請參考 [https://getutm.app/](https://getutm.app/) 和 [https://mac.getutm.app/](https://mac.getutm.app/)。
 
 <p align="center">
-  <img width="450px" alt="在 iPhone 上執行 UTM" src="screen.png">
+  <img width="450px" alt="在 iPhone 上執行 PC on iPhone" src="screen.png">
   <br>
-  <img width="450px" alt="在 MacBook 上執行 UTM" src="screenmac.png">
+  <img width="450px" alt="在 MacBook 上執行 PC on iPhone" src="screenmac.png">
 </p>
 
 ## 功能
@@ -31,7 +31,7 @@ UTM 是一個功能完整的系統模擬器和虛擬機器主機，適用於 iOS
 
 ## UTM SE
 
-UTM/QEMU 需要動態程式碼生成(JIT)以達到最大效能。iOS 裝置上的 JIT 需要越獄裝置，或是針對特定 iOS 版本的各種解決方案（詳見「安裝」）。
+PC on iPhone/QEMU 需要動態程式碼生成(JIT)以達到最大效能。iOS 裝置上的 JIT 需要越獄裝置，或是針對特定 iOS 版本的各種解決方案（詳見「安裝」）。
 
 UTM SE（"慢速版/slow edition"）使用一個 [執行緒直譯器][3]，效能優於傳統的直譯器但仍然比 JIT 慢。這個技術與 [iSH][4] 用於動態執行的方式類似。因此，UTM SE 不需要越獄或任何 JIT 解決方案，可以作為一般應用程式側載。
 
@@ -39,9 +39,9 @@ UTM SE（"慢速版/slow edition"）使用一個 [執行緒直譯器][3]，效�
 
 ## 安裝
 
-適用於 iOS 的 UTM(SE)：[https://getutm.app/install/](https://getutm.app/install/)
+適用於 iOS 的 PC on iPhone(SE)：[https://getutm.app/install/](https://getutm.app/install/)
 
-也適用於 macOS 的 UTM：[https://mac.getutm.app/](https://mac.getutm.app/)
+也適用於 macOS 的 PC on iPhone：[https://mac.getutm.app/](https://mac.getutm.app/)
 
 ## 開發
 
@@ -56,11 +56,11 @@ UTM SE（"慢速版/slow edition"）使用一個 [執行緒直譯器][3]，效�
 
 ## 授權
 
-UTM 是在寬鬆的 Apache 2.0 授權下釋出。然而，它使用了幾個 (L)GPL 元件。大部分是動態連結的，但 gstreamer 外掛是靜態連結的，部分程式碼來自 qemu。如果你打算重新散佈這個應用程式，請留意這一點。
+PC on iPhone 是在寬鬆的 Apache 2.0 授權下釋出。然而，它使用了幾個 (L)GPL 元件。大部分是動態連結的，但 gstreamer 外掛是靜態連結的，部分程式碼來自 qemu。如果你打算重新散佈這個應用程式，請留意這一點。
 
 部分圖示由 [Freepik](https://www.freepik.com) 製作，來自 [www.flaticon.com](https://www.flaticon.com/)。
 
-此外，UTM 前端相依於以下 MIT/BSD 授權元件：
+此外，PC on iPhone 前端相依於以下 MIT/BSD 授權元件：
 
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
 * [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)

@@ -42,7 +42,7 @@
 "Pwr-Ct-cel.ibShadowedToolTips[2]" = "Перезапускает ВМ";
 
 /* Class = "NSWindow"; title = "UTM"; ObjectID = "QvC-M9-y7g"; */
-"QvC-M9-y7g.title" = "UTM";
+"QvC-M9-y7g.title" = "PC on iPhone";
 
 /* Class = "NSToolbarItem"; label = "Resize Console"; ObjectID = "Ulf-oT-4cP"; */
 "Ulf-oT-4cP.label" = "Изменить размер консоли";

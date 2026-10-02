@@ -99,7 +99,7 @@
 /* UTMConfiguration
    UTMVirtualMachine */
 "An internal error has occurred." = "Ha ocurrido un error interno.";
-"An internal error has occured. UTM will terminate." = "Ocurrió un error interno. UTM se cerrará.";
+"An internal error has occured. UTM will terminate." = "Ocurrió un error interno. PC on iPhone se cerrará.";
 "Cannot start shared directory before SPICE starts." = "No se puede iniciar un directorio compartido antes de que SPICE inicie.";
 
 /* No comment provided by engineer. */
@@ -121,7 +121,7 @@
 "Architecture" = "Arquitectura";
 
 /* No comment provided by engineer. */
-"Are you sure you want to exit UTM?" = "¿Estás seguro/a de querer cerrar UTM?";
+"Are you sure you want to exit UTM?" = "¿Estás seguro/a de querer cerrar PC on iPhone?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to permanently delete this disk image?" = "¿Estás seguro/a de querer eliminar permanentemente esta imagen de disco?";
@@ -188,7 +188,7 @@
 "Bridged Interface" = "Interfaz de puente";
 
 /* Welcome view */
-"Browse UTM Gallery" = "Navegar por la librería de UTM";
+"Browse UTM Gallery" = "Navegar por la librería de PC on iPhone";
 
 /* No comment provided by engineer. */
 "Browse" = "Navegar";
@@ -216,7 +216,7 @@
 "Cannot find AltServer for JIT enable. You cannot run VMs until JIT is enabled." = "No es posible encontrar AltServer habilitado para JIT. No puedes ejecutar las VMs hasta que JIT esté habilitado.";
 
 /* UTMData */
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "No se puede importar esta VM. La configuración es inválida, fue creado con una nueva versión de UTM, o en una plataforma que es incompatible con esta versión de UTM.";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "No se puede importar esta VM. La configuración es inválida, fue creado con una nueva versión de PC on iPhone, o en una plataforma que es incompatible con esta versión de PC on iPhone.";
 
 /* No comment provided by engineer. */
 "Caps Lock (⇪) is treated as a key" = "Bloq Mayús (⇪) es tratado como una tecla";
@@ -453,7 +453,7 @@
 "Download and mount the guest tools for Windows." = "Descargar y montar las herramientas de invitado de Windows.";
 
 /* No comment provided by engineer. */
-"Download prebuilt from UTM Gallery…" = "Descargar una VM lista para usar desde la librería de UTM...";
+"Download prebuilt from UTM Gallery…" = "Descargar una VM lista para usar desde la librería de PC on iPhone...";
 
 /* No comment provided by engineer. */
 "Download Ubuntu Server for ARM" = "Descargar Ubuntu Server para ARM";
@@ -614,7 +614,7 @@
 "Failed to load plist" = "No se pudo cargar la plist";
 
 /* UTMQemuConfigurationError */
-"Failed to migrate configuration from a previous UTM version." = "No se pudo migrar la configuración de una versión anterior de UTM.";
+"Failed to migrate configuration from a previous UTM version." = "No se pudo migrar la configuración de una versión anterior de PC on iPhone.";
 
 /* UTMData */
 "Failed to parse download URL." = "No se pudo analizar la URL de descarga.";
@@ -878,7 +878,7 @@
 "Invalid size" = "Tamaño inválido";
 
 /* VMListViewController */
-"Invalid UTM not imported." = "UTM inválido no importado.";
+"Invalid UTM not imported." = "PC on iPhone inválido no importado.";
 
 /* No comment provided by engineer. */
 "Invert Mouse Scroll" = "Invertir el desplazamiento del mouse";
@@ -914,7 +914,7 @@
 "Keyboard" = "Teclado";
 
 /* No comment provided by engineer. */
-"Keep UTM running after last window is closed and all VMs are shut down" = "Continuar ejecutando UTM después de que se cierre la última ventana y se apaguen todas las VMs";
+"Keep UTM running after last window is closed and all VMs are shut down" = "Continuar ejecutando PC on iPhone después de que se cierre la última ventana y se apaguen todas las VMs";
 
 /* No comment provided by engineer. */
 "Legacy" = "Heredado";
@@ -1119,7 +1119,7 @@
 "Note: select the path to share from the main screen." = "Nota: selecciona la ruta a compartir desde la pantalla principal.";
 
 /* No comment provided by engineer. */
-"Note: Shared directories will not be saved and will be reset when UTM quits." = "Nota: Los directorios compartidos no serán guardados y se restablecerán cuando UTM se cierre.";
+"Note: Shared directories will not be saved and will be reset when UTM quits." = "Nota: Los directorios compartidos no serán guardados y se restablecerán cuando PC on iPhone se cierre.";
 
 /* No comment provided by engineer. */
 "Notes" = "Notas";
@@ -1143,7 +1143,7 @@
 "Operating System" = "Sistema operativo";
 
 /* No comment provided by engineer. */
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Opcionalmente, selecciona un directorio a hacer accessible dentro de la VM. Ten en cuenta que el soporte de los directorios compartidos varía según el sistema operativo invitado y puede requerir drivers adicionales a ser instalados. Ver las páginas de soporte de UTM para más información.";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Opcionalmente, selecciona un directorio a hacer accessible dentro de la VM. Ten en cuenta que el soporte de los directorios compartidos varía según el sistema operativo invitado y puede requerir drivers adicionales a ser instalados. Ver las páginas de soporte de PC on iPhone para más información.";
 
 /* No comment provided by engineer. */
 "Other" = "Otro";
@@ -1236,7 +1236,7 @@
 "Quit" = "Salir";
 
 /* VMQemuDisplayMetalWindowController */
-"Quitting UTM will kill all running VMs." = "Salirse de UTM matará todas las VMs en ejecución.";
+"Quitting UTM will kill all running VMs." = "Salirse de PC on iPhone matará todas las VMs en ejecución.";
 
 /* No comment provided by engineer. */
 "RAM" = "RAM";
@@ -1350,7 +1350,7 @@
 "Running" = "En ejecución";
 
 /* No comment provided by engineer. */
-"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "¡El dispositivo se está quedando sin memoria! UTM pronto podría ser matado por iOS. Puedes prevenir esto al disminuir la cantidad de memoria y/o el caché de JIT asignado a esta VM";
+"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "¡El dispositivo se está quedando sin memoria! PC on iPhone pronto podría ser matado por iOS. Puedes prevenir esto al disminuir la cantidad de memoria y/o el caché de JIT asignado a esta VM";
 
 /* No comment provided by engineer. */
 "Save" = "Guardar";
@@ -1393,7 +1393,7 @@
 "Select where to save debug log:" = "Seleccione dónde guardar el registro de depuración:";
 
 /* SavePanel */
-"Select where to save UTM Virtual Machine:" = "Seleccione dónde guardar la máquina virtual UTM:";
+"Select where to save UTM Virtual Machine:" = "Seleccione dónde guardar la máquina virtual PC on iPhone:";
 
 /* No comment provided by engineer. */
 "Selected:" = "Seleccionado:";
@@ -1589,7 +1589,7 @@
 "The host operating system needs to be updated to support one or more features requested by the guest." = "El sistema operativo host debe actualizarse para soportar una o más funciones solicitadas por el invitado.";
 
 /* No comment provided by engineer. */
-"The selected architecture is unsupported in this version of UTM." = "La arquitectura seleccionada no está soportada en esta versión de UTM.";
+"The selected architecture is unsupported in this version of UTM." = "La arquitectura seleccionada no está soportada en esta versión de PC on iPhone.";
 
 /* VMWizardState */
 "The selected boot image contains the word '%@' but the guest architecture is '%@'. Please ensure you have selected an image that is compatible with '%@'." = "La imagen de arranque seleccionada contiene la palabra “%1$@“, pero la arquitectura invitada es “%2$@“. Por favor asegúrese de que tiene seleccionada una imagen que es compatible con “%3$@“.";
@@ -1607,7 +1607,7 @@
 "Theme" = "Tema";
 
 /* Error shown when importing a ZIP file from web that doesn't contain a UTM Virtual Machine. */
-"There is no UTM file in the downloaded ZIP archive." = "No hay un archivo UTM en el archivo ZIP descargado.";
+"There is no UTM file in the downloaded ZIP archive." = "No hay un archivo PC on iPhone en el archivo ZIP descargado.";
 
 /* No comment provided by engineer. */
 "These are advanced settings affecting QEMU which should be kept default unless you are running into issues." = "Estas son configuraciones avanzadas que afectan a QEMU y deben mantenerse predeterminadas a menos que tengas problemas.";
@@ -1619,13 +1619,13 @@
 "This build does not emulation." = "Esta compilación no emula.";
 
 /* UTMQemuVirtualMachine */
-"This build of UTM does not support emulating the architecture of this VM." = "Esta compilación de UTM no soporta la emulación de la arquitectura de esta VM.";
+"This build of UTM does not support emulating the architecture of this VM." = "Esta compilación de PC on iPhone no soporta la emulación de la arquitectura de esta VM.";
 
 /* VMConfigSystemView */
 "This change will reset all settings" = "Este cambio restablecerá todas las configuraciones";
 
 /* UTMConfiguration */
-"This configuration is saved with a newer version of UTM and is not compatible with this version." = "Esta configuración está guardada con una nueva versión de UTM y no es compatible con esta versión.";
+"This configuration is saved with a newer version of UTM and is not compatible with this version." = "Esta configuración está guardada con una nueva versión de PC on iPhone y no es compatible con esta versión.";
 
 /* UTMConfiguration */
 "This configuration is too old and is not supported." = "Esta configuración es muy antigua y no está soportada.";
@@ -1742,7 +1742,7 @@
 "USB Sharing" = "Compartir USB";
 
 /* No comment provided by engineer. */
-"USB sharing not supported in this build of UTM." = "El uso compartido de USB no está soportado en esta compilación de UTM.";
+"USB sharing not supported in this build of UTM." = "El uso compartido de USB no está soportado en esta compilación de PC on iPhone.";
 
 /* No comment provided by engineer. */
 "USB Support" = "Soporte de USB";
@@ -1800,7 +1800,7 @@
 "Waiting for VM to connect to display..." = "Esperando a que la VM se conecte al monitor…";
 
 /* No comment provided by engineer. */
-"Welcome to UTM" = "Bienvenido/a a UTM";
+"Welcome to UTM" = "Bienvenido/a a PC on iPhone";
 
 /* No comment provided by engineer. */
 "WebDAV requires installing SPICE daemon. VirtFS requires installing device drivers." = "WebDAV require de instalar el daemon de SPICE. VirtFS require de instalar los controladores de dispositivo.";
@@ -1837,7 +1837,7 @@
 "Your machine does not support running this IPSW." = "Tu máquina no soporta ejecutar este archivo IPSW.";
 
 /* ContentView */
-"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "Tu versión de iOS no soporta la ejecución de VMs sin modificar. Debes de ejecutar UTM con Jailbreak o con un depurador remoto conectado. Consulte https://getutm.app/install/ para obtener más detalles.";
+"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "Tu versión de iOS no soporta la ejecución de VMs sin modificar. Debes de ejecutar PC on iPhone con Jailbreak o con un depurador remoto conectado. Consulte https://getutm.app/install/ para obtener más detalles.";
 
 /* No comment provided by engineer. */
 "Zoom" = "Zoom";

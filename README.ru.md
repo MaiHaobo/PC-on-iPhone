@@ -1,4 +1,4 @@
-# UTM
+# PC on iPhone
 
 [![Статус](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/utmapp/UTM/actions?query=event%3Arelease+workflow%3ABuild)
 
@@ -6,14 +6,14 @@
 
 — <cite>Алан Тьюринг, «О вычислимых числах применительно к [проблеме разрешения](https://ru.wikipedia.org/wiki/Проблема_разрешения)» ([*On Computable Numbers, with an Application to the Entscheidungsproblem*](https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf)) (1936)</cite>
 
-UTM — это полноценный эмулятор системы и хост виртуальных машин для iOS и macOS. В основе UTM лежит [QEMU](https://www.qemu.org/). UTM позволяет запускать Windows, Linux и другие операционные системы на Mac, iPhone и iPad.
+PC on iPhone — это полноценный эмулятор системы и хост виртуальных машин для iOS и macOS. В основе PC on iPhone лежит [QEMU](https://www.qemu.org/). PC on iPhone позволяет запускать Windows, Linux и другие операционные системы на Mac, iPhone и iPad.
 
 Дополнительная информация на [getutm.app](https://getutm.app/) и [mac.getutm.app](https://mac.getutm.app/).
 
 <p align="center">
-  <img width="450px" alt="UTM на iPhone" src="screen.png">
+  <img width="450px" alt="PC on iPhone на iPhone" src="screen.png">
   <br>
-  <img width="450px" alt="UTM на MacBook" src="screenmac.png">
+  <img width="450px" alt="PC on iPhone на MacBook" src="screenmac.png">
 </p>
 
 ## Возможности
@@ -34,7 +34,7 @@ UTM — это полноценный эмулятор системы и хос�
 
 ## UTM SE
 
-Для максимальной скорости работы UTM и QEMU используют кодогенерацию just-in-time, которая ограничена на iOS. Чтобы запустить UTM, можно воспользоваться джейлбрейком или — для некоторых версий iOS — одним из обходных путей (см. раздел «Установка»).
+Для максимальной скорости работы PC on iPhone и QEMU используют кодогенерацию just-in-time, которая ограничена на iOS. Чтобы запустить PC on iPhone, можно воспользоваться джейлбрейком или — для некоторых версий iOS — одним из обходных путей (см. раздел «Установка»).
 
 UTM SE (“slow edition”) использует [поточный интерпретатор](https://github.com/ktemkin/qemu/blob/with_tcti/tcg/aarch64-tcti/README.md), который работает быстрее традиционного, но всё же медленнее JIT. Подобный подход используется в проекте [iSH](https://github.com/ish-app/ish) для динамического исполнения. В результате версия UTM SE не требует джейлбрейк или прочие хаки и может быть установлена как любое другое приложение.
 
@@ -42,19 +42,19 @@ UTM SE (“slow edition”) использует [поточный интерп�
 
 ## Установка
 
-* [UTM для macOS](https://mac.getutm.app/)
-* [UTM (SE) для iOS](https://getutm.app/install/)
+* [PC on iPhone для macOS](https://mac.getutm.app/)
+* [PC on iPhone (SE) для iOS](https://getutm.app/install/)
 
 ## Разработка
 
-* [UTM для macOS](Documentation/MacDevelopment.md)
-* [UTM для iOS](Documentation/iOSDevelopment.md)
+* [PC on iPhone для macOS](Documentation/MacDevelopment.md)
+* [PC on iPhone для iOS](Documentation/iOSDevelopment.md)
 
 ## Лицензии
 
-UTM распространяется по лицензии Apache 2.0.
+PC on iPhone распространяется по лицензии Apache 2.0.
 
-Однако некоторые компоненты проекта используют более строгие лицензии из группы (L)GPL. Большинство таких компонентов использует динамическую связку, но плагины `gstreamer` связаны статически, а некоторые части кода взяти из QEMU. Пожалуйста, обращайте внимание на ограничения этих лицензий, если планируете распространять UTM.
+Однако некоторые компоненты проекта используют более строгие лицензии из группы (L)GPL. Большинство таких компонентов использует динамическую связку, но плагины `gstreamer` связаны статически, а некоторые части кода взяти из QEMU. Пожалуйста, обращайте внимание на ограничения этих лицензий, если планируете распространять PC on iPhone.
 
 Кроме того, UI приложения использует следующие компоненты, распространяемые по лицензиям MIT или BSD:
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)

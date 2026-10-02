@@ -56,7 +56,7 @@
 "An existing virtual machine already exists with this name." = "Tällä nimellä on jo olemassa virtuaalikone.";
 
 /* VMDisplayViewController */
-"An internal error has occured. UTM will terminate." = "Tapahtui sisäinen virhe. UTM päättyy.";
+"An internal error has occured. UTM will terminate." = "Tapahtui sisäinen virhe. PC on iPhone päättyy.";
 
 /* No comment provided by engineer. */
 "Architecture" = "Arkkitehtuuri";
@@ -68,7 +68,7 @@
 "Are you sure you want to delete this VM? Any drives associated will also be deleted." = "Haluatko varmasti poistaa tämän VM:n? Myös kaikki siihen liittyvät asemat poistetaan.";
 
 /* VMDisplayViewController */
-"Are you sure you want to exit UTM?" = "Haluatko varmasti poistua UTM:stä?";
+"Are you sure you want to exit UTM?" = "Haluatko varmasti poistua PC on iPhone:stä?";
 
 /* VMConfigDrivePickerViewController */
 "Are you sure you want to permanently delete this disk image?" = "Haluatko varmasti poistaa tämän levyvedoksen pysyvästi?";
@@ -116,7 +116,7 @@
 "Browse" = "Selaa";
 
 /* No comment provided by engineer. */
-"Browse UTM Gallery" = "Selaa UTM-galleriaa";
+"Browse UTM Gallery" = "Selaa PC on iPhone-galleriaa";
 
 /* VMConfigSharingViewController */
 "Browse…" = "Selaa…";
@@ -141,7 +141,7 @@
 "Cannot find VM." = "VM:ää ei löydy.";
 
 /* UTMData */
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "Tätä VM:ää ei voi tuoda. Joko kokoonpano on virheellinen, se on luotu uudemmassa UTM-versiossa tai alustalla, joka ei ole yhteensopiva tämän UTM-version kanssa.";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "Tätä VM:ää ei voi tuoda. Joko kokoonpano on virheellinen, se on luotu uudemmassa PC on iPhone-versiossa tai alustalla, joka ei ole yhteensopiva tämän PC on iPhone-version kanssa.";
 
 /* UTMVirtualMachine+Sharing */
 "Cannot start shared directory before SPICE starts." = "Jaettua hakemistoa ei voi käynnistää ennen kuin SPICE alkaa.";
@@ -299,7 +299,7 @@
 "Done" = "Tehty";
 
 /* No comment provided by engineer. */
-"Download prebuilt from UTM Gallery…" = "Lataa valmiiksi rakennettu UTM Gallerysta…";
+"Download prebuilt from UTM Gallery…" = "Lataa valmiiksi rakennettu PC on iPhone Gallerysta…";
 
 /* No comment provided by engineer. */
 "Download Ubuntu Server for ARM" = "Lataa Ubuntu Server for ARM";
@@ -575,7 +575,7 @@
 "Invalid size" = "Väärä koko";
 
 /* VMListViewController */
-"Invalid UTM not imported." = "Virheellinen UTM ei tuotu.";
+"Invalid UTM not imported." = "Virheellinen PC on iPhone ei tuotu.";
 
 /* No comment provided by engineer. */
 "Invert Mouse Scroll" = "Käänteinen hiiren vieritys";
@@ -749,7 +749,7 @@
 "Operating System" = "Käyttöjärjestelmä";
 
 /* No comment provided by engineer. */
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Valitse valinnaisesti hakemisto, joka on käytettävissä virtuaalikoneen sisällä. Huomaa, että jaettujen hakemistojen tuki vaihtelee vieraskäyttöjärjestelmän mukaan ja saattaa edellyttää lisävierasohjaimien asentamista. Katso lisätietoja UTM-tukisivuilta.";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Valitse valinnaisesti hakemisto, joka on käytettävissä virtuaalikoneen sisällä. Huomaa, että jaettujen hakemistojen tuki vaihtelee vieraskäyttöjärjestelmän mukaan ja saattaa edellyttää lisävierasohjaimien asentamista. Katso lisätietoja PC on iPhone-tukisivuilta.";
 
 /* No comment provided by engineer. */
 "Other" = "Muu";
@@ -855,7 +855,7 @@
 "Running" = "Suorittaa";
 
 /* VMDisplayViewController */
-"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "Muisti on vähissä! iOS saattaa pian tappaa UTM:n. Voit estää tämän vähentämällä tälle VM:lle osoitetun muistin ja/tai JIT-välimuistin määrää";
+"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "Muisti on vähissä! iOS saattaa pian tappaa PC on iPhone:n. Voit estää tämän vähentämällä tälle VM:lle osoitetun muistin ja/tai JIT-välimuistin määrää";
 
 /* No comment provided by engineer. */
 "Save" = "Tallenna";
@@ -978,7 +978,7 @@
 "Test" = "Testaa";
 
 /* No comment provided by engineer. */
-"The selected architecture is unsupported in this version of UTM." = "Valittua arkkitehtuuria ei tueta tässä UTM-versiossa.";
+"The selected architecture is unsupported in this version of UTM." = "Valittua arkkitehtuuria ei tueta tässä PC on iPhone-versiossa.";
 
 /* VMConfigSystemViewController */
 "The total memory usage is close to your device's limit. iOS will kill the VM if it consumes too much memory." = "Kokonaismuistin käyttö on lähellä laitteesi rajaa. iOS tappaa virtuaalikoneen, jos se kuluttaa liikaa muistia.";
@@ -987,7 +987,7 @@
 "Theme" = "Teema";
 
 /* Error shown when importing a ZIP file from web that doesn't contain a UTM Virtual Machine. */
-"There is no UTM file in the downloaded ZIP archive." = "Ladatussa ZIP-arkistossa ei ole UTM-tiedostoa.";
+"There is no UTM file in the downloaded ZIP archive." = "Ladatussa ZIP-arkistossa ei ole PC on iPhone-tiedostoa.";
 
 /* No comment provided by engineer. */
 "These settings are unavailable in console display mode." = "Nämä asetukset eivät ole käytettävissä konsolin näyttötilassa.";
@@ -1041,7 +1041,7 @@
 "USB not supported in console display mode." = "USB:tä ei tueta konsolin näyttötilassa.";
 
 /* No comment provided by engineer. */
-"USB not supported in this build of UTM." = "Tämä UTM-versio ei tue USB:tä.";
+"USB not supported in this build of UTM." = "Tämä PC on iPhone-versio ei tue USB:tä.";
 
 /* No comment provided by engineer. */
 "USB Sharing" = "USB-jako";
@@ -1074,10 +1074,10 @@
 "Warning: iOS will kill apps that use more than 80% of the device's total memory." = "Varoitus: iOS tappaa sovellukset, jotka käyttävät yli 80 % laitteen kokonaismuistista.";
 
 /* No comment provided by engineer. */
-"Welcome to UTM" = "Tervetuloa UTM:ään";
+"Welcome to UTM" = "Tervetuloa PC on iPhone:ään";
 
 /* Startup message */
-"Welcome to UTM! Due to a bug in iOS, if you force kill this app, the system will be unstable and you cannot launch UTM again until you reboot. The recommended way to terminate this app is the button on the top left." = "Tervetuloa UTM:ään! iOS-virheen vuoksi, jos pakotat tappamaan tämän sovelluksen, järjestelmästä tulee epävakaa, etkä voi käynnistää UTM:ää uudelleen ennen kuin käynnistät uudelleen. Suositeltu tapa lopettaa tämä sovellus on vasemmassa yläkulmassa oleva painike.";
+"Welcome to UTM! Due to a bug in iOS, if you force kill this app, the system will be unstable and you cannot launch UTM again until you reboot. The recommended way to terminate this app is the button on the top left." = "Tervetuloa PC on iPhone:ään! iOS-virheen vuoksi, jos pakotat tappamaan tämän sovelluksen, järjestelmästä tulee epävakaa, etkä voi käynnistää PC on iPhone:ää uudelleen ennen kuin käynnistät uudelleen. Suositeltu tapa lopettaa tämä sovellus on vasemmassa yläkulmassa oleva painike.";
 
 /* No comment provided by engineer. */
 "Windows" = "Windows";
@@ -1095,7 +1095,7 @@
 
 /* UTMData
  VMConfigDrivePickerViewController */
-"You cannot import a .utm package as a drive. Did you mean to open the package with UTM?" = "Et voi tuoda .utm-pakettia asemana. Tarkoititko avata paketin UTM:llä?";
+"You cannot import a .utm package as a drive. Did you mean to open the package with UTM?" = "Et voi tuoda .utm-pakettia asemana. Tarkoititko avata paketin PC on iPhone:llä?";
 
 /* UTMData
  VMConfigDrivePickerViewController */
@@ -1108,7 +1108,7 @@
 "You must terminate the running VM before you can import a new VM." = "Vous devez arrêter la VM en cours avant de pouvoir importer une nouvelle VM.";
 
 /* ContentView */
-"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached." = "IOS-versiosi ei tue virtuaalikoneiden käyttöä muokkaamattomana. Sinun on joko suoritettava UTM, kun se on rikki tai kun etädebuggeri on liitetty.";
+"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached." = "IOS-versiosi ei tue virtuaalikoneiden käyttöä muokkaamattomana. Sinun on joko suoritettava PC on iPhone, kun se on rikki tai kun etädebuggeri on liitetty.";
 
 /* No comment provided by engineer. */
 "Zoom" = "Zoomaa";
@@ -1174,7 +1174,7 @@
 "Do not generate any arguments based on current configuration" = "Älä luo argumentteja nykyisen kokoonpanon perusteella";
 
 /* No comment provided by engineer. */
-"Keep UTM running after last window is closed and all VMs are shut down" = "Pidä UTM käynnissä, kun viimeinen ikkuna on suljettu ja kaikki VM:t suljetaan";
+"Keep UTM running after last window is closed and all VMs are shut down" = "Pidä PC on iPhone käynnissä, kun viimeinen ikkuna on suljettu ja kaikki VM:t suljetaan";
 
 /* No comment provided by engineer. */
 "VM display size is fixed" = "VM-näytön koko on kiinteä";

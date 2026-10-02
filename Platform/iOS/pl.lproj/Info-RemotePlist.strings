@@ -1,8 +1,8 @@
 /* Bundle name */
-"CFBundleName" = "UTM";
+"CFBundleName" = "PC on iPhone";
 
 /* Privacy - Local Network Usage Description */
-"NSLocalNetworkUsageDescription" = "UTM używa sieci lokalnej, aby znaleźć i połączyć się do zdalnych serwerów UTM.";
+"NSLocalNetworkUsageDescription" = "PC on iPhone używa sieci lokalnej, aby znaleźć i połączyć się do zdalnych serwerów PC on iPhone.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Wymagane są uprawnienia dla maszyny wirtualnej, aby używać mikrofonu.";

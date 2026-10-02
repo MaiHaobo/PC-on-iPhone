@@ -1,4 +1,4 @@
-#  UTM
+#  PC on iPhone
 [![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
 > It is possible to invent a single machine which can be used to compute any computable sequence.
@@ -8,9 +8,9 @@
 UTMは、QEMUベースのiOSとmacOSのためのフル機能システムエミュレータと仮想マシンホストです。Mac、iPhone及びiPad上でWindows、Linuxなどを実行することができます。詳細については、[https://getutm.app/](https://getutm.app/) および [https://mac.getutm.app/](https://mac.getutm.app/) をご覧ください。
 
 <p align="center">
-  <img width="450px" alt="UTM running on an iPhone" src="screen.png">
+  <img width="450px" alt="PC on iPhone running on an iPhone" src="screen.png">
   <br>
-  <img width="450px" alt="UTM running on a MacBook" src="screenmac.png">
+  <img width="450px" alt="PC on iPhone running on a MacBook" src="screenmac.png">
 </p>
 
 ## 機能
@@ -31,7 +31,7 @@ UTMは、QEMUベースのiOSとmacOSのためのフル機能システムエミ�
 
 ## UTM SE
 
-UTM/QEMU は、パフォーマンスを最大化するために動的コード生成（JIT）を必要とします。iOS デバイスでの JIT は、ジェイルブレイクしたデバイスか、特定のバージョンの iOS で利用できるさまざまな回避策のいずれかが必要です（詳細については、「インストール」を参照してください）。
+PC on iPhone/QEMU は、パフォーマンスを最大化するために動的コード生成（JIT）を必要とします。iOS デバイスでの JIT は、ジェイルブレイクしたデバイスか、特定のバージョンの iOS で利用できるさまざまな回避策のいずれかが必要です（詳細については、「インストール」を参照してください）。
 
 UTM SE ("slow edition") は従来のインタープリタよりは性能が良いですが、JITよりは遅い [threaded interpreter][3] を使用します。この手法は、[iSH][4]が動的実行のために行っているものと同様です。それによって、UTM SEは、ジェルブレイクやJITの回避策を必要とせず、通常のアプリとしてサイドロードすることができます。
 

@@ -401,7 +401,7 @@
 "If enabled, clients must enter a password. This is required if you want to access the server externally." = "有効にすると、クライアントはパスワードを入力する必要があります。これは、サーバに外部からアクセスする場合に必要です。";
 
 // UTMApp.swift
-"UTM" = "UTM";
+"UTM" = "PC on iPhone";
 "UTM Server" = "UTMサーバ";
 
 // UTMDataExtension.swift

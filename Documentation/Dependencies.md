@@ -1,6 +1,6 @@
 # Dependencies
 
-UTM is built upon QEMU, SPICE, and various libraries that those projects depend on. To support building as an Xcode project, we designed a custom build system that creates Xcode compatible frameworks from autoconf and meson projects.
+PC on iPhone is built upon QEMU, SPICE, and various libraries that those projects depend on. To support building as an Xcode project, we designed a custom build system that creates Xcode compatible frameworks from autoconf and meson projects.
 
 ## `build_dependencies.sh`
 
@@ -35,19 +35,19 @@ The build steps are summarized below:
 
 ### QEMU
 
-The steps for updating QEMU is the most involved. UTM maintains a [fork][1] of QEMU which the updated QEMU version must be merged into. This will be the most time consuming part as the fork needs to build and run correctly outside of UTM.
+The steps for updating QEMU is the most involved. PC on iPhone maintains a [fork][1] of QEMU which the updated QEMU version must be merged into. This will be the most time consuming part as the fork needs to build and run correctly outside of PC on iPhone.
 
-Next, the QAPI generator for UTM needs to be updated with the changes from QEMU. The UTM [QAPI script](../scripts/qapi/) is derived from QEMU's `scripts/qapi/*`. Many of the files are unchanged and copied directly from QEMU. However, the key files (commands.py, events.py, types.py) are heavily modified. The best way to approach this is to do a 3-way diff with the UTM files, the version of QEMU where those files are derived from, and the new version of the scripts. Then take the changes from the old version of QEMU to the new version of QEMU and merge it into UTM. For files where there are no changes between UTM and QEMU, the new version from QEMU can be copied to directly. For files where there are changes, some work is required to integrate the changes. From experience, it may be easiest to do incremental changes from QEMU's commits. Also, QAPI does not change often so it is not required to update the scripts after each QEMU update.
+Next, the QAPI generator for PC on iPhone needs to be updated with the changes from QEMU. The PC on iPhone [QAPI script](../scripts/qapi/) is derived from QEMU's `scripts/qapi/*`. Many of the files are unchanged and copied directly from QEMU. However, the key files (commands.py, events.py, types.py) are heavily modified. The best way to approach this is to do a 3-way diff with the PC on iPhone files, the version of QEMU where those files are derived from, and the new version of the scripts. Then take the changes from the old version of QEMU to the new version of QEMU and merge it into PC on iPhone. For files where there are no changes between PC on iPhone and QEMU, the new version from QEMU can be copied to directly. For files where there are changes, some work is required to integrate the changes. From experience, it may be easiest to do incremental changes from QEMU's commits. Also, QAPI does not change often so it is not required to update the scripts after each QEMU update.
 
 As a result of the above, the [QAPI support files](../qapi/) may also need to be updated. Check with QEMU `qapi/*.c`'s commit history to see if there's any changes needed there. It will usually correspond to changes in the Python generator code.
 
-[UTMQemuConfiguration+ConstantsGenerated.m](../Configuration/UTMQemuConfiguration+ConstantsGenerated.m) needs to be updated by running [const-gen.py](../scripts/const-gen.py). You need to build the [UTM fork of QEMU][1] for macOS and pass the build directory as an argument to const-gen. It will then run each QEMU executable in order to parse the help text to find changes in device support. If QEMU adds or removes a supported architecture, this must be manually changed in the const-gen script.
+[UTMQemuConfiguration+ConstantsGenerated.m](../Configuration/UTMQemuConfiguration+ConstantsGenerated.m) needs to be updated by running [const-gen.py](../scripts/const-gen.py). You need to build the [PC on iPhone fork of QEMU][1] for macOS and pass the build directory as an argument to const-gen. It will then run each QEMU executable in order to parse the help text to find changes in device support. If QEMU adds or removes a supported architecture, this must be manually changed in the const-gen script.
 
-Finally, make sure to rename the [binary patches](../patches/data) directory to the new QEMU version. The code patch for the previous QEMU version can be deleted if all the changes have been integrated into the UTM fork of QEMU.
+Finally, make sure to rename the [binary patches](../patches/data) directory to the new QEMU version. The code patch for the previous QEMU version can be deleted if all the changes have been integrated into the PC on iPhone fork of QEMU.
 
 ### Others
 
-The other dependencies are more straightforward. Take the latest release tarball and re-integrate the UTM patches if needed. The UTM [GitHub][2] will usually keep forks of projects it depends on with required patches. The UTM changes should be rebased off of the commit corresponding to the latest release of the project. Then `git format-patch` can be used to generate the patch file which will be applied to the release tarball.
+The other dependencies are more straightforward. Take the latest release tarball and re-integrate the PC on iPhone patches if needed. The PC on iPhone [GitHub][2] will usually keep forks of projects it depends on with required patches. The PC on iPhone changes should be rebased off of the commit corresponding to the latest release of the project. Then `git format-patch` can be used to generate the patch file which will be applied to the release tarball.
 
 [1]: https://github.com/utmapp/qemu
 [2]: https://github.com/utmapp

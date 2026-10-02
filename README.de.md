@@ -1,16 +1,16 @@
-#  UTM
+#  PC on iPhone
 [![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
 > Es ist möglich, eine einzige Maschine zu entwerfen, mit der jede berechenbare Folge berechnet werden kann.
 
 -- <cite>Alan Turing, 1936</cite>
 
-UTM ist ein voll umfänglicher Systememulator und Virtualisierungs-Host für iOS und macOS. Es basiert auf QEMU. Kurz gesagt ermöglicht es, Windows, Linux und weitere Betriebssysteme auf Ihrem Mac, iPhone und iPad auszuführen. Weitere Informationen finden Sie unter https://getutm.app/ und https://mac.getutm.app/
+PC on iPhone ist ein voll umfänglicher Systememulator und Virtualisierungs-Host für iOS und macOS. Es basiert auf QEMU. Kurz gesagt ermöglicht es, Windows, Linux und weitere Betriebssysteme auf Ihrem Mac, iPhone und iPad auszuführen. Weitere Informationen finden Sie unter https://getutm.app/ und https://mac.getutm.app/
 
 <p align="center">
-  <img width="450px" alt="UTM running on an iPhone" src="screen.png">
+  <img width="450px" alt="PC on iPhone running on an iPhone" src="screen.png">
   <br>
-  <img width="450px" alt="UTM running on a MacBook" src="screenmac.png">
+  <img width="450px" alt="PC on iPhone running on a MacBook" src="screenmac.png">
 </p>
 
 ## Funktionen
@@ -31,7 +31,7 @@ UTM ist ein voll umfänglicher Systememulator und Virtualisierungs-Host für iOS
 
 ## UTM SE
 
-UTM/QEMU benötigt für maximale Leistung die dynamische Codegenerierung (JIT).
+PC on iPhone/QEMU benötigt für maximale Leistung die dynamische Codegenerierung (JIT).
 JIT auf iOS-Geräten erfordert entweder ein Gerät mit Jailbreak oder eine der verschiedenen Umgehungslösungen, die für bestimmte iOS-Versionen verfügbar sind (siehe „Installation“ für weitere Details).
 
 UTM SE („Slow Edition“) verwendet einen [threaded interpreter][3], der eine bessere Leistung als ein herkömmlicher Interpreter bietet, jedoch weiterhin langsamer als JIT ist. Diese Technik ähnelt dem Ansatz, den [iSH][4] für die dynamische Ausführung verwendet. Daher benötigt UTM SE weder einen Jailbreak noch JIT-Workarounds und kann als reguläre App per Sideloading installiert werden.
@@ -40,9 +40,9 @@ Zur Optimierung von Größe und Build-Zeiten sind in UTM SE ausschließlich die 
 
 ## Installation
 
-UTM (SE) für iOS: https://getutm.app/install/
+PC on iPhone (SE) für iOS: https://getutm.app/install/
 
-UTM ist auch für macOS verfügbar: https://mac.getutm.app/
+PC on iPhone ist auch für macOS verfügbar: https://mac.getutm.app/
 
 ## Entwicklung
 
@@ -57,11 +57,11 @@ UTM ist auch für macOS verfügbar: https://mac.getutm.app/
 
 ## Lizenz
 
-UTM wird unter der permissiven Apache-2.0-Lizenz vertrieben. Es verwendet jedoch mehrere (L)GPL-Komponenten. Die meisten davon sind dynamisch eingebunden, die gstreamer-Plugins sind jedoch statisch gelinkt, und Teile des Codes stammen aus QEMU. Bitte beachten Sie dies, sofern Sie beabsichtigen, diese Anwendung weiterverbreiten.
+PC on iPhone wird unter der permissiven Apache-2.0-Lizenz vertrieben. Es verwendet jedoch mehrere (L)GPL-Komponenten. Die meisten davon sind dynamisch eingebunden, die gstreamer-Plugins sind jedoch statisch gelinkt, und Teile des Codes stammen aus QEMU. Bitte beachten Sie dies, sofern Sie beabsichtigen, diese Anwendung weiterverbreiten.
 
 Einige Icons wurden von [Freepik](https://www.freepik.com) erstellt und stammen von [www.flaticon.com](https://www.flaticon.com/).
 
-Zusätzlich verwendet das UTM-Frontend die folgenden Komponenten unter der MIT-/BSD-Lizenz:
+Zusätzlich verwendet das PC on iPhone-Frontend die folgenden Komponenten unter der MIT-/BSD-Lizenz:
 
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
 * [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)

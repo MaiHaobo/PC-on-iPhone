@@ -1,8 +1,8 @@
 /* Bundle name */
-"CFBundleName" = "UTM";
+"CFBundleName" = "PC on iPhone";
 
 /* Privacy - Local Network Usage Description */
-"NSLocalNetworkUsageDescription" = "UTM usa la red nativa para encontrar y comunicarse con AltServer.";
+"NSLocalNetworkUsageDescription" = "PC on iPhone usa la red nativa para encontrar y comunicarse con AltServer.";
 
 /* Privacy - Location Always and When In Use Usage Description */
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "El acceso en segundo plano a la máquina virtual requiere de los servicios de localización. Los datos de ubicación no se transfieren fuera del dispositivo.";
@@ -17,5 +17,5 @@
 "NSMicrophoneUsageDescription" = "La máquina virtual necesita el acceso al micrófono.";
 
 /* (No Comment) */
-"UTM virtual machine" = "Máquina virtual de UTM";
+"UTM virtual machine" = "Máquina virtual de PC on iPhone";
 

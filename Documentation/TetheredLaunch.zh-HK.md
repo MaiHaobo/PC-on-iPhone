@@ -12,13 +12,13 @@
 
 ## 簽署
 
-安裝並依循 [iOS App Signer][4] 的說明執行操作。確保你的簽署證書與配置檔案匹配。選擇 UTM.ipa 發行版本做為輸入檔案，然後按一下「開始（Start）」。
+安裝並依循 [iOS App Signer][4] 的說明執行操作。確保你的簽署證書與配置檔案匹配。選擇 PC on iPhone.ipa 發行版本做為輸入檔案，然後按一下「開始（Start）」。
 
 將已簽署的 IPA 儲存為 `UTM-signed.ipa`，當程序完成之後，重新命名 `UTM-signed.ipa` 為 `UTM-signed.zip`，並開啟 ZIP 檔案。macOS 應當將檔案解壓縮至名為 `Payload/` 的新目錄裡。
 
 ## 部署
 
-如要部署 UTM，連接你的裝置並在終端機中執行：
+如要部署 PC on iPhone，連接你的裝置並在終端機中執行：
 
 ```sh
 ios-deploy --bundle /path/to/Payload/UTM.app
@@ -28,7 +28,7 @@ ios-deploy --bundle /path/to/Payload/UTM.app
 
 ## 啟動
 
-如你每次希望啟動 UTM，都需要執行以下內容。（在 iOS 14 當中，不應該透過主畫面啟動 UTM，否則它將無法正常工作！）
+如你每次希望啟動 PC on iPhone，都需要執行以下內容。（在 iOS 14 當中，不應該透過主畫面啟動 PC on iPhone，否則它將無法正常工作！）
 
 ```sh
 ios-deploy --justlaunch --noinstall --bundle /path/to/Payload/UTM.app

@@ -1,6 +1,6 @@
 ## Building
 
-UTM **cannot** build without prebuilt native dependencies (QEMU, SPICE, …) staged
+PC on iPhone **cannot** build without prebuilt native dependencies (QEMU, SPICE, …) staged
 into `sysroot-*` directories at the repo root. Get them from the project's GitHub
 Actions `Sysroot-*` artifacts — don't build them manually unless you're modifying a
 dependency (it's slow and fragile). Then build with `./scripts/build_utm.sh` and

@@ -1,6 +1,6 @@
 # Graphics
 
-The graphics architecture of UTM involves many separate translation layers.
+The graphics architecture of PC on iPhone involves many separate translation layers.
 
 ### GPU Acceleration
 ```
@@ -23,7 +23,7 @@ The graphics architecture of UTM involves many separate translation layers.
 └─────────────────────┘      └────────────────────────────────────────────────┘
 ```
 
-†: Future work that is not currently in UTM.
+†: Future work that is not currently in PC on iPhone.
 
 ### No GPU Acceleration
 ```
@@ -61,11 +61,11 @@ When GPU acceleration is missing, if a `-gl` display hardware is used, then QEMU
 
 ## gfxstream
 
-[gfxstream][3] is an alternative library that allows the guest to serialize OpenGL and Vulkan commands, pass them through a communication channel ("pipe") to the host, and the host will deserialize and evaluate the calls. It differs from virglrenderer in that there is no intermediate translation (guest Mesa -> virgl commands -> host OpenGL). Currently this technology is used for Google's Android emulator and not by mainline QEMU so it will take some time for UTM to adopt the code.
+[gfxstream][3] is an alternative library that allows the guest to serialize OpenGL and Vulkan commands, pass them through a communication channel ("pipe") to the host, and the host will deserialize and evaluate the calls. It differs from virglrenderer in that there is no intermediate translation (guest Mesa -> virgl commands -> host OpenGL). Currently this technology is used for Google's Android emulator and not by mainline QEMU so it will take some time for PC on iPhone to adopt the code.
 
 ## ANGLE
 
-[ANGLE][4] is an implementation of OpenGL ES on top of other graphics APIs. UTM uses three ANGLE backends:
+[ANGLE][4] is an implementation of OpenGL ES on top of other graphics APIs. PC on iPhone uses three ANGLE backends:
 1. On macOS, the `cgl` (Core OpenGL) backend is provided
 2. On iOS, the `eagl` backend is provided
 3. For both macOS and iOS, the `metal` backend is provided
@@ -74,13 +74,13 @@ The three backends have differing compatibility and there is no "best" backend. 
 
 ## MoltenVK
 
-[MoltenVK][5] is used to translate Vulkan to Metal because Apple devices do not support Vulkan natively. MoltenVK is currently not used in UTM.
+[MoltenVK][5] is used to translate Vulkan to Metal because Apple devices do not support Vulkan natively. MoltenVK is currently not used in PC on iPhone.
 
 ## CocoaSpice
 
 [CocoaSpice][6] renders the IOSurface as a texture directly to screen with Metal APIs. It also controls the frame time by synchronizing to the display's vblank signal to reduce tearing. As an optimization, CocoaSpice renderer will only draw the last update before a vblank which means that if the guest is drawing multiple times per monitor refresh, the host will consolidate the draws to a single Metal call. On macOS, the IOSurface is passed from QEMULauncher (rendered in a separate process) through a global `IOSurfaceID`. On iOS, because there is no process separation, the IOSurface reference is passed directly from QEMU to CocoaSpice.
 
-UTM uses SPICE as a QEMU frontend, which means that all input/output goes through SPICE. SPICE was designed to work remotely over the network but when operating remotely, GPU acceleration is not supported. Instead, all pixel buffer updates must be sent from QEMU which is why it is slower than the EGL canvas rendering.
+PC on iPhone uses SPICE as a QEMU frontend, which means that all input/output goes through SPICE. SPICE was designed to work remotely over the network but when operating remotely, GPU acceleration is not supported. Instead, all pixel buffer updates must be sent from QEMU which is why it is slower than the EGL canvas rendering.
 
 # Debugging Tips
 

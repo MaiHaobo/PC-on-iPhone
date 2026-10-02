@@ -1,6 +1,6 @@
 ---
 name: utm-review
-description: Review pending UTM changes before they are submitted. Runs a standard correctness/quality code review of the current branch's diff AND audits it against UTM's contribution rules in CONTRIBUTING.md and AGENTS.md — scope discipline, commit/PR format, AI attribution, logging hooks, generated files, UI/design philosophy, and platform compatibility. Use this before opening or updating a UTM pull request, whenever the user asks to review UTM changes, or when the user runs /utm-review. The /utm-submit workflow expects this to have been run on the current changes first.
+description: Review pending PC on iPhone changes before they are submitted. Runs a standard correctness/quality code review of the current branch's diff AND audits it against PC on iPhone's contribution rules in CONTRIBUTING.md and AGENTS.md — scope discipline, commit/PR format, AI attribution, logging hooks, generated files, UI/design philosophy, and platform compatibility. Use this before opening or updating a PC on iPhone pull request, whenever the user asks to review PC on iPhone changes, or when the user runs /utm-review. The /utm-submit workflow expects this to have been run on the current changes first.
 ---
 
 # utm-review
@@ -10,11 +10,11 @@ Agent-neutral instructions — follow them with whatever tools your agent provid
 per-agent entries under `.claude/commands/`, `.opencode/command/`, etc. just
 point here.
 
-Gate a UTM change through two passes before it can be submitted:
+Gate a PC on iPhone change through two passes before it can be submitted:
 
 1. **A standard code review** for real correctness bugs and worthwhile cleanups.
-2. **A UTM contribution-guideline audit** — the part specific to this project and
-   the reason this workflow exists. UTM has firm rules (especially for
+2. **A PC on iPhone contribution-guideline audit** — the part specific to this project and
+   the reason this workflow exists. PC on iPhone has firm rules (especially for
    AI-assisted contributions) that a generic review won't check.
 
 Report everything you find. This workflow *reviews and reports*; it does not
@@ -26,7 +26,7 @@ If you were invoked with an argument, treat it as a review effort level
 ## Step 1 — Read the authoritative rules
 
 Read `CONTRIBUTING.md` and `AGENTS.md` at the repo root now — they are the single
-source of truth for what makes an acceptable UTM contribution, and Step 4 audits
+source of truth for what makes an acceptable PC on iPhone contribution, and Step 4 audits
 the diff against them. (`AGENTS.md` overrides default tool behavior for this repo
 — notably the commit-trailer policy.)
 
@@ -55,7 +55,7 @@ focused review pass yourself if none exists. If the change includes uncommitted
 edits the review tool doesn't pick up, review those yourself to the same
 standard. Collect the findings; you'll merge them into one report.
 
-## Step 4 — UTM contribution-guideline audit
+## Step 4 — PC on iPhone contribution-guideline audit
 
 Audit the diff against **every** rule in the `CONTRIBUTING.md` and `AGENTS.md` you
 just read — those files *are* the checklist, so keeping it there (rather than
@@ -70,7 +70,7 @@ explicitly:
 - **AI attribution.** Every AI-assisted commit in `"$base"..HEAD` **must** carry an
   `Assisted-by: AGENT:MODEL` trailer — many agents omit it by default, so a missing
   trailer is a common, easy-to-miss finding, not an acceptable absence — and **no
-  `Co-authored-by`** (strip it — UTM takes full human responsibility per the
+  `Co-authored-by`** (strip it — PC on iPhone takes full human responsibility per the
   Linux-kernel policy). Verify with `git log --format='%H%n%B' "$base"..HEAD`.
 - **Scope discipline.** One feature/fix; no edits, refactors, reformatting, or
   whitespace/header churn in unrelated files; no stray logging.
@@ -94,7 +94,7 @@ Produce one consolidated report:
 
 Be honest about uncertainty and avoid nitpicks a senior reviewer wouldn't raise
 (pre-existing issues, things a compiler/linter would catch, lines the change
-didn't touch). The goal is a change that sails through human review on the UTM
+didn't touch). The goal is a change that sails through human review on the PC on iPhone
 repo, not a wall of pedantry.
 
 ## Step 6 — Record that the review ran (handoff to /utm-submit)

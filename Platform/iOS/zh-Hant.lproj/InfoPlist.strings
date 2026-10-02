@@ -1,8 +1,8 @@
 /* Bundle name */
-"CFBundleName" = "UTM";
+"CFBundleName" = "PC on iPhone";
 
 /* Privacy - Local Network Usage Description */
-"NSLocalNetworkUsageDescription" = "UTM 使用本機網路尋找並與 AltServer 通訊。";
+"NSLocalNetworkUsageDescription" = "PC on iPhone 使用本機網路尋找並與 AltServer 通訊。";
 
 /* Privacy - Location Always and When In Use Usage Description */
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "虛擬機背景存取權需要位置服務。位置資料不會傳出手機。";
@@ -17,5 +17,5 @@
 "NSMicrophoneUsageDescription" = "虛擬機需要麥克風存取權。";
 
 /* (No Comment) */
-"UTM virtual machine" = "UTM 虛擬機";
+"UTM virtual machine" = "PC on iPhone 虛擬機";
 

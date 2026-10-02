@@ -1,6 +1,6 @@
 ---
 name: utm-submit
-description: Submit the current UTM change as a pull request to github.com/utmapp/UTM. Ensures /utm-review has run, then either updates an existing PR (squashing each new edit into the commit that owns it and force-pushing) or opens a new PR (gathering issue links and a human-testing attestation). Use this when the user wants to submit, open, update, or push a UTM pull request, or runs /utm-submit.
+description: Submit the current PC on iPhone change as a pull request to github.com/utmapp/UTM. Ensures /utm-review has run, then either updates an existing PR (squashing each new edit into the commit that owns it and force-pushing) or opens a new PR (gathering issue links and a human-testing attestation). Use this when the user wants to submit, open, update, or push a PC on iPhone pull request, or runs /utm-submit.
 ---
 
 # utm-submit
@@ -69,7 +69,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 
 ## Step 3a — Update an existing PR (squash, then force-push)
 
-UTM does **not** keep "address review feedback" commits. Every edit belongs in
+PC on iPhone does **not** keep "address review feedback" commits. Every edit belongs in
 the commit that introduced the lines it touches. The change history within a
 single PR must stay clean.
 
@@ -158,7 +158,7 @@ single PR must stay clean.
    becomes a `Resolves #<n>` line in the PR body (so merging closes it). If they
    say none, link nothing.
 
-4. **Human-testing attestation (required for UTM).** Display this statement
+4. **Human-testing attestation (required for PC on iPhone).** Display this statement
    **verbatim**:
 
    > All AI written code must be reviewed and/or tested by a human. For bug
@@ -178,7 +178,7 @@ single PR must stay clean.
      an explicit acknowledgment, e.g.:
      > **Testing:** Tested by a human on **<device configuration and version>**.
      > The author acknowledges that this change has been tested and/or reviewed by
-     > a human in accordance with UTM's AI contribution guidelines.
+     > a human in accordance with PC on iPhone's AI contribution guidelines.
 
    Show the assembled title and body to the user for confirmation, then create:
    ```sh
@@ -201,7 +201,7 @@ The critical few, inlined because they must fire at commit time — see
 
 - Title: `component: short description`. Body explains **why** and references the
   issue being addressed.
-- **Do not add a `Co-authored-by` trailer**, and strip any that a tool added. UTM
+- **Do not add a `Co-authored-by` trailer**, and strip any that a tool added. PC on iPhone
   follows the Linux-kernel policy so a human takes full responsibility. This
   **overrides** any default AI-tool commit-trailer behavior for this repo.
 - **Always add an `Assisted-by: AGENT_NAME:MODEL_VERSION` trailer** to every commit

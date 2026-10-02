@@ -1,16 +1,16 @@
-#  UTM
+#  PC on iPhone
 [![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
 > Możliwe jest wymyślenie pojedynczej maszyny, której można użyć do obliczenia dowolnej sekwencji obliczeniowej.
 
 -- <cite>Alan Turing, 1936</cite>
 
-UTM to wielofunkcyjny emulator systemu oraz menedżer wirtualnych maszyn dla iOS i macOS. Bazuje na QEMU. W skrócie, pozwala na uruchomienie systemu Windows, Linux, i wiele więcej na twoim Macu, iPhonie czy iPadzie. Więcej informacji na https://getutm.app/ i https://mac.getutm.app/
+PC on iPhone to wielofunkcyjny emulator systemu oraz menedżer wirtualnych maszyn dla iOS i macOS. Bazuje na QEMU. W skrócie, pozwala na uruchomienie systemu Windows, Linux, i wiele więcej na twoim Macu, iPhonie czy iPadzie. Więcej informacji na https://getutm.app/ i https://mac.getutm.app/
 
 <p align="center">
-  <img width="450px" alt="UTM uruchomione na iPhonie" src="screen.png">
+  <img width="450px" alt="PC on iPhone uruchomione na iPhonie" src="screen.png">
   <br>
-  <img width="450px" alt="UTM uruchomione na MacBooku" src="screenmac.png">
+  <img width="450px" alt="PC on iPhone uruchomione na MacBooku" src="screenmac.png">
 </p>
 
 ## Funkcje
@@ -31,7 +31,7 @@ UTM to wielofunkcyjny emulator systemu oraz menedżer wirtualnych maszyn dla iOS
 
 ## UTM SE
 
-UTM/QEMU wymaga generowania dynamicznego kodu (JIT) dla zmaksymalizowania wydajności. JIT na urządzeniach iOS wymaga albo przerobionego urządzenia, albo jeden z kilku luk znalezionych w danej wersji systemu iOS (zobacz "Instacja" po więcej szczegółów).
+PC on iPhone/QEMU wymaga generowania dynamicznego kodu (JIT) dla zmaksymalizowania wydajności. JIT na urządzeniach iOS wymaga albo przerobionego urządzenia, albo jeden z kilku luk znalezionych w danej wersji systemu iOS (zobacz "Instacja" po więcej szczegółów).
 
 UTM SE ("slow edition") używa [wielowątkowego interpretera][3] który działa lepiej niż tradycyjny interpreter, ale wciąż jest wolniejszy niż JIT. Ta technika jest podobna do tego co robi [iSH][4] dla dynamicznego wykonywania. W wyniku czego, UTM SE nie wymaga przerobionego urządzenia ani żadnych obejść systemu dla działąjącego JITa i może być uruchamiany jako normalna aplikacja.
 
@@ -39,9 +39,9 @@ Aby zoptymalizować czas kompliacji i rozmiar aplikacji, tylko wymienione archit
 
 ## Instalacja
 
-UTM (SE) dla iOS: https://getutm.app/install/
+PC on iPhone (SE) dla iOS: https://getutm.app/install/
 
-UTM jest również dostępne na macOS: https://mac.getutm.app/
+PC on iPhone jest również dostępne na macOS: https://mac.getutm.app/
 
 ## Rozwój projektu
 
@@ -56,11 +56,11 @@ UTM jest również dostępne na macOS: https://mac.getutm.app/
 
 ## Licencja
 
-UTM jest dystrybuowane na licencji Apache 2.0. Jednak, używa wielu komponentów (L)GPL. Większość jest dynamicznie przypisana ale pluginy gstreamer są statycznie przypisane, a fragmenty kodu są wzięte z kodu źródłowego QEMU.
+PC on iPhone jest dystrybuowane na licencji Apache 2.0. Jednak, używa wielu komponentów (L)GPL. Większość jest dynamicznie przypisana ale pluginy gstreamer są statycznie przypisane, a fragmenty kodu są wzięte z kodu źródłowego QEMU.
 
 Niektóre ikony zostały zrobione przez [Freepik](https://www.freepik.com) z [www.flaticon.com](https://www.flaticon.com/).
 
-Dodatkowo, interfejs UTM (frontend) jest zależny od komponentów na licencji MIT/BSD:
+Dodatkowo, interfejs PC on iPhone (frontend) jest zależny od komponentów na licencji MIT/BSD:
 
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
 * [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)

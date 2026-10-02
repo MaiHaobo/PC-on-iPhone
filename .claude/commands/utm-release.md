@@ -1,5 +1,5 @@
 ---
-description: Publish a new UTM GitHub release — drafts release notes since the last release, asks for approval, then bumps Build.xcconfig, tags, and creates the release + Releases discussion.
+description: Publish a new PC on iPhone GitHub release — drafts release notes since the last release, asks for approval, then bumps Build.xcconfig, tags, and creates the release + Releases discussion.
 argument-hint: [version x.y.z (default next revision)] [prerelease yes|no (default yes)]
 allowed-tools: Bash, Read, Grep, Glob, Edit, Write, AskUserQuestion
 ---

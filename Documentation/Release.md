@@ -1,15 +1,15 @@
 # Release Guide
 
-This document details the release procedure for UTM team members. The release procedure is mostly automated by GitHub Actions. In short, when you create a new release on the GitHub repository, the following happens:
+This document details the release procedure for PC on iPhone team members. The release procedure is mostly automated by GitHub Actions. In short, when you create a new release on the GitHub repository, the following happens:
 
-1. If UTM dependencies are not cached from a previous run, build them for every platform (iOS, iOS TCI, iOS Simulator, visionOS, visionOS TCI, visionOS Simulator, macOS) and architecture.
-2. Build UTM for every scheme (iOS, iOS SE, iOS Remote, macOS) on each platform and architecture.
+1. If PC on iPhone dependencies are not cached from a previous run, build them for every platform (iOS, iOS TCI, iOS Simulator, visionOS, visionOS TCI, visionOS Simulator, macOS) and architecture.
+2. Build PC on iPhone for every scheme (iOS, iOS SE, iOS Remote, macOS) on each platform and architecture.
 3. Package the iOS and visionOS builds into fakesigned IPAs (`UTM.ipa`, `UTM-HV.ipa`, `UTM-SE.ipa`, `UTM-Remote.ipa`, and the `-visionOS` variants) and a jailbreak DEB (`UTM.deb`) and post them as release assets.
 4. Dispatch updates to the AltStore and Cydia repositories.
-5. Combine dependencies for macOS-arm64 and macOS-x86_64 into universal binaries and build UTM as a macOS universal binary.
+5. Combine dependencies for macOS-arm64 and macOS-x86_64 into universal binaries and build PC on iPhone as a macOS universal binary.
 6. Sign, package, and notarize the universal build into a DMG and post it as a release asset.
 7. Sign and package the universal build for the Mac App Store and submit it to App Store Connect.
-8. Sign UTM SE and UTM Remote (iOS and visionOS) and submit them to App Store Connect.
+8. Sign UTM SE and PC on iPhone Remote (iOS and visionOS) and submit them to App Store Connect.
 
 For more details see the [build.yml](../.github/workflows/build.yml) file.
 
@@ -34,7 +34,7 @@ The app downloads the notes for its own version from the GitHub release and show
   | Prefix | Shown in |
   |--------|----------|
   | starts with `macOS`, e.g. `(macOS)`, `(macOS 26)` | macOS |
-  | starts with `iOS`, e.g. `(iOS)`, `(iOS 17)`, `(iOS Remote)` (but not `(iOS SE)`) | all iOS and visionOS builds, including UTM SE and UTM Remote |
+  | starts with `iOS`, e.g. `(iOS)`, `(iOS 17)`, `(iOS Remote)` (but not `(iOS SE)`) | all iOS and visionOS builds, including UTM SE and PC on iPhone Remote |
   | `(iOS SE)` exactly | UTM SE only |
   | starts with `visionOS` | visionOS builds only |
 
@@ -57,7 +57,7 @@ The app downloads the notes for its own version from the GitHub release and show
   * `(Platform)` only if the change affects one platform, or one version of it (`(macOS 26)`); see the prefix table above.
   * `Component:` when the change belongs to one area. Commonly used: Home, Config, Wizard, Settings, Toolbar, Scripting, utmctl, AVF, QEMU, SPICE, CocoaSpice, ANGLE, USB, Downloader, Localization.
   * `(#issue)` is the issue the change fixes or resolves, not the PR number.
-  * `(thanks @login)` credits a PR or commit author who is not a UTM maintainer.
+  * `(thanks @login)` credits a PR or commit author who is not a PC on iPhone maintainer.
   * Translation changes use the `Localization:` component and name each language in English, not by its code: `* Localization: Updated German (thanks @contributor)`, not `de`. Add the region or script in parentheses when it matters: `Chinese (Hong Kong, Simplified)`.
   * Sort each `## Changes` section into groups:
     1. Changes for every platform, then `(iOS…)` changes, then `(visionOS…)` changes, then `(macOS…)` changes. Keep a versioned prefix such as `(macOS 26)` next to the others for that platform.
@@ -174,7 +174,7 @@ The following certificates (and associated private keys) must be exported from K
 
 Give a password when prompted and save it to the repository secret `SIGNING_CERTIFICATE_PASSWORD`. Then, in Terminal, convert the PKCS#12 file to Base64 and copy it: `cat Certificates.p12 | base64 | pbcopy` and paste it to `SIGNING_CERTIFICATE_P12_DATA`.
 
-Next you need to get each provisioning profile {3 profiles for macOS} X {1 for Developer ID, 1 for Mac App Store} plus the App Store profiles for iOS: UTM SE, its helper extension (`com.utmapp.UTM-SE.iOSHelper`) and UTM Remote. Save each UUID of the profile as `*_PROFILE_UUID` and the Base64 encoded data from `cat name.provisionprofile | base64 | pbcopy` as `*_PROFILE_DATA`.
+Next you need to get each provisioning profile {3 profiles for macOS} X {1 for Developer ID, 1 for Mac App Store} plus the App Store profiles for iOS: UTM SE, its helper extension (`com.utmapp.UTM-SE.iOSHelper`) and PC on iPhone Remote. Save each UUID of the profile as `*_PROFILE_UUID` and the Base64 encoded data from `cat name.provisionprofile | base64 | pbcopy` as `*_PROFILE_DATA`.
 
 ### AltStore Repository
 

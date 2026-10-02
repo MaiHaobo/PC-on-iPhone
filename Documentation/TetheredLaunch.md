@@ -12,13 +12,13 @@ On iOS 14, Apple [patched][1] the trick we used to get JIT working. As a result,
 
 ## Signing
 
-Install and follow the instructions for [iOS App Signer][4]. Make sure your signing certificate and provisioning profiles matches. Select the UTM.ipa release as the input file and press start.
+Install and follow the instructions for [iOS App Signer][4]. Make sure your signing certificate and provisioning profiles matches. Select the PC on iPhone.ipa release as the input file and press start.
 
 Save the signed IPA as `UTM-signed.ipa`. Once the process is completed, rename `UTM-signed.ipa` to `UTM-signed.zip` and open the ZIP file. macOS should extract the files to a new directory named `Payload/`.
 
 ## Deploying
 
-To deploy UTM, connect your device and run in Terminal:
+To deploy PC on iPhone, connect your device and run in Terminal:
 
 ```sh
 ios-deploy --bundle /path/to/Payload/UTM.app
@@ -28,7 +28,7 @@ ios-deploy --bundle /path/to/Payload/UTM.app
 
 ## Launching
 
-You need to run the following each subsequent time you wish to launch UTM. (You cannot launch UTM from the home screen in iOS 14 or it will not work properly!)
+You need to run the following each subsequent time you wish to launch PC on iPhone. (You cannot launch PC on iPhone from the home screen in iOS 14 or it will not work properly!)
 
 ```sh
 ios-deploy --justlaunch --noinstall --bundle /path/to/Payload/UTM.app

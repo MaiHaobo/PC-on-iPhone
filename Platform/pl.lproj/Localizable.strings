@@ -17,7 +17,7 @@
 
 /* UTMConfiguration.swift */
 "This configuration is too old and is not supported." = "Ta konfiguracja jest przestarzała i niewspierana";
-"This configuration is saved with a newer version of UTM and is not compatible with this version." = "Ta konfiguracja została zapisana w nowszej wersji UTM i nie jest kompatybilna z tą wersją programu.";
+"This configuration is saved with a newer version of UTM and is not compatible with this version." = "Ta konfiguracja została zapisana w nowszej wersji PC on iPhone i nie jest kompatybilna z tą wersją programu.";
 "An invalid value of '%@' is used in the configuration file." = "Nieprawidłowa wartość '%@' została użyta w pliku konfiguracyjnym";
 "The backend for this configuration is not supported." = "Funkcja (Backend) dla tej konfiguracji jest nie wspierana.";
 "The drive '%@' already exists and cannot be created." = "Dysk '%@' już istnieje i nie może zostać utworzony.";
@@ -54,7 +54,7 @@
 "Mac Keyboard (macOS 14+)" = "Klawiatura (macOS 14+)";
 
 /* UTMQemuConfiguration.swift */
-"Failed to migrate configuration from a previous UTM version." = "Migracja konfiguracji z poprzedniej wersji UTM zakończona niepowodzeniem.";
+"Failed to migrate configuration from a previous UTM version." = "Migracja konfiguracji z poprzedniej wersji PC on iPhone zakończona niepowodzeniem.";
 "UEFI is not supported with this architecture." = "UEFI nie jest wspierane przez wybraną architekturę.";
 
 /* UTMConfigurationDrive.swift */
@@ -127,7 +127,7 @@
 "Suspend is not supported when GPU acceleration is enabled." = "Wstrzymywanie nie jest wspierane, gdy akceleracja grafiki jest włączona.";
 "Suspend is not supported when an emulated NVMe device is active." = "Wstrzymywanie nie jest wspierane, gdy emulowane urządzenie NVMe jest aktywne.";
 "Failed to access data from shortcut." = "Nie udało się uzyskać dostępu do danych ze skrótu.";
-"This build of UTM does not support emulating the architecture of this VM." = "Ta wersja UTM nie wspiera emulacji danej architektury wybranej maszyny wirtualnej.";
+"This build of UTM does not support emulating the architecture of this VM." = "Ta wersja PC on iPhone nie wspiera emulacji danej architektury wybranej maszyny wirtualnej.";
 "Failed to access drive image path." = "Nie udało się uzyskać dostępu do ścieżki obrazu dysku.";
 "Failed to access shared directory." = "Nie udało się uzyskać dostępu do współdzielonego katalogu.";
 "The virtual machine is in an invalid state." = "Ta maszyna wirtualna jest w nieprawidłowym stanie.";
@@ -143,14 +143,14 @@
 "Waiting for VM to connect to display..." = "Czekam na połączenie wirtualnej maszynę z oknem...";
 
 /* UTMRemoteConnectView.swift */
-"Select a UTM Server" = "Wybierz serwer UTM";
+"Select a UTM Server" = "Wybierz serwer PC on iPhone";
 "Help" = "Pomoc";
 "New Connection" = "Nowe połączenie";
 "Saved" = "Zapisane";
 "Edit…" = "Edytuj...";
 "Delete" = "Usuń";
 "Discovered" = "Odnalezione";
-"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "Upewnij się, że na twoim Macu zainstalowana jest najnowsza wersja UTM oraz Serwer UTM jest włączony. Możesz pobrać UTM z App Store dla twojego Maca.";
+"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "Upewnij się, że na twoim Macu zainstalowana jest najnowsza wersja PC on iPhone oraz Serwer PC on iPhone jest włączony. Możesz pobrać PC on iPhone z App Store dla twojego Maca.";
 "Name (optional)" = "Nazwa (opcjonalne)";
 "Hostname or IP address" = "Nazwa hosta lub adres IP";
 "Port" = "Port";
@@ -231,10 +231,10 @@
 "Are you sure you want to stop this VM and exit? Any unsaved changes will be lost." = "Czy jesteś pewien, że chcesz zatrzymać tą maszynę wirtualną i wyjść? Wszystkie niezapisane zmiany zostaną utracone.";
 "No" = "Nie";
 "Yes" = "Tak";
-"Are you sure you want to exit UTM?" = "Jesteś pewny że chcesz wyjść z UTM?";
+"Are you sure you want to exit UTM?" = "Jesteś pewny że chcesz wyjść z PC on iPhone?";
 "Are you sure you want to reset this VM? Any unsaved changes will be lost." = "Jesteś pewny że chcesz zresetować tą maszynę wirtualną? Wszystkie niezapisane zmiany zostaną utracone.";
 "Would you like to connect '%@' to this virtual machine?" = "Czy chcesz połączyć '%@' z tą maszyną wirtualną?";
-"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "Zaczyna brakować pamięci! UTM może zostać zatrzymane przez iOS. Możesz temu zapobiec przez zmniejszenie ilości pamięci i/lub pamięci podręcznej JIT przypisanej do maszyny wirtualnej.";
+"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "Zaczyna brakować pamięci! PC on iPhone może zostać zatrzymane przez iOS. Możesz temu zapobiec przez zmniejszenie ilości pamięci i/lub pamięci podręcznej JIT przypisanej do maszyny wirtualnej.";
 "OK" = "OK";
 "No output device is selected for this window." = "Nie wybrano żadnego urządzenia wyjścia dla tego okna.";
 
@@ -311,11 +311,11 @@
 "To capture input or to release the capture, press Command and Option at the same time." = "Aby przechwycić klawiaturę lub uwolnić ją, naciśnij ⌘ i ⌥  w tym samym czasie.";
 
 /* AppDelegate.swift */
-"Quitting UTM will kill all running VMs." = "Wyjście z UTM zatrzyma wszystkie uruchomione maszyny.";
+"Quitting UTM will kill all running VMs." = "Wyjście z PC on iPhone zatrzyma wszystkie uruchomione maszyny.";
 
 /* SettingsView.swift */
 "Application" = "Aplikacja";
-"Keep UTM running after last window is closed and all VMs are shut down" = "Zostaw UTM uruchomione nawet jeśli ostatnie okno jest zamknięte i wszystkie maszyny wirtualne są wyłączone.";
+"Keep UTM running after last window is closed and all VMs are shut down" = "Zostaw PC on iPhone uruchomione nawet jeśli ostatnie okno jest zamknięte i wszystkie maszyny wirtualne są wyłączone.";
 "Show dock icon" = "Pokazuj ikonę w docku";
 "Show menu bar icon" = "Pokazuj ikonę na pasku menu";
 "Prevent system from sleeping when any VM is running" = "Zapobiegaj usypianiu systemu gdy jakakolwiek maszyna wirtualna jest uruchomiona";
@@ -356,7 +356,7 @@
 "QEMU USB" = "QEMU USB";
 "Do not show prompt when USB device is plugged in" = "Nie pokazuj powiadomienia gdy urządzenie USB zostanie podłączone";
 "Startup" = "Uruchomienie";
-"Automatically start UTM server" = "Automatycznie uruchamiaj serwer UTM";
+"Automatically start UTM server" = "Automatycznie uruchamiaj serwer PC on iPhone";
 "Reject unknown connections by default" = "Domyślnie odrzucaj nieznane połączenia";
 "If checked, you will not be prompted about any unknown connection and they will be rejected." = "Jeśli zaznaczone, nie będziesz informowany o żadnych nieznanych połączeniach, a one będą odrzucane.";
 "Allow access from external clients" = "Pozwalaj na dostęp dla klientów zewnętrznych";
@@ -368,17 +368,17 @@
 "If enabled, clients must enter a password. This is required if you want to access the server externally." = "Jeśli włączone, klienci muszą wprowadzić hasło. Jest to wymagane jeśli chcesz uzyskać dostęp do serwera zewnętrznie.";
 
 /* UTMApp.swift */
-"UTM" = "UTM";
-"UTM Server" = "Serwer UTM";
+"UTM" = "PC on iPhone";
+"UTM Server" = "Serwer PC on iPhone";
 
 /* UTMMenuBarExtraScene.swift */
-"Show UTM" = "Pokazuj UTM";
+"Show UTM" = "Pokazuj PC on iPhone";
 "Show the main window." = "Pokazuj główne okno";
 "Hide dock icon on next launch" = "Ukryj ikonę w Docku przy następnym uruchomieniu";
-"Requires restarting UTM to take affect." = "Wymaga ponownego uruchomienia UTM, aby zastosować zmiany.";
+"Requires restarting UTM to take affect." = "Wymaga ponownego uruchomienia PC on iPhone, aby zastosować zmiany.";
 "No virtual machines found." = "Nie znaleziono wirtualnych maszyn.";
 "Quit" = "Wyjdź";
-"Terminate UTM and stop all running VMs." = "Zakończ UTM i zatrzymaj uruchomione wirtualne maszyny.";
+"Terminate UTM and stop all running VMs." = "Zakończ PC on iPhone i zatrzymaj uruchomione wirtualne maszyny.";
 "Start" = "Uruchom";
 "Stop" = "Zatrzymaj";
 "Suspend" = "Wstrzymaj";
@@ -386,7 +386,7 @@
 "Busy…" = "Zajęta...";
 
 /* UTMServer.swift */
-"Enable UTM Server" = "Włącz serwer UTM";
+"Enable UTM Server" = "Włącz serwer PC on iPhone";
 "Reset Identity" = "Resetuj identyfikacje serwerów";
 "Do you want to forget all clients and generate a new server identity? Any clients that previously paired with this server will be instructed to manually unpair with this server before they can connect again." = "すべてのクライアントを削除して、新しいサーバIDを生成しますか? 以前このサーバとペアリングしていたクライアントは、再度接続する前に手動でこのサーバとのペアリングを解除するよう指示されます。";
 "Server IP: %s, Port: %s" = "Adres IP serwera: %s, Port: %s";
@@ -453,7 +453,7 @@
 /* VMConfigAppleSerialView.swift */
 "Connection" = "Połączenie";
 "Mode" = "Tryb";
-"Note: Shared directories will not be saved and will be reset when UTM quits." = "Pamiętaj: Współdzielone katalogi nie będą zapisane i się zresetują, gdy zamkniesz UTM.";
+"Note: Shared directories will not be saved and will be reset when UTM quits." = "Pamiętaj: Współdzielone katalogi nie będą zapisane i się zresetują, gdy zamkniesz PC on iPhone.";
 "Shared Path" = "Ścieżka wspołdzielonego katalogu";
 "Add" = "Dodaj";
 "This directory is already being shared." = "Ten katalog jest już współdzielony.";
@@ -496,7 +496,7 @@
 /* VMConfigQEMUArgumentsView.swift */
 "Arguments" = "Parametry";
 "Export QEMU Command…" = "Eksportuj komendę QEMU...";
-"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "Eksportuj wszystkie argumenty do pliku tekstowego. Jest to tylko dla potrzeb debugowania z uwagi, że wbudowany do UTM, QEMU różni się od głównej wersji QEMU we wspieranych parametrach.";
+"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "Eksportuj wszystkie argumenty do pliku tekstowego. Jest to tylko dla potrzeb debugowania z uwagi, że wbudowany do PC on iPhone, QEMU różni się od głównej wersji QEMU we wspieranych parametrach.";
 "Move Up" = "Przenieś wyżej";
 "Move Down" = "Przenieś niżej";
 
@@ -534,7 +534,7 @@
 
 /* SavePanel.swift */
 "Select where to save debug log:" = "Wybierz, gdzie zapisać plik dziennika zdzarzeń do debugowania:";
-"Select where to save UTM Virtual Machine:" = "Wybierz, gdzie zapisać wirtualną maszynę UTM:";
+"Select where to save UTM Virtual Machine:" = "Wybierz, gdzie zapisać wirtualną maszynę PC on iPhone:";
 "Select where to export QEMU command:" = "Wybierz, gdzie wyeksportować komendę QEMU:";
 
 /* Platform/visionOS */
@@ -553,7 +553,7 @@
 "Description" = "Opis";
 
 /* ContentView.swift */
-"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https:/*getutm.app/install/ for more details." = "Twoja wersja systemu iOS nie wspiera uruchamiania wirtualnych maszyn bez modyfikacji. Musisz albo uruchomić UTM na jailbreakowanym urządzeniu albo z dołączonym zdalnym debuggerem. Sprawdź https:/*getutm.app/install/ po więcej informacji.";
+"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https:/*getutm.app/install/ for more details." = "Twoja wersja systemu iOS nie wspiera uruchamiania wirtualnych maszyn bez modyfikacji. Musisz albo uruchomić PC on iPhone na jailbreakowanym urządzeniu albo z dołączonym zdalnym debuggerem. Sprawdź https:/*getutm.app/install/ po więcej informacji.";
 
 /* RAMSlider.swift */
 "Size" = "Rozmiar";
@@ -645,7 +645,7 @@
 "If enabled, the default input devices will be emulated on the USB bus." = "Jeśli włączone, domyślne urządzenia wejścia będą emulowane na magistrali USB.";
 "USB Support" = "Wsparcie USB";
 "USB Sharing" = "Współdzielenie USB";
-"USB sharing not supported in this build of UTM." = "Współdzielenie USB nie jest wspieranę przez tą wersję UTM.";
+"USB sharing not supported in this build of UTM." = "Współdzielenie USB nie jest wspieranę przez tą wersję PC on iPhone.";
 "Share USB devices from host" = "Udostępnij urządzenia USB hosta";
 "Maximum Shared USB Devices" = "Maksymalna ilość współdzielonych urządzeń USB";
 "Additional Settings" = "Dodatkowe ustawienia";
@@ -729,7 +729,7 @@
 "This change will reset all settings" = "Ta zmiania zresetuje wszystkie ustawienia.";
 "Are you sure you want to reset this VM? Any unsaved changes will be lost." = "Jesteś pewien że chcesz zresetować tą wirtualną maszynę? Wszelkie niezapisane dane zostaną utracone.";
 "Architecture" = "Architektura";
-"The selected architecture is unsupported in this version of UTM." = "Wybrana architektura jest niewspierana przez tą wersję UTM.";
+"The selected architecture is unsupported in this version of UTM." = "Wybrana architektura jest niewspierana przez tą wersję PC on iPhone.";
 "Hide Unused…" = "Ukryj nieużywane...";
 "Show All…" = "Pokaż wszystko...";
 "Stop" = "Zatrzymaj";
@@ -785,9 +785,9 @@
 "Create a new VM" = "Utwórz nową maszynę wirtualną";
 
 /* VMPlaceholderView.swift */
-"Welcome to UTM" = "Witaj w UTM!";
+"Welcome to UTM" = "Witaj w PC on iPhone!";
 "Create a New Virtual Machine" = "Stwórz nową wirtualną maszynę";
-"Browse UTM Gallery" = "Przeglądaj galerię UTM";
+"Browse UTM Gallery" = "Przeglądaj galerię PC on iPhone";
 "User Guide" = "Poradnik użytkownika";
 "Support" = "Wsparcie";
 "Server" = "Serwer";
@@ -813,7 +813,7 @@
 "Run selected VM" = "Uruchom wybraną wirtualną maszynę";
 "Edit selected VM" = "Edytuj wybraną wirtualną maszynę";
 "Preferences" = "Preferencje";
-"Show UTM preferences" = "Pokaż preferencje UTM";
+"Show UTM preferences" = "Pokaż preferencje PC on iPhone";
 
 /* VMWizardDrivesView.swift */
 "Storage" = "Pamięć masowa";
@@ -876,7 +876,7 @@
 "Shared Directory Path" = "Ścieżka współdzielonego katalogu";
 "Directory" = "Katalog";
 "Share is read only" = "Wspódzielony katalog jest tylko do odczytu";
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Opcjonalnie, wybierz katalog, aby był on dostępny z poziomu wirtualnej maszyny. Pamiętaj, że wsparcie dla współdzielonych katalogów zależy od systemu operacyjnego gościa i może wymagać instalacji dodatkowych sterowników. Zobacz strony wsparcia UTM po więcej szczegółów.";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "Opcjonalnie, wybierz katalog, aby był on dostępny z poziomu wirtualnej maszyny. Pamiętaj, że wsparcie dla współdzielonych katalogów zależy od systemu operacyjnego gościa i może wymagać instalacji dodatkowych sterowników. Zobacz strony wsparcia PC on iPhone po więcej szczegółów.";
 
 /* VMWizardStartView.swift */
 "Start" = "Uruchom";
@@ -886,7 +886,7 @@
 "Slower, but can run other CPU architectures." = "Wolniejsze, ale może uruchomić system z inną architekturą niż procesor";
 "Virtualization is not supported on your system." = "Wirtualizacja nie jest wspierana przez twój system.";
 "This build does not emulation." = "Ta wersja nie wspiera emulacji.";
-"Download prebuilt from UTM Gallery…" = "Pobierz gotowca z Galerii UTM...";
+"Download prebuilt from UTM Gallery…" = "Pobierz gotowca z Galerii PC on iPhone...";
 "Existing" = "Istniejące";
 
 /* VMWizardState.swift */
@@ -928,7 +928,7 @@
 "Cancel download" = "Anuluj pobieranie";
 
 /* UTMUnavailableVMView.swift */
-"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "Ta maszyna wirtualna musi być dodana ponownie do UTM przez otwarcie jej za pomocą Findera. Możesz ją znaleźć w tej ścieżce: %@";
+"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "Ta maszyna wirtualna musi być dodana ponownie do PC on iPhone przez otwarcie jej za pomocą Findera. Możesz ją znaleźć w tej ścieżce: %@";
 "This virtual machine cannot be found at: %@" = "Ta wirtualna maszyna nie została znaleziona w: %@";
 
 /* Platform */
@@ -937,7 +937,7 @@
 "An existing virtual machine already exists with this name." = "Istnieje już wirtualna maszyna z tą nazwą.";
 "Failed to clone VM." = "Nie udało się zamknąć wirtualnej maszyny.";
 "Unable to add a shortcut to the new location." = "Nie udało się dodać skrótu do nowej lokalizacji.";
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "Nie udało się zaimportować tej maszyny wirtualnej. Konfiguracja może nie być prawidłowa albo została utworzona w nowszej wersji UTM lub na platformie która nie jest kompatybilna z tą wersją UTM.";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "Nie udało się zaimportować tej maszyny wirtualnej. Konfiguracja może nie być prawidłowa albo została utworzona w nowszej wersji PC on iPhone lub na platformie która nie jest kompatybilna z tą wersją PC on iPhone.";
 "Failed to parse imported VM." = "Nie udało się parsować zaimportowanej wirtualnej maszyny.";
 "Failed to parse download URL." = "Nie udało się parsować adresu URL pobierania.";
 "Cannot find AltServer for JIT enable. You cannot run VMs until JIT is enabled." = "Nie udało się znaleźć AltServer dla aktywacji JIT. Uruchomienie wirtualnej maszyny będzie niemożliwe dopóki JIT nie będzie aktywowany.";
@@ -951,7 +951,7 @@
 "AltJIT error: (error.localizedDescription)" = "Błąd AltJIT ：(error.localizedDescription)";
 
 /* UTMDownloadVMTask.swift */
-"There is no UTM file in the downloaded ZIP archive." = "Pobrane archiwum ZIP nie zawiera żadnego pliku UTM.";
+"There is no UTM file in the downloaded ZIP archive." = "Pobrane archiwum ZIP nie zawiera żadnego pliku PC on iPhone.";
 "Failed to parse the downloaded VM." = "Nie udało się parsować pobranej wirtualnej maszyny.";
 
 /* UTMDownloadSupportToolsTask.swift */
@@ -1007,7 +1007,7 @@
 "A client with fingerprint '%@' is attempting to connect." = "Kilent z odciskiem palca '%@' próbuje się połączyć.";
 "Remote Client Connected" = "Połączono ze zdalnym klientem";
 "Established connection from %@." = "Próba nawiązenia połączenia od '%@'.";
-"UTM Remote Server Error" = "Błąd serwera zdalnego UTM";
+"UTM Remote Server Error" = "Błąd serwera zdalnego PC on iPhone";
 "Cannot reserve port '%@' for external access from NAT. Make sure no other device on the network has reserved it." = "Nie można zarezerwować portu '%@' dla dostępu zewnętrznego z NAT. Upewnij się, że żadne inne urządzenie w sieci go nie zarezerwowało.";
 "Not authenticated." = "Nieuwiezytelniony";
 "The client interface version does not match the server." = "Wersja interfejsu klienta nie zgadza się z wersją interfejsu serwera.";
@@ -1018,7 +1018,7 @@
 /* Scripting */
 
 /* UTMScriptingUSBDeviceImpl.swift */
-"UTM is not ready to accept commands." = "UTM nie jest gotowy, aby przymować komendy.";
+"UTM is not ready to accept commands." = "PC on iPhone nie jest gotowy, aby przymować komendy.";
 "The device cannot be found." = "Urządzenie nie może zostać odnalezione.";
 "The device is not currently connected." = "Urządzenie jest obecnie nie podłączone.";
 
@@ -1073,7 +1073,7 @@
 /* UTMQemuVirtualMachine.m */
 "QEMU exited from an error: %@" = "QEMU zakończył z błędem: %@";
 "Failed to access data from shortcut." = "Nie udało się uzyskać dostępu do danych ze skrótu.";
-"This build of UTM does not support emulating the architecture of this VM." = "Ta wersja UTM nie wspiera emulacji architektury tej wirtualnej maszyny.";
+"This build of UTM does not support emulating the architecture of this VM." = "Ta wersja PC on iPhone nie wspiera emulacji architektury tej wirtualnej maszyny.";
 "Error trying to restore external drives and shares: %@" = "Wystąpił błąd podczas próby odzyskania dysku zewnętrznego i współdzielonego katalogu: %@";
 "Error trying to start shared directory: %@" = "Wystąpił błąd podczas próby uruchomienia współdzielonego katalogu ：%@";
 "Error trying to restore removable drives: %@" = "Wystąpił błąd podczas próby odzyskania dysków zewnętrznych: %@";
@@ -1161,7 +1161,7 @@
 "Running" = "Uruchomiono";
 "USB 3.0 (XHCI) Support" = "Wsparcie USB 3.0 (XHCI)";
 "USB not supported in console display mode." = "USB nie jest wspierane w trybie konsolowym.";
-"USB not supported in this build of UTM." = "USB nie jest wspierane przez tą wersję UTM.";
+"USB not supported in this build of UTM." = "USB nie jest wspierane przez tą wersję PC on iPhone.";
 "This virtual machine has been deleted." = "Ta wirtualna maszyna została usunięta.";
 "Type" = "Typ";
 "Selected:" = "Wybrane:";
@@ -1194,10 +1194,10 @@
 /* VMListViewController */
 "A VM already exists with this name." = "Wirtualna maszyna o tej nazwie już istnieje.";
 "Cannot find VM." = "Nie udało się znaleźć maszyny wirtualnej.";
-"Invalid UTM not imported." = "Niewłaściwy UTM, nie zaimportowano.";
+"Invalid UTM not imported." = "Niewłaściwy PC on iPhone, nie zaimportowano.";
 
 /* VMDisplayViewController */
-"An internal error has occured. UTM will terminate." = "Wystąpił błąd wewnętrzny. UTM zostanie zatrzymane.";
+"An internal error has occured. UTM will terminate." = "Wystąpił błąd wewnętrzny. PC on iPhone zostanie zatrzymane.";
 "Failed to save VM snapshot. Usually this means at least one device does not support snapshots." = "Nie udało się zapisać migawki wirtualnej maszyny. Zazwyczaj oznacza to, że conajmniej jedno urządzenie nie wspiera migawek.";
 "Hint: To show the toolbar again, use a three-finger swipe down on the screen." = "Wskazówka: Aby znów pokazać pasek narzędzi, przesuń w dół trzema palcami na ekranie.";
 "You must terminate the running VM before you can import a new VM." = "Musisz zamknąć obecenie uruchomioną maszynę, zanim zaczniesz importować następną.";
@@ -1274,12 +1274,12 @@
 "Unknown" = "Nieznany";
 
 /* Startup message */
-"Welcome to UTM! Due to a bug in iOS, if you force kill this app, the system will be unstable and you cannot launch UTM again until you reboot. The recommended way to terminate this app is the button on the top left." = "Witaj w UTM! Przez błąd w systemie iOS, jeśli wymusisz zatrzymanie tej aplikacji, system będzie nieużywalny, nie możesz też ponownie uruchomić UTM do momentu ponownego uruchomienia. Zalecane jest zatrzymanie działania tej aplikacji za pomocą tego przycisku w lewym górnym rogu.";
+"Welcome to UTM! Due to a bug in iOS, if you force kill this app, the system will be unstable and you cannot launch UTM again until you reboot. The recommended way to terminate this app is the button on the top left." = "Witaj w PC on iPhone! Przez błąd w systemie iOS, jeśli wymusisz zatrzymanie tej aplikacji, system będzie nieużywalny, nie możesz też ponownie uruchomić PC on iPhone do momentu ponownego uruchomienia. Zalecane jest zatrzymanie działania tej aplikacji za pomocą tego przycisku w lewym górnym rogu.";
 
 /* UTMData
    VMConfigDrivePickerViewController */
 "Would you like to import an existing disk image or create a new one?" = "Czy chciałbyś zaimportować istniejący dysk czy stworzyć nowy?";
-"You cannot import a .utm package as a drive. Did you mean to open the package with UTM?" = "Nie możesz zaimportować paczki .utm jako dysku. Masz na myśli otworzyć paczkę za pomocą UTM?";
+"You cannot import a .utm package as a drive. Did you mean to open the package with UTM?" = "Nie możesz zaimportować paczki .utm jako dysku. Masz na myśli otworzyć paczkę za pomocą PC on iPhone?";
 "You cannot import a directory as a drive." = "Nie możesz zaimportować katalogu jako dysku.";
 
 /* VMConfigDriveDetailsViewController */

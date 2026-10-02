@@ -1,5 +1,5 @@
 ---
-description: Submit the current UTM change as a PR to utmapp/UTM — ensures /utm-review ran, then updates an existing PR (blame-squash + force-push) or opens a new one (issue links + human-test attestation).
+description: Submit the current PC on iPhone change as a PR to utmapp/PC on iPhone — ensures /utm-review ran, then updates an existing PR (blame-squash + force-push) or opens a new one (issue links + human-test attestation).
 argument-hint: [PR number or URL — for updates]
 allowed-tools: Bash, Read, Grep, Glob, Skill, Task, AskUserQuestion
 ---

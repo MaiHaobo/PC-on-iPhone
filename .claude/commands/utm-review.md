@@ -1,5 +1,5 @@
 ---
-description: Review pending UTM changes (standard code review + CONTRIBUTING.md/AGENTS.md audit) before submitting. Run before /utm-submit.
+description: Review pending PC on iPhone changes (standard code review + CONTRIBUTING.md/AGENTS.md audit) before submitting. Run before /utm-submit.
 argument-hint: [low|medium|high|max]
 allowed-tools: Bash, Read, Grep, Glob, Skill, Task
 ---

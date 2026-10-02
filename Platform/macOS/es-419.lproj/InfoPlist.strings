@@ -1,9 +1,9 @@
 /* Bundle name */
-"CFBundleName" = "UTM";
+"CFBundleName" = "PC on iPhone";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Se requiere permiso para que cualquier máquina virtual grabe desde el micrófono.";
 
 /* (No Comment) */
-"UTM virtual machine" = "Máquina virtual de UTM";
+"UTM virtual machine" = "Máquina virtual de PC on iPhone";
 

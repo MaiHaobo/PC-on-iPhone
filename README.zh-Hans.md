@@ -1,16 +1,16 @@
-#  UTM
+#  PC on iPhone
 [![Build](https://github.com/utmapp/UTM/actions/workflows/build.yml/badge.svg?branch=main&event=push)][1]
 
 > 发明一台可用于计算任何可计算序列的机器是可行的。
 
 -- <cite>艾伦·图灵（Alan Turing），1936 年</cite>
 
-UTM 是适用于 iOS 和 macOS 的全功能系统模拟器和虚拟机主机。它基于 QEMU。简而言之，它允许你在 Mac、iPhone 和 iPad 上运行 Windows、Linux 等。有关更多信息，请访问 https://getutm.app/ 与 https://mac.getutm.app/
+PC on iPhone 是适用于 iOS 和 macOS 的全功能系统模拟器和虚拟机主机。它基于 QEMU。简而言之，它允许你在 Mac、iPhone 和 iPad 上运行 Windows、Linux 等。有关更多信息，请访问 https://getutm.app/ 与 https://mac.getutm.app/
 
 <p align="center">
-  <img width="450px" alt="在 iPhone 上运行的 UTM" src="screen.png">
+  <img width="450px" alt="在 iPhone 上运行的 PC on iPhone" src="screen.png">
   <br>
-  <img width="450px" alt="在 MacBook 上运行的 UTM" src="screenmac.png">
+  <img width="450px" alt="在 MacBook 上运行的 PC on iPhone" src="screenmac.png">
 </p>
 
 ## 特色
@@ -31,7 +31,7 @@ UTM 是适用于 iOS 和 macOS 的全功能系统模拟器和虚拟机主机。�
 
 ## UTM SE
 
-UTM/QEMU 需要动态代码生成（JIT）才能获得最佳性能。iOS 设备上的 JIT 需要越狱设备，或为特定版本的 iOS 找到的各种变通方法之一（有关更多详细信息，请参阅“安装”）。
+PC on iPhone/QEMU 需要动态代码生成（JIT）才能获得最佳性能。iOS 设备上的 JIT 需要越狱设备，或为特定版本的 iOS 找到的各种变通方法之一（有关更多详细信息，请参阅“安装”）。
 
 UTM SE（“较慢版”）使用[线程解释器][3]，其性能优于传统解释器，但仍然比 JIT 慢。此种技术与 [iSH][4] 用于动态执行的技术相似。因此，UTM SE 不需要越狱或任何 JIT 变通办法，且可以作为常规应用程序侧载。
 
@@ -39,9 +39,9 @@ UTM SE（“较慢版”）使用[线程解释器][3]，其性能优于传统解
 
 ## 安装
 
-iOS 版 UTM (SE)：https://getutm.app/install/
+iOS 版 PC on iPhone (SE)：https://getutm.app/install/
 
-UTM 也可以在 macOS 上使用：https://mac.getutm.app/
+PC on iPhone 也可以在 macOS 上使用：https://mac.getutm.app/
 
 ## 开发
 
@@ -56,11 +56,11 @@ UTM 也可以在 macOS 上使用：https://mac.getutm.app/
 
 ## 许可
 
-UTM 在宽容的 Apache 2.0 许可证分发。然而，它使用了若干 (L)GPL 组件。大多数组件为动态链接，但 gstreamer 插件是静态链接的，部分代码取自 QEMU。若要打算重新分发此应用程序，请注意这一点。
+PC on iPhone 在宽容的 Apache 2.0 许可证分发。然而，它使用了若干 (L)GPL 组件。大多数组件为动态链接，但 gstreamer 插件是静态链接的，部分代码取自 QEMU。若要打算重新分发此应用程序，请注意这一点。
 
 某些图标由 [Freepik](https://www.freepik.com) 从 [www.flaticon.com](https://www.flaticon.com/) 制作。
 
-此外，UTM 前端依赖于以下 MIT/BSD 许可的组件：
+此外，PC on iPhone 前端依赖于以下 MIT/BSD 许可的组件：
 
 * [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager)
 * [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm)

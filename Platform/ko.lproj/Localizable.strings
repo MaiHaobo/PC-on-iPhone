@@ -54,7 +54,7 @@
 "Mac Keyboard (macOS 14+)" = "Mac 키보드 (macOS 14 이상)";
 
 // UTMQemuConfiguration.swift
-"Failed to migrate configuration from a previous UTM version." = "이전 UTM 버전으로부터 구성을 마이그레이션하는 데 실패하였습니다.";
+"Failed to migrate configuration from a previous UTM version." = "이전 PC on iPhone 버전으로부터 구성을 마이그레이션하는 데 실패하였습니다.";
 "UEFI is not supported with this architecture." = "이 아키텍처에서는 UEFI가 지원되지 않습니다.";
 
 // QEMUConstant.swift
@@ -123,7 +123,7 @@
 "Suspend is not supported when GPU acceleration is enabled." = "GPU 가속이 활성화된 경우 일시 중지가 지원되지 않습니다.";
 "Suspend is not supported when an emulated NVMe device is active." = "에뮬레이트된 NVMe 장치가 활성 상태인 경우 일시 중지가 지원되지 않습니다.";
 "Failed to access data from shortcut." = "바로가기로부터 데이터에 접근할 수 없습니다.";
-"This build of UTM does not support emulating the architecture of this VM." = "현재 UTM 빌드에서는 이 가상 머신의 아키텍처를 에뮬레이트할 수 없습니다.";
+"This build of UTM does not support emulating the architecture of this VM." = "현재 PC on iPhone 빌드에서는 이 가상 머신의 아키텍처를 에뮬레이트할 수 없습니다.";
 "Failed to access drive image path." = "드라이브 이미지 경로에 접근할 수 없습니다.";
 "Failed to access shared directory." = "공유 디렉터리에 접근할 수 없습니다.";
 "The virtual machine is in an invalid state." = "가상 머신이 유효하지 않은 상태입니다.";
@@ -139,7 +139,7 @@
 // UTMDonateView.swift
 "Your support is the driving force that helps UTM stay independent. Your contribution, no matter the size, makes a significant difference. It enables us to develop new features and maintain existing ones. Thank you for considering a donation to support us." = "모든 지원은 UTM을 독립적으로 유지하게 만들어주는 원동력입니다. 규모에 상관 없이 모든 기여는 UTM에 새로운 기능을 추가하고 유지하는 데에 큰 도움이 됩니다. 기부를 고려해 주셔서 감사드립니다.";
 "GitHub Sponsors" = "GitHub 스폰서";
-"Support UTM" = "UTM 지원";
+"Support UTM" = "PC on iPhone 지원";
 "One Time Donation" = "일시(1회) 기부";
 "Recurring Donation" = "정기 기부";
 "Manage Subscriptions…" = "구독 관리…";
@@ -159,14 +159,14 @@
 "Waiting for VM to connect to display..." = "가상 머신의 디스플레이 연결을 기다리는 중…";
 
 // UTMRemoteConnectView.swift
-"Select a UTM Server" = "UTM 서버 선택";
+"Select a UTM Server" = "PC on iPhone 서버 선택";
 "Help" = "도움말";
 "New Connection" = "새 연결";
 "Saved" = "저장됨";
 "Edit…" = "편집…";
 "Delete" = "제거";
 "Discovered" = "발견됨";
-"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "사용자의 Mac에서 최신 버전의 UTM이 실행 중이고 UTM 서버가 활성화되어 있는지 확인해 주세요. Mac App Store에서 UTM을 다운로드할 수 있습니다.";
+"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "사용자의 Mac에서 최신 버전의 UTM이 실행 중이고 PC on iPhone 서버가 활성화되어 있는지 확인해 주세요. Mac App Store에서 UTM을 다운로드할 수 있습니다.";
 "Name (optional)" = "이름 (선택 사항)";
 "Hostname or IP address" = "호스트명 또는 IP 주소";
 "Port" = "포트";
@@ -348,7 +348,7 @@
 
 // SettingsView.swift
 "Application" = "프로그램";
-"Keep UTM running after last window is closed and all VMs are shut down" = "마지막 창이 닫히고 모든 가상 머신이 종료된 후에도 UTM 실행 유지";
+"Keep UTM running after last window is closed and all VMs are shut down" = "마지막 창이 닫히고 모든 가상 머신이 종료된 후에도 PC on iPhone 실행 유지";
 "Show dock icon" = "Dock에 아이콘 표시";
 "Show menu bar icon" = "메뉴 바에 아이콘 표시";
 "Prevent system from sleeping when any VM is running" = "실행 중인 가상 머신이 있으면 시스템 절전 방지";
@@ -389,7 +389,7 @@
 "QEMU USB" = "QEMU USB";
 "Do not show prompt when USB device is plugged in" = "USB 장치를 연결했을 때 메시지 표시하지 않기";
 "Startup" = "시작";
-"Automatically start UTM server" = "UTM 서버 자동 시작";
+"Automatically start UTM server" = "PC on iPhone 서버 자동 시작";
 "Reject unknown connections by default" = "기본적으로 알 수 없는 연결 거부";
 "If checked, you will not be prompted about any unknown connection and they will be rejected." = "활성화하면 알 수 없는 연결이 발생할 때 메시지를 표시하지 않고 자동으로 연결을 거부합니다.";
 "Allow access from external clients" = "외부 클라이언트의 접근 허용";
@@ -401,14 +401,14 @@
 "If enabled, clients must enter a password. This is required if you want to access the server externally." = "활성화하면 클라이언트는 연결을 위해 비밀번호를 입력해야 합니다. 서버를 외부로 노출시키고자 한다면 이 설정을 활성화해야 합니다.";
 
 // UTMApp.swift
-"UTM" = "UTM";
-"UTM Server" = "UTM 서버";
+"UTM" = "PC on iPhone";
+"UTM Server" = "PC on iPhone 서버";
 
 // UTMDataExtension.swift
 "This virtual machine cannot be run on this machine." = "이 가상 머신은 이 기기에서 실행될 수 없습니다.";
 
 // UTMMenuBarExtraScene.swift
-"Show UTM" = "UTM 표시";
+"Show UTM" = "PC on iPhone 표시";
 "Show the main window." = "메인 창을 표시합니다.";
 "Hide dock icon on next launch" = "다음 실행 시 Dock 아이콘 숨기기";
 "Requires restarting UTM to take affect." = "활성화하려면 UTM을 다시 시작해야 합니다.";
@@ -422,7 +422,7 @@
 "Busy…" = "처리 중…";
 
 // UTMServer.swift
-"Enable UTM Server" = "UTM 서버 활성화";
+"Enable UTM Server" = "PC on iPhone 서버 활성화";
 "Reset Identity" = "ID 초기화";
 "Do you want to forget all clients and generate a new server identity? Any clients that previously paired with this server will be instructed to manually unpair with this server before they can connect again." = "모든 클라이언트를 잊고 새로운 서버 ID를 생성하시겠습니까? 이전에 이 서버와 페어링했던 모든 클라이언트에게 서버와의 연결을 위해선 페어링을 직접 해제하라고 안내합니다.";
 "Server IP: %s, Port: %s" = "서버 IP: %1$s, 포트: %2$s";
@@ -560,7 +560,7 @@
 
 // SavePanel.swift
 "Select where to save debug log:" = "디버그 로그를 저장할 위치를 선택하세요 :";
-"Select where to save UTM Virtual Machine:" = "UTM 가상 머신을 저장할 위치를 선택하세요 :";
+"Select where to save UTM Virtual Machine:" = "PC on iPhone 가상 머신을 저장할 위치를 선택하세요 :";
 "Select where to export QEMU command:" = "QEMU 명령줄을 내보낼 위치를 선택하세요 :";
 
 
@@ -740,7 +740,7 @@
 "If enabled, the default input devices will be emulated on the USB bus." = "활성화한 경우 기본 입력 장치가 USB 버스에서 에뮬레이트됩니다.";
 "USB Support" = "USB 지원";
 "USB Sharing" = "USB 공유";
-"USB sharing not supported in this build of UTM." = "이 UTM 빌드에서는 USB 공유가 지원되지 않습니다.";
+"USB sharing not supported in this build of UTM." = "이 PC on iPhone 빌드에서는 USB 공유가 지원되지 않습니다.";
 "Share USB devices from host" = "호스트로부터 USB 장치 공유";
 "Maximum Shared USB Devices" = "최대 공유 USB 장치 개수";
 "Additional Settings" = "추가 설정";
@@ -828,7 +828,7 @@
 "Your device has %llu MB of memory and the estimated usage is %llu MB." = "이 기기의 가용 메모리는 %1$llu MB 이며, 예상 메모리 사용량은 %2$llu MB 입니다.";
 "Any unsaved changes will be lost." = "저장하지 않은 변경 사항을 잃게 됩니다.";
 "Architecture" = "아키텍처";
-"The selected architecture is unsupported in this version of UTM." = "이 UTM 버전에선 선택한 아키텍처가 지원되지 않습니다.";
+"The selected architecture is unsupported in this version of UTM." = "이 PC on iPhone 버전에선 선택한 아키텍처가 지원되지 않습니다.";
 "Hide Unused…" = "미사용 숨기기…";
 "Show All…" = "모두 표시…";
 
@@ -883,7 +883,7 @@
 // VMPlaceholderView.swift
 "Welcome to UTM" = "UTM에 오신 것을 환영합니다.";
 "Create a New Virtual Machine" = "새로운 가상 머신 생성";
-"Browse UTM Gallery" = "UTM 갤러리 탐색";
+"Browse UTM Gallery" = "PC on iPhone 갤러리 탐색";
 "User Guide" = "사용자 가이드";
 "Support" = "지원";
 "Server" = "서버";
@@ -908,7 +908,7 @@
 "Run selected VM" = "선택한 가상 머신을 실행합니다.";
 "Edit selected VM" = "선택한 가상 머신을 편집합니다.";
 "Preferences" = "환경 설정";
-"Show UTM preferences" = "UTM 환경 설정을 표시합니다.";
+"Show UTM preferences" = "PC on iPhone 환경 설정을 표시합니다.";
 
 // VMWizardDrivesView.swift
 "Storage" = "저장소";
@@ -975,7 +975,7 @@
 
 // VMWizardSharingView.swift
 "Shared Directory Path" = "공유 디렉터리 경로";
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "가상 머신 내에서 접근 가능한 디렉터리를 선택적으로 지정할 수 있습니다. 공유 디렉터리 지원 여부는 게스트 운영체제에 따라 다르며, 추가적인 게스트 드라이버 설치가 필요할 수 있습니다. 자세한 내용은 UTM 지원 페이지를 참고해 주세요.";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "가상 머신 내에서 접근 가능한 디렉터리를 선택적으로 지정할 수 있습니다. 공유 디렉터리 지원 여부는 게스트 운영체제에 따라 다르며, 추가적인 게스트 드라이버 설치가 필요할 수 있습니다. 자세한 내용은 PC on iPhone 지원 페이지를 참고해 주세요.";
 "Share is read only" = "읽기 전용 공유";
 
 // VMWizardStartView.swift
@@ -985,7 +985,7 @@
 "Slower, but can run other CPU architectures." = "느린 성능. 다른 CPU 아키텍처도 실행할 수 있음.";
 "Virtualization is not supported on your system." = "이 시스템에선 가상화가 지원되지 않습니다.";
 "This build does not emulation." = "이 빌드는 에뮬레이션을 지원하지 않습니다.";
-"Download prebuilt from UTM Gallery…" = "UTM 갤러리에서 이미 만들어진 가상 머신 다운로드…";
+"Download prebuilt from UTM Gallery…" = "PC on iPhone 갤러리에서 이미 만들어진 가상 머신 다운로드…";
 "Existing" = "기존 가상 머신";
 
 // VMWizardStartViewTCI.swift
@@ -1034,7 +1034,7 @@
 "This virtual machine cannot be found at: %@" = "가상 머신이 이 경로에 존재하지 않습니다: %@";
 
 // UTMTips.swift
-"Support UTM" = "UTM 지원";
+"Support UTM" = "PC on iPhone 지원";
 "Enjoying the app? Consider making a donation to support development." = "프로그램을 유용하게 사용하고 있나요? 개발을 지원하기 위해 기부를 고려해 주세요.";
 "No Thanks" = "지금은 하지 않기";
 "Tap to hide/show toolbar" = "탭하여 툴바 숨기기/표시";
@@ -1050,7 +1050,7 @@
 "This virtual machine is currently unavailable, make sure it is not open in another session." = "이 가상 머신은 현재 사용할 수 없습니다. 다른 세션에서 열려 있지 않은지 확인해 주세요.";
 "Failed to clone VM." = "가상 머신을 복제하는 데 실패했습니다.";
 "Unable to add a shortcut to the new location." = "새로운 위치로 바로 가기를 추가할 수 없습니다.";
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "이 가상 머신을 가져올 수 없습니다. 구성이 잘못되었거나, 상위 UTM 버전에서 생성되었거나, 이 UTM 버전과 호환되지 않는 플랫폼에서 생성되었을 수 있습니다.";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "이 가상 머신을 가져올 수 없습니다. 구성이 잘못되었거나, 상위 PC on iPhone 버전에서 생성되었거나, 이 PC on iPhone 버전과 호환되지 않는 플랫폼에서 생성되었을 수 있습니다.";
 "Failed to parse imported VM." = "가져온 가상 머신의 구성을 파싱하는 데 실패했습니다.";
 "Cannot find AltServer for JIT enable. You cannot run VMs until JIT is enabled." = "JIT 활성화를 위한 AltServer를 찾을 수 없스니다. JIT가 활성화되기 전까지는 가상 머신을 실행할 수 없습니다.";
 "AltJIT error: %@" = "AltJIT 오류: %@";
@@ -1062,7 +1062,7 @@
 "Failed to reconnect to the server." = "서버에 다시 연결하는 데 실패했습니다.";
 
 // UTMDownloadVMTask.swift
-"There is no UTM file in the downloaded ZIP archive." = "다운로드한 ZIP 아카이브에 UTM 파일이 없습니다.";
+"There is no UTM file in the downloaded ZIP archive." = "다운로드한 ZIP 아카이브에 PC on iPhone 파일이 없습니다.";
 "Failed to parse the downloaded VM." = "다운로드한 가상 머신을 파싱하는 데 실패했습니다.";
 
 // UTMDownloadSupportToolsTask.swift
@@ -1124,7 +1124,7 @@
 "A client with fingerprint '%@' is attempting to connect." = "지문 '%@'을(를) 가진 클라이언트가 연결을 시도하고 있습니다.";
 "Remote Client Connected" = "원격 클라이언트 연결됨";
 "Established connection from %@." = "%@(으)로부터 연결이 수립되었습니다.";
-"UTM Remote Server Error" = "UTM 원격 서버 오류";
+"UTM Remote Server Error" = "PC on iPhone 원격 서버 오류";
 "Cannot reserve port %d for external access from NAT. Make sure no other device on the network has reserved it." = "포트 %d를 NAT에서 외부 접근용으로 점유할 수 없습니다. 네트워크의 다른 장치가 해당 포트를 점유하지 않았는지 확인해 주세요.";
 "Not authenticated." = "인증되지 않았습니다.";
 "The client interface version does not match the server." = "클라이언트 인터페이스 버전이 서버와 일치하지 않습니다.";
@@ -1162,7 +1162,7 @@
 "No architecture specified in the configuration." = "구성에 아키텍처가 지정되어 있지 않습니다.";
 
 // UTMScriptingImportCommand.swift
-"A valid UTM file must be specified." = "유효한 UTM 파일을 지정해야 합니다.";
+"A valid UTM file must be specified." = "유효한 PC on iPhone 파일을 지정해야 합니다.";
 "No file specified in the command." = "명령어에 파일이 지정되어 있지 않습니다.";
 
 

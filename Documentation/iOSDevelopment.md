@@ -1,6 +1,6 @@
 # iOS Development
 
-This document describes the steps to build and debug UTM on iOS and simulator devices.
+This document describes the steps to build and debug PC on iPhone on iOS and simulator devices.
 
 ## Getting the Source
 
@@ -28,7 +28,7 @@ The easy way is to get the prebuilt dependences from [GitHub Actions][1]. Pick t
 
 After downloading the prebuilt artifacts of your choice, extract them to the root directory where you cloned the repository.
 
-To build UTM, make sure you have the latest version of Xcode installed.
+To build PC on iPhone, make sure you have the latest version of Xcode installed.
 
 ### Building Dependencies (Advanced)
 
@@ -43,11 +43,11 @@ If you want to build the dependencies yourself, it is highly recommended that yo
 3. Run `./scripts/build_dependencies.sh -p PLATFORM -a ARCHITECTURE` where `ARCHITECTURE` is the last part of the table above (e.g. `x86_64`) and `PLATFORM` is the first part (e.g. `ios_simulator-tci`).
 4. Repeat the above for any other platforms and architectures you wish to target.
 
-## Building UTM
+## Building PC on iPhone
 
 ### Command Line
 
-You can build UTM for iOS with the script (run `./scripts/build_utm.sh` for all options):
+You can build PC on iPhone for iOS with the script (run `./scripts/build_utm.sh` for all options):
 
 ```
 ./scripts/build_utm.sh -k iphoneos -s iOS -a arm64 -o /path/to/output/directory
@@ -67,7 +67,7 @@ For a user friendly option, you can use [iOS App Signer][3] to re-sign the `.xca
 ./scripts/package.sh ipa-signed /path/to/UTM.xcarchive /path/to/output TEAM_ID PROFILE_UUID development HELPER_PROFILE_UUID
 ```
 
-This builds `UTM.ipa` in `/path/to/output` which can be installed by Xcode, iTunes, or AirDrop. Note that you need a "Development" signing certificate and NOT a "Distribution" certificate. This is because UTM requires a provisioning profile with the `get-task-allow` entitlement which Apple only grants for Development signing. `HELPER_PROFILE_UUID` is a second profile for the helper extension embedded in the app (`com.utmapp.UTM.iOSHelper`, or `com.utmapp.UTM-SE.iOSHelper` for `ipa-se-signed`), which runs QEMU tools such as `qemu-img` out of process on iOS 26 and later.
+This builds `UTM.ipa` in `/path/to/output` which can be installed by Xcode, iTunes, or AirDrop. Note that you need a "Development" signing certificate and NOT a "Distribution" certificate. This is because PC on iPhone requires a provisioning profile with the `get-task-allow` entitlement which Apple only grants for Development signing. `HELPER_PROFILE_UUID` is a second profile for the helper extension embedded in the app (`com.utmapp.UTM.iOSHelper`, or `com.utmapp.UTM-SE.iOSHelper` for `ipa-se-signed`), which runs QEMU tools such as `qemu-img` out of process on iOS 26 and later.
 
 #### Unsigned IPA
 

@@ -1,6 +1,6 @@
 # Architecture
 
-UTM is built upon several pieces of technology, layered to provide compatibility across various host configurations. Below is a simplified diagram of key pieces of UTM with additional details provided below.
+PC on iPhone is built upon several pieces of technology, layered to provide compatibility across various host configurations. Below is a simplified diagram of key pieces of PC on iPhone with additional details provided below.
 
 ```
 ┌────────────────────┬──────────────────────┐
@@ -18,7 +18,7 @@ UTM is built upon several pieces of technology, layered to provide compatibility
 
 ## QEMU
 
-The backbone of UTM is QEMU, which provides the emulation and virtualization engine. We run a custom [fork][1] which includes several features such as:
+The backbone of PC on iPhone is QEMU, which provides the emulation and virtualization engine. We run a custom [fork][1] which includes several features such as:
 
 * Building QEMU as a shared library
 * APRR support for jailbroken iOS
@@ -39,7 +39,7 @@ QEMU is linked as a shared library. On iOS, there is no ability to use `fork`, X
 
 On macOS, spawning new processes is permitted but due to App Sandbox security requirements, we need some additional "bootstrapping" code to launch QEMU properly. The added benefit is that we only have to provide a single bundle identifier for the "launcher" executable rather than a different identifier for each QEMU executable (required for App Sandbox).
 
-`QEMUHelper` is an XPC helper with its own App Sandbox separate from the UTM main application. This improves security by providing an additional layer of separation. However, due to this extra care has to be taken when passing file handles and other system resources from the main app. For example, the Unix socket file used to communicate with SPICE is stored in a shared App Group directory. For disk images and shared directories that cannot be stored in the App Group, we have to do a complicated sandbox dance to get the right access permissions.
+`QEMUHelper` is an XPC helper with its own App Sandbox separate from the PC on iPhone main application. This improves security by providing an additional layer of separation. However, due to this extra care has to be taken when passing file handles and other system resources from the main app. For example, the Unix socket file used to communicate with SPICE is stored in a shared App Group directory. For disk images and shared directories that cannot be stored in the App Group, we have to do a complicated sandbox dance to get the right access permissions.
 
 1. The main application opens a `NSOpenPanel`, allowing the user to select a file/directory outside the sandbox. This returns a `NSURL` with the right security scope attached. If we take a regular bookmark of `NSURL` and pass it through XPC, the XPC process should also have access once it reads the bookmark back into a `NSURL`.
 2. However, the access to that file is only valid while the app is open. As soon as you close it, the app loses those permissions and must either prompt the user to select the file again or store a "security scoped bookmark." The issue here is that a security scoped bookmark is only valid for the sandbox that created it. If we take a security scoped bookmark and pass it directly to the XPC process, it cannot get back a `NSURL`.
@@ -65,9 +65,9 @@ After a VM is launched, `UTMQemuManager` provides run-time services though the Q
 
 #### QAPI
 
-QMP protocol is defined by the QAPI schema which is provided as a set of JSON files in QEMU. QEMU uses these JSON files to generate wrapper C functions for internal usage. UTM includes a modified function generator derived from QEMU's own script (`qapi-gen.py`) along with modified QAPI C visitors (for `NSDictionary`). This allows UTM to use the same commands, structures, and events that QEMU uses in a transparent way.
+QMP protocol is defined by the QAPI schema which is provided as a set of JSON files in QEMU. QEMU uses these JSON files to generate wrapper C functions for internal usage. PC on iPhone includes a modified function generator derived from QEMU's own script (`qapi-gen.py`) along with modified QAPI C visitors (for `NSDictionary`). This allows PC on iPhone to use the same commands, structures, and events that QEMU uses in a transparent way.
 
-For example, when UTM makes a call to some QAPI command such as `qmp_blockdev_change_medium`, the generated C functions will automatically marshal the function arguments into a `NSDictionary` object which `UTMJSONStream` converts into JSON and sends it over the QMP socket. When a response is received, `UTMJSONStream` converts the JSON into a `NSDictionary` object, which goes through the generated C functions to unmarshal into some C structure which is returned from `qmp_blockdev_change_medium`. This is all transparent to the caller as long as they understand that the function call will block until the response is received so it must not be called from the main thread.
+For example, when PC on iPhone makes a call to some QAPI command such as `qmp_blockdev_change_medium`, the generated C functions will automatically marshal the function arguments into a `NSDictionary` object which `UTMJSONStream` converts into JSON and sends it over the QMP socket. When a response is received, `UTMJSONStream` converts the JSON into a `NSDictionary` object, which goes through the generated C functions to unmarshal into some C structure which is returned from `qmp_blockdev_change_medium`. This is all transparent to the caller as long as they understand that the function call will block until the response is received so it must not be called from the main thread.
 
 ## Virtualization.framework
 
@@ -75,19 +75,19 @@ On Apple Silicon Macs running macOS 12 or later, `Virtualization.framework` is p
 
 ### UTMAppleConfiguration
 
-As the backend is different, the configuration format UTM uses is also different and is represented in `UTMAppleConfiguration`. As this configuration is handed in Swift, the Codable protocol is used for serialization instead of a `NSDictionary` backing used in `UTMQemuConfiguration`. The Codable backing is more extendible as it allows more complex data to be represented without a lot of boilerplate.
+As the backend is different, the configuration format PC on iPhone uses is also different and is represented in `UTMAppleConfiguration`. As this configuration is handed in Swift, the Codable protocol is used for serialization instead of a `NSDictionary` backing used in `UTMQemuConfiguration`. The Codable backing is more extendible as it allows more complex data to be represented without a lot of boilerplate.
 
 ## CocoaSpice
 
-UTM uses the SPICE front-end with QEMU because it has more versatility than VNC to handle things like USB forwarding, multiple displays, and the ability to use a SPICE agent running on the guest to share clipboard and change the resolution. [CocoaSpice][2] is provided as a Swift package and acts as Cocoa/Objective-C bindings for SPICE GTK. CocoaSpice also provides a bridge between the Pixman framebuffer that SPICE uses and Metal textures that is used by MetalKit to render to screen.
+PC on iPhone uses the SPICE front-end with QEMU because it has more versatility than VNC to handle things like USB forwarding, multiple displays, and the ability to use a SPICE agent running on the guest to share clipboard and change the resolution. [CocoaSpice][2] is provided as a Swift package and acts as Cocoa/Objective-C bindings for SPICE GTK. CocoaSpice also provides a bridge between the Pixman framebuffer that SPICE uses and Metal textures that is used by MetalKit to render to screen.
 
 ### UTMSpiceIO
 
-`UTMSpiceIO` connects `CocoaSpice` to UTM and is used by `UTMQemuVirtualMachine` to control the SPICE client and respond to client events.
+`UTMSpiceIO` connects `CocoaSpice` to PC on iPhone and is used by `UTMQemuVirtualMachine` to control the SPICE client and respond to client events.
 
 ## UTMVirtualMachine
 
-`UTMVirtualMachine` provides file I/O operations for creating and saving .utm VM bundles as well as controls for the platform-specific layer above to do high level tasks like starting and stopping the VM. It is highest level of the "backend", providing a platform independent view of UTM virtual machines.
+`UTMVirtualMachine` provides file I/O operations for creating and saving .utm VM bundles as well as controls for the platform-specific layer above to do high level tasks like starting and stopping the VM. It is highest level of the "backend", providing a platform independent view of PC on iPhone virtual machines.
 
 ### UTMQemuVirtualMachine
 
@@ -101,7 +101,7 @@ This subclass manages Apple Virtualization.framework backend VMs.
 
 ### SwiftUI
 
-The frontend for UTM is designed mostly in SwiftUI 3.0. That means the minimum supported operating system is iOS 15 and macOS 12 and is the main reason there are no plans to back-port UTM to earlier versions. Most views are designed to work on both macOS and iOS.
+The frontend for PC on iPhone is designed mostly in SwiftUI 3.0. That means the minimum supported operating system is iOS 15 and macOS 12 and is the main reason there are no plans to back-port PC on iPhone to earlier versions. Most views are designed to work on both macOS and iOS.
 
 #### UTMData
 
@@ -109,7 +109,7 @@ The frontend for UTM is designed mostly in SwiftUI 3.0. That means the minimum s
 
 ### iOS VM Display
 
-The VM display uses UIKit as SwiftUI is not mature enough to do everything UTM needs. This includes the custom keyboard accessory view implemented in a NIB for emulating keys that are not available on the standard iOS keyboard.
+The VM display uses UIKit as SwiftUI is not mature enough to do everything PC on iPhone needs. This includes the custom keyboard accessory view implemented in a NIB for emulating keys that are not available on the standard iOS keyboard.
 
 ### macOS VM Display
 

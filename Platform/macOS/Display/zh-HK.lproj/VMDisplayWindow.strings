@@ -65,7 +65,7 @@
 "Pwr-Ct-ite.paletteLabel" = "電源";
 
 /* Class = "NSWindow"; title = "UTM"; ObjectID = "QvC-M9-y7g"; */
-"QvC-M9-y7g.title" = "UTM";
+"QvC-M9-y7g.title" = "PC on iPhone";
 
 /* Class = "NSToolbarItem"; label = "USB Devices"; ObjectID = "tlw-Fb-ne3"; */
 "tlw-Fb-ne3.label" = "USB 裝置";

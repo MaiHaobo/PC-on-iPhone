@@ -102,7 +102,7 @@
 "Architecture" = "المعمارية";
 
 /* No comment provided by engineer. */
-"Are you sure you want to exit UTM?" = "هل أنت متأكد أنك تريد الخروج من UTM؟";
+"Are you sure you want to exit UTM?" = "هل أنت متأكد أنك تريد الخروج من PC on iPhone؟";
 
 /* No comment provided by engineer. */
 "Are you sure you want to permanently delete this disk image?" = "هل أنت متأكد أنك تريد حذف صورة القرص هذه نهائيًا؟";
@@ -160,7 +160,7 @@
 "Bridged Settings" = "إعدادات الموصول";
 
 /* Welcome view */
-"Browse UTM Gallery" = "تصفح معرض UTM";
+"Browse UTM Gallery" = "تصفح معرض PC on iPhone";
 
 /* No comment provided by engineer. */
 "Browse…" = "تصفح...";
@@ -194,7 +194,7 @@
 "Cannot find VM with ID: %@" = "لا يمكن العثور على VM بعنوان ID: %@";
 
 /* UTMData */
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "لا يمكن استيراد هذه الآلة الافتراضية. إما أن التكوين غير صالح، أو تم إنشاؤها في إصدار أحدث من UTM، أو على نظام أساسي غير متوافق مع هذا الإصدار من UTM.";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "لا يمكن استيراد هذه الآلة الافتراضية. إما أن التكوين غير صالح، أو تم إنشاؤها في إصدار أحدث من PC on iPhone، أو على نظام أساسي غير متوافق مع هذا الإصدار من PC on iPhone.";
 
 /* UTMRemoteServer */
 "لا يمكن حجز المنفذ '%@' للوصول الخارجي من NAT. تأكد من عدم قيام أي جهاز آخر على الشبكة بحجزه." = "无法保留端口“%@”用作从 NAT 的外部访问。请确保网络上没有其他设备保留该端口。";
@@ -366,7 +366,7 @@
 "Download" = "تنزيل";
 
 /* No comment provided by engineer. */
-"Download prebuilt from UTM Gallery…" = "تنزيل مسبق البناء من معرض UTM…";
+"Download prebuilt from UTM Gallery…" = "تنزيل مسبق البناء من معرض PC on iPhone…";
 
 /* No comment provided by engineer. */
 "Download VM" = "تنزيل الآلة الافتراضية";
@@ -459,7 +459,7 @@
 "Failed to import generated key." = "فشل في استيراد المفتاح المولد.";
 
 /* UTMQemuConfigurationError */
-"Failed to migrate configuration from a previous UTM version." = "فشل في ترحيل التكوين من إصدار UTM سابق.";
+"Failed to migrate configuration from a previous UTM version." = "فشل في ترحيل التكوين من إصدار PC on iPhone سابق.";
 
 /* UTMData */
 "Failed to parse download URL." = "فشل في تحليل عنوان URL للتنزيل.";
@@ -629,7 +629,7 @@
 "Italic, Bold" = "مائل، عريض";
 
 /* No comment provided by engineer. */
-"Keep UTM running after last window is closed and all VMs are shut down" = "استمر في تشغيل UTM بعد إغلاق آخر نافذة وإيقاف جميع الآلات الافتراضية.";
+"Keep UTM running after last window is closed and all VMs are shut down" = "استمر في تشغيل PC on iPhone بعد إغلاق آخر نافذة وإيقاف جميع الآلات الافتراضية.";
 
 /* No comment provided by engineer. */
 "License" = "ترخيص";
@@ -686,7 +686,7 @@
 "macOS Settings" = "إعدادات macOS";
 
 /* No comment provided by engineer. */
-"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "تأكد من أن أحدث إصدار من UTM يعمل على جهاز Mac الخاص بك وأن خادم UTM مفعل. يمكنك تنزيل UTM من متجر تطبيقات Mac.";
+"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "تأكد من أن أحدث إصدار من PC on iPhone يعمل على جهاز Mac الخاص بك وأن خادم PC on iPhone مفعل. يمكنك تنزيل PC on iPhone من متجر تطبيقات Mac.";
 
 /* UTMQemuConstants */
 "Manual Serial Device (advanced)" = "جهاز تسلسلي يدوي (متقدم)";
@@ -900,7 +900,7 @@
 "Querying USB devices..." = "يتم استعلام أجهزة USB...";
 
 /* VMQemuDisplayMetalWindowController */
-"Quitting UTM will kill all running VMs." = "إنهاء UTM سيؤدي إلى إنهاء جميع الآلات الافتراضية النشطة.";
+"Quitting UTM will kill all running VMs." = "إنهاء PC on iPhone سيؤدي إلى إنهاء جميع الآلات الافتراضية النشطة.";
 
 /* No comment provided by engineer. */
 "Raw Image" = "صورة خام";
@@ -963,7 +963,7 @@
 "Running" = "يعمل";
 
 /* No comment provided by engineer. */
-"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "الذاكرة منخفضة! قد يتم إنهاء UTM قريبًا بواسطة iOS. يمكنك منع ذلك عن طريق تقليل كمية الذاكرة و/أو ذاكرة التخزين المؤقت JIT المخصصة لهذه الآلة الافتراضية.";
+"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "الذاكرة منخفضة! قد يتم إنهاء PC on iPhone قريبًا بواسطة iOS. يمكنك منع ذلك عن طريق تقليل كمية الذاكرة و/أو ذاكرة التخزين المؤقت JIT المخصصة لهذه الآلة الافتراضية.";
 
 /* No comment provided by engineer. */
 "Save" = "حفظ";
@@ -987,7 +987,7 @@
 "Select a file." = "اختر ملفًا.";
 
 /* No comment provided by engineer. */
-"Select a UTM Server" = "اختر خادم UTM";
+"Select a UTM Server" = "اختر خادم PC on iPhone";
 
 /* VMDisplayWindowController */
 "Select Drive Image" = "اختر صورة محرك";
@@ -1003,7 +1003,7 @@
 "Select where to save debug log:" = "اختر المكان لحفظ سجل التصحيح:";
 
 /* SavePanel */
-"Select where to save UTM Virtual Machine:" = "اختر المكان لحفظ الآلة الافتراضية UTM:";
+"Select where to save UTM Virtual Machine:" = "اختر المكان لحفظ الآلة الافتراضية PC on iPhone:";
 
 /* No comment provided by engineer. */
 "Selected:" = "المحدد:";
@@ -1157,7 +1157,7 @@
 "The guest support tools have already been mounted." = "تمت إضافة أدوات دعم الضيف بالفعل.";
 
 /* UTMRemoteClient */
-"The host fingerprint does not match the saved value. This means that UTM Server was reset, a different host is using the same name, or an attacker is pretending to be the host. For your protection, you need to delete this saved host to continue." = "بصمة المضيف لا تتطابق مع القيمة المحفوظة. هذا يعني أن خادم UTM قد تم إعادة تعيينه، أو أن مضيفًا مختلفًا يستخدم نفس الاسم، أو أن هناك مهاجمًا يتظاهر بأنه المضيف. لحمايتك، تحتاج إلى حذف هذا المضيف المحفوظ للمتابعة.";
+"The host fingerprint does not match the saved value. This means that UTM Server was reset, a different host is using the same name, or an attacker is pretending to be the host. For your protection, you need to delete this saved host to continue." = "بصمة المضيف لا تتطابق مع القيمة المحفوظة. هذا يعني أن خادم PC on iPhone قد تم إعادة تعيينه، أو أن مضيفًا مختلفًا يستخدم نفس الاسم، أو أن هناك مهاجمًا يتظاهر بأنه المضيف. لحمايتك، تحتاج إلى حذف هذا المضيف المحفوظ للمتابعة.";
 
 /* UTMAppleConfiguration */
 "The host operating system needs to be updated to support one or more features requested by the guest." = "يجب تحديث نظام التشغيل المضيف لدعم ميزة أو أكثر طلبها الضيف.";
@@ -1172,7 +1172,7 @@
 "The QEMU guest agent is not running or not installed on the guest." = "وكيل ضيف QEMU غير قيد التشغيل أو غير مثبت على الضيف.";
 
 /* No comment provided by engineer. */
-"The selected architecture is unsupported in this version of UTM." = "البنية المختارة غير مدعومة في هذا الإصدار من UTM.";
+"The selected architecture is unsupported in this version of UTM." = "البنية المختارة غير مدعومة في هذا الإصدار من PC on iPhone.";
 
 /* VMWizardState */
 "The selected boot image contains the word '%@' but the guest architecture is '%@'. Please ensure you have selected an image that is compatible with '%@'." = "تحتوي صورة التمهيد المحددة على الكلمة '%@' ولكن بنية الضيف هي '%@'. يرجى التأكد من أنك قد اخترت صورة متوافقة مع '%@'.";
@@ -1193,7 +1193,7 @@
 "The virtual machine must be stopped before this operation can be performed." = "يجب إيقاف الآلة الافتراضية قبل أن يمكن تنفيذ هذه العملية.";
 
 /* Error shown when importing a ZIP file from web that doesn't contain a UTM Virtual Machine. */
-"There is no UTM file in the downloaded ZIP archive." = "لا يوجد ملف UTM في الأرشيف المضغوط الذي تم تنزيله.";
+"There is no UTM file in the downloaded ZIP archive." = "لا يوجد ملف PC on iPhone في الأرشيف المضغوط الذي تم تنزيله.";
 
 /* No comment provided by engineer. */
 "This audio card is not supported." = "هذه بطاقة الصوت غير مدعومة.";
@@ -1205,13 +1205,13 @@
 "This build does not emulation." = "هذا الإصدار لا يدعم المحاكاة.";
 
 /* UTMQemuVirtualMachine */
-"This build of UTM does not support emulating the architecture of this VM." = "هذا الإصدار من UTM لا يدعم محاكاة بنية هذه الآلة الافتراضية.";
+"This build of UTM does not support emulating the architecture of this VM." = "هذا الإصدار من PC on iPhone لا يدعم محاكاة بنية هذه الآلة الافتراضية.";
 
 /* VMConfigSystemView */
 "This change will reset all settings" = "سيؤدي هذا التغيير إلى إعادة تعيين جميع الإعدادات.";
 
 /* UTMConfiguration */
-"This configuration is saved with a newer version of UTM and is not compatible with this version." = "تم حفظ هذا التكوين بإصدار أحدث من UTM وهو غير متوافق مع هذا الإصدار.";
+"This configuration is saved with a newer version of UTM and is not compatible with this version." = "تم حفظ هذا التكوين بإصدار أحدث من PC on iPhone وهو غير متوافق مع هذا الإصدار.";
 
 /* UTMConfiguration */
 "This configuration is too old and is not supported." = "هذا التكوين قديم جدًا وغير مدعوم.";
@@ -1331,7 +1331,7 @@
 "USB Sharing" = "مشاركة USB";
 
 /* No comment provided by engineer. */
-"USB sharing not supported in this build of UTM." = "مشاركة USB غير مدعومة في هذا الإصدار من UTM.";
+"USB sharing not supported in this build of UTM." = "مشاركة USB غير مدعومة في هذا الإصدار من PC on iPhone.";
 
 /* No comment provided by engineer. */
 "Use Command+Option (⌘+⌥) for input capture/release" = "استخدم Command + Option (⌘ + ⌥) لالتقاط/إطلاق الإدخال.";
@@ -1341,7 +1341,7 @@
 
 /* UTMScriptingAppDelegate
    UTMScriptingUSBDeviceImpl */
-"UTM is not ready to accept commands." = "UTM غير جاهز لقبول الأوامر.";
+"UTM is not ready to accept commands." = "PC on iPhone غير جاهز لقبول الأوامر.";
 
 /* No comment provided by engineer. */
 "Version" = "الإصدار";
@@ -1375,7 +1375,7 @@
 "Waiting for VM to connect to display..." = "انتظار اتصال الآلة الافتراضية بالشاشة...";
 
 /* No comment provided by engineer. */
-"Welcome to UTM" = "مرحبًا بك في UTM";
+"Welcome to UTM" = "مرحبًا بك في PC on iPhone";
 
 /* No comment provided by engineer. */
 "What's New" = "ما الجديد";
@@ -1406,7 +1406,7 @@
 "Your machine does not support running this IPSW." = "جهازك لا يدعم تشغيل هذا IPSW.";
 
 /* ContentView */
-"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "إصدار iOS الخاص بك لا يدعم تشغيل الآلات الافتراضية في حالة عدم التعديل. يجب عليك تشغيل UTM أثناء كسر الحماية أو مع توصيل مصحح أخطاء عن بُعد. انظر https://getutm.app/install/ لمزيد من التفاصيل.";
+"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "إصدار iOS الخاص بك لا يدعم تشغيل الآلات الافتراضية في حالة عدم التعديل. يجب عليك تشغيل PC on iPhone أثناء كسر الحماية أو مع توصيل مصحح أخطاء عن بُعد. انظر https://getutm.app/install/ لمزيد من التفاصيل.";
 
 // Additional Strings (These strings are unable to be extracted by Xcode)
 
@@ -1654,7 +1654,7 @@
 "Engine" = "محرك.";
 
 /* No comment provided by engineer. */
-"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "تصدير جميع الوسائط كملف نصي. هذا فقط لأغراض التصحيح حيث أن QEMU المدمج في UTM يختلف عن QEMU الرئيسي في الوسائط المدعومة.";
+"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "تصدير جميع الوسائط كملف نصي. هذا فقط لأغراض التصحيح حيث أن QEMU المدمج في PC on iPhone يختلف عن QEMU الرئيسي في الوسائط المدعومة.";
 
 /* No comment provided by engineer. */
 "Export Debug Log" = "تصدير سجل التصحيح.";
@@ -1873,7 +1873,7 @@
 "New VM" = "آلة افتراضية جديدة";
 
 /* No comment provided by engineer. */
-"Older versions of UTM added each IDE device to a separate bus. Check this to change the configuration to place two units on each bus." = "أضافت الإصدارات القديمة من UTM كل جهاز IDE إلى ناقل منفصل. تحقق من ذلك لتغيير التكوين لوضع وحدتين على كل ناقل.";
+"Older versions of UTM added each IDE device to a separate bus. Check this to change the configuration to place two units on each bus." = "أضافت الإصدارات القديمة من PC on iPhone كل جهاز IDE إلى ناقل منفصل. تحقق من ذلك لتغيير التكوين لوضع وحدتين على كل ناقل.";
 
 /* No comment provided by engineer. */
 "Only available if host architecture matches the target. Otherwise, TCG emulation is used." = "متاح فقط إذا كانت بنية المضيف تتطابق مع الهدف. خلاف ذلك، يتم استخدام محاكاة TCG.";
@@ -1888,7 +1888,7 @@
 "Open VM Settings" = "فتح إعدادات الآلة الافتراضية";
 
 /* No comment provided by engineer. */
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "اختر دليلًا بشكل اختياري لجعله متاحًا داخل الآلة الافتراضية. لاحظ أن الدعم للدلائل المشتركة يختلف حسب نظام تشغيل الضيف وقد يتطلب تثبيت برامج تشغيل إضافية للضيف. راجع صفحات دعم UTM لمزيد من التفاصيل.";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "اختر دليلًا بشكل اختياري لجعله متاحًا داخل الآلة الافتراضية. لاحظ أن الدعم للدلائل المشتركة يختلف حسب نظام تشغيل الضيف وقد يتطلب تثبيت برامج تشغيل إضافية للضيف. راجع صفحات دعم PC on iPhone لمزيد من التفاصيل.";
 
 /* No comment provided by engineer. */
 "Options here only apply on next boot and are not saved." = "الخيارات هنا تنطبق فقط عند التمهيد التالي وليست محفوظة.";
@@ -1939,7 +1939,7 @@
 "Renderer Backend" = "الواجهة الخلفية للرندر";
 
 /* No comment provided by engineer. */
-"Requires restarting UTM to take affect." = "يتطلب إعادة تشغيل UTM ليصبح ساري المفعول.";
+"Requires restarting UTM to take affect." = "يتطلب إعادة تشغيل PC on iPhone ليصبح ساري المفعول.";
 
 /* No comment provided by engineer. */
 "Requires SPICE guest agent tools to be installed." = "يتطلب تثبيت أدوات وكيل SPICE للضيف.";
@@ -2053,10 +2053,10 @@
 "Show the main window." = "عرض النافذة الرئيسية.";
 
 /* No comment provided by engineer. */
-"Show UTM" = "عرض UTM";
+"Show UTM" = "عرض PC on iPhone";
 
 /* No comment provided by engineer. */
-"Show UTM preferences" = "عرض تفضيلات UTM";
+"Show UTM preferences" = "عرض تفضيلات PC on iPhone";
 
 /* No comment provided by engineer. */
 "Skip Boot Image" = "تخطي صورة التمهيد";
@@ -2098,7 +2098,7 @@
 "Target" = "الهدف";
 
 /* No comment provided by engineer. */
-"Terminate UTM and stop all running VMs." = "إنهاء UTM وإيقاف جميع الآلات الافتراضية الجارية.";
+"Terminate UTM and stop all running VMs." = "إنهاء PC on iPhone وإيقاف جميع الآلات الافتراضية الجارية.";
 
 /* No comment provided by engineer. */
 "Text" = "نص";
@@ -2125,7 +2125,7 @@
 "This virtual machine cannot be found at: %@" = "لا يمكن العثور على هذه الآلة الافتراضية في: %@";
 
 /* No comment provided by engineer. */
-"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "يجب إعادة إضافة هذه الآلة الافتراضية إلى UTM عن طريق فتحها باستخدام Finder. يمكنك العثور عليها في المسار: %@";
+"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "يجب إعادة إضافة هذه الآلة الافتراضية إلى PC on iPhone عن طريق فتحها باستخدام Finder. يمكنك العثور عليها في المسار: %@";
 
 /* No comment provided by engineer. */
 "TPM 2.0 Device" = "جهاز TPM 2.0";

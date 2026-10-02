@@ -1,8 +1,8 @@
 /* Bundle name */
-"CFBundleName" = "UTM";
+"CFBundleName" = "PC on iPhone";
 
 /* Privacy - Local Network Usage Description */
-"NSLocalNetworkUsageDescription" = "UTM использует собственную сеть для поиска и обмена данными с AltServer.";
+"NSLocalNetworkUsageDescription" = "PC on iPhone использует собственную сеть для поиска и обмена данными с AltServer.";
 
 /* Privacy - Location Always and When In Use Usage Description */
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Для фонового доступа к виртуальной машине требуются службы определения местоположения. Данные о местоположении не передаются за пределы устройства.";
@@ -17,5 +17,5 @@
 "NSMicrophoneUsageDescription" = "Виртуальной машине необходим доступ к микрофону.";
 
 /* (No Comment) */
-"UTM virtual machine" = "Виртуальная машина UTM";
+"UTM virtual machine" = "Виртуальная машина PC on iPhone";
 

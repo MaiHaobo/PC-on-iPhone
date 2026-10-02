@@ -76,7 +76,7 @@ VMDisplayQemuTerminalWindowController */
 "A valid kernel image must be specified." = "必须指定有效的内核映像。";
 
 /* UTMScriptingAppDelegate */
-"A valid UTM file must be specified." = "必须指定有效的 UTM 文件。";
+"A valid UTM file must be specified." = "必须指定有效的 PC on iPhone 文件。";
 
 /* No comment provided by engineer. */
 "Add" = "添加";
@@ -136,7 +136,7 @@ VMDisplayQemuTerminalWindowController */
 "Architecture" = "架构";
 
 /* No comment provided by engineer. */
-"Are you sure you want to exit UTM?" = "你确定要退出 UTM 吗？";
+"Are you sure you want to exit UTM?" = "你确定要退出 PC on iPhone 吗？";
 
 /* No comment provided by engineer. */
 "Are you sure you want to permanently delete this disk image?" = "你确定要永久删除此磁盘映像吗？";
@@ -210,7 +210,7 @@ UTMQemuConstants */
 "Bridged Settings" = "桥接设置";
 
 /* Welcome view */
-"Browse UTM Gallery" = "浏览 UTM 库";
+"Browse UTM Gallery" = "浏览 PC on iPhone 库";
 
 /* VMDisplayQemuWindowController */
 "Browse…" = "浏览…";
@@ -242,7 +242,7 @@ VMQemuDisplayMetalWindowController */
 "Cannot find VM with ID: %@" = "无法通过 ID 找到虚拟机：%@";
 
 /* UTMData */
-"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "无法导入此虚拟机。此虚拟机可能配置无效，或是在较新版本的 UTM 中、与此版本的 UTM 不兼容的平台上创建。";
+"Cannot import this VM. Either the configuration is invalid, created in a newer version of UTM, or on a platform that is incompatible with this version of UTM." = "无法导入此虚拟机。此虚拟机可能配置无效，或是在较新版本的 PC on iPhone 中、与此版本的 PC on iPhone 不兼容的平台上创建。";
 
 /* UTMRemoteServer */
 "Cannot reserve port %d for external access from NAT. Make sure no other device on the network has reserved it." = "无法保留端口 %d 用作通过 NAT 的外部访问。确保网络上没有其他设备保留该端口。";
@@ -469,7 +469,7 @@ VMDisplayQemuDisplayController */
 "Download" = "下载";
 
 /* No comment provided by engineer. */
-"Download prebuilt from UTM Gallery…" = "从 UTM 库中下载预构建虚拟机…";
+"Download prebuilt from UTM Gallery…" = "从 PC on iPhone 库中下载预构建虚拟机…";
 
 /* No comment provided by engineer. */
 "Download VM" = "下载虚拟机";
@@ -581,7 +581,7 @@ UTMRemoteServer */
 "Failed to import generated key." = "无法导入生成的密钥。";
 
 /* UTMQemuConfigurationError */
-"Failed to migrate configuration from a previous UTM version." = "无法从以前的 UTM 版本迁移配置。";
+"Failed to migrate configuration from a previous UTM version." = "无法从以前的 PC on iPhone 版本迁移配置。";
 
 /* UTMRemoteKeyManager */
 "Failed to parse generated key pair." = "无法解析生成的密钥对。";
@@ -785,7 +785,7 @@ UTMQemuConstants */
 "Italic, Bold" = "斜体，粗体";
 
 /* No comment provided by engineer. */
-"Keep UTM running after last window is closed and all VMs are shut down" = "在关闭最后一个窗口和所有虚拟机关机后继续运行 UTM";
+"Keep UTM running after last window is closed and all VMs are shut down" = "在关闭最后一个窗口和所有虚拟机关机后继续运行 PC on iPhone";
 
 /* No comment provided by engineer. */
 "KosmicKrisp" = "KosmicKrisp";
@@ -854,7 +854,7 @@ UTMQemuConstants */
 "macOS Settings" = "macOS 设置";
 
 /* No comment provided by engineer. */
-"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "确保你的 Mac 上运行最新版本的 UTM，且 UTM 服务器已启用。你可以从 Mac App Store 下载 UTM。";
+"Make sure the latest version of UTM is running on your Mac and UTM Server is enabled. You can download UTM from the Mac App Store." = "确保你的 Mac 上运行最新版本的 PC on iPhone，且 PC on iPhone 服务器已启用。你可以从 Mac App Store 下载 PC on iPhone。";
 
 /* UTMQemuConstants */
 "Manual Serial Device (advanced)" = "手动串行设备 (高级)";
@@ -950,7 +950,7 @@ UTMQemuConstants */
 "No release notes found for version %@." = "未找到 %@ 版本的发布说明。";
 
 /* VMDisplayAppleWindowController */
-"No USB devices assigned to UTM." = "没有分配给 UTM 的 USB 设备。";
+"No USB devices assigned to UTM." = "没有分配给 PC on iPhone 的 USB 设备。";
 
 /* VMQemuDisplayMetalWindowController */
 "No USB devices detected." = "未检测到 USB 设备。";
@@ -979,7 +979,7 @@ UTMVirtualMachine */
 "Not implemented." = "未实现。";
 
 /* No comment provided by engineer. */
-"Note: No DHCP will be provided by UTM" = "注意：UTM 不提供 DHCP";
+"Note: No DHCP will be provided by UTM" = "注意：PC on iPhone 不提供 DHCP";
 
 /* No comment provided by engineer. */
 "Notes" = "注释";
@@ -1123,7 +1123,7 @@ VMQemuDisplayMetalWindowController */
 "Querying USB devices..." = "正在查询 USB 设备状态…";
 
 /* VMQemuDisplayMetalWindowController */
-"Quitting UTM will kill all running VMs." = "退出 UTM 将终止所有正在运行的虚拟机。";
+"Quitting UTM will kill all running VMs." = "退出 PC on iPhone 将终止所有正在运行的虚拟机。";
 
 /* UTMAppleDiskImage */
 "RAW" = "RAW";
@@ -1198,7 +1198,7 @@ VMQemuDisplayMetalWindowController */
 "Running" = "正在运行";
 
 /* No comment provided by engineer. */
-"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "运行内存不足！UTM 可能很快就会被 iOS 终止。你可以通过减少分配给此虚拟机的内存和/或 JIT 缓存来防止这种情况。";
+"Running low on memory! UTM might soon be killed by iOS. You can prevent this by decreasing the amount of memory and/or JIT cache assigned to this VM" = "运行内存不足！PC on iPhone 可能很快就会被 iOS 终止。你可以通过减少分配给此虚拟机的内存和/或 JIT 缓存来防止这种情况。";
 
 /* No comment provided by engineer. */
 "Save" = "存储";
@@ -1225,7 +1225,7 @@ VMQemuDisplayMetalWindowController */
 "Select a file." = "选择一个文件。";
 
 /* No comment provided by engineer. */
-"Select a UTM Server" = "选择一个 UTM 服务器";
+"Select a UTM Server" = "选择一个 PC on iPhone 服务器";
 
 /* VMDisplayWindowController */
 "Select Drive Image" = "选择驱动器映像";
@@ -1241,7 +1241,7 @@ VMDisplayWindowController */
 "Select where to save debug log:" = "选择存储调试日志的位置：";
 
 /* SavePanel */
-"Select where to save UTM Virtual Machine:" = "选择存储 UTM 虚拟机的位置：";
+"Select where to save UTM Virtual Machine:" = "选择存储 PC on iPhone 虚拟机的位置：";
 
 /* VMDisplayWindowController */
 "Send Key" = "发送按键";
@@ -1351,7 +1351,7 @@ UTMQemuConstants */
 "Support" = "支持";
 
 /* No comment provided by engineer. */
-"Support UTM" = "支持 UTM";
+"Support UTM" = "支持 PC on iPhone";
 
 /* UTMQemuVirtualMachine */
 "Suspend is not supported for virtualization." = "挂起功能不支持虚拟化。";
@@ -1384,7 +1384,7 @@ UTMQemuConstants */
 "Swap the leftmost key on the number row and the key next to left shift on ISO keyboards" = "在 ISO 键盘上交换数字行上最左边的按键与左 Shift 旁边的按键";
 
 /* VMSessionState */
-"Switch back to UTM to avoid termination." = "切换回 UTM 以避免终止。";
+"Switch back to UTM to avoid termination." = "切换回 PC on iPhone 以避免终止。";
 
 /* No comment provided by engineer. */
 "System" = "系统";
@@ -1432,7 +1432,7 @@ UTMQemuConstants */
 "The guest support tools have already been mounted." = "客户机支持工具已装载。";
 
 /* UTMRemoteClient */
-"The host fingerprint does not match the saved value. This means that UTM Server was reset, a different host is using the same name, or an attacker is pretending to be the host. For your protection, you need to delete this saved host to continue." = "主机指纹与存储的值不匹配。这意味着 UTM 服务器被重置、不同的主机使用相同的名称，或者攻击者正在冒充主机。为了保护你的安全，你需要删除已存储的主机才能继续。";
+"The host fingerprint does not match the saved value. This means that UTM Server was reset, a different host is using the same name, or an attacker is pretending to be the host. For your protection, you need to delete this saved host to continue." = "主机指纹与存储的值不匹配。这意味着 PC on iPhone 服务器被重置、不同的主机使用相同的名称，或者攻击者正在冒充主机。为了保护你的安全，你需要删除已存储的主机才能继续。";
 
 /* UTMAppleConfiguration */
 "The host operating system needs to be updated to support one or more features requested by the guest." = "需要更新主机操作系统以支持客户机请求的一个或多个功能。";
@@ -1462,7 +1462,7 @@ UTMQemuConstants */
 "The recovery IPSW cannot be read. Please select a new IPSW in Boot settings." = "无法读取 IPSW 恢复文件。请在启动设置中选择一个新的 IPSW。";
 
 /* No comment provided by engineer. */
-"The selected architecture is unsupported in this version of UTM." = "此版本的 UTM 不支持所选架构。";
+"The selected architecture is unsupported in this version of UTM." = "此版本的 PC on iPhone 不支持所选架构。";
 
 /* VMWizardState */
 "The selected boot image contains the word '%@' but the guest architecture is '%@'. Please ensure you have selected an image that is compatible with '%@'." = "所选的启动映像名称包含“%@”，但客户机的架构是“%@”。请确保你选择了与“%@”兼容的映像。";
@@ -1516,7 +1516,7 @@ UTMQemuConstants */
 "The virtual machine must be stopped before this operation can be performed." = "在执行此操作之前，必须停止虚拟机。";
 
 /* Error shown when importing a ZIP file from web that doesn't contain a UTM Virtual Machine. */
-"There is no UTM file in the downloaded ZIP archive." = "下载的 ZIP 归档中无 UTM 文件。";
+"There is no UTM file in the downloaded ZIP archive." = "下载的 ZIP 归档中无 PC on iPhone 文件。";
 
 /* No comment provided by engineer. */
 "This audio card is not supported." = "此声卡不受支持。";
@@ -1528,13 +1528,13 @@ UTMQemuConstants */
 "This build does not emulation." = "此版本不支持模拟。";
 
 /* UTMQemuVirtualMachine */
-"This build of UTM does not support emulating the architecture of this VM." = "此 UTM 版本不支持模拟此虚拟机的架构。";
+"This build of UTM does not support emulating the architecture of this VM." = "此 PC on iPhone 版本不支持模拟此虚拟机的架构。";
 
 /* VMConfigSystemView */
 "This change will reset all settings" = "此更改将重置所有设置";
 
 /* UTMConfiguration */
-"This configuration is saved with a newer version of UTM and is not compatible with this version." = "此配置是用较新版本的 UTM 存储的，并且与此版本不兼容。";
+"This configuration is saved with a newer version of UTM and is not compatible with this version." = "此配置是用较新版本的 PC on iPhone 存储的，并且与此版本不兼容。";
 
 /* UTMConfiguration */
 "This configuration is too old and is not supported." = "此配置过旧，无法支持。";
@@ -1672,7 +1672,7 @@ UTMQemuConstants */
 "USB Sharing" = "USB 共享";
 
 /* No comment provided by engineer. */
-"USB sharing not supported in this build of UTM." = "此版本的 UTM 不支持 USB 共享。";
+"USB sharing not supported in this build of UTM." = "此版本的 PC on iPhone 不支持 USB 共享。";
 
 /* No comment provided by engineer. */
 "Use Apple Sparse Image Format" = "使用 Apple Sparse 映像格式";
@@ -1688,7 +1688,7 @@ UTMQemuConstants */
 
 /* UTMScriptingAppDelegate
 UTMScriptingUSBDeviceImpl */
-"UTM is not ready to accept commands." = "UTM 尚未准备好接受命令。";
+"UTM is not ready to accept commands." = "PC on iPhone 尚未准备好接受命令。";
 
 /* UTMQemuConstants */
 "VirtFS" = "VirtFS";
@@ -1721,7 +1721,7 @@ VMMetalView */
 "week" = "周";
 
 /* No comment provided by engineer. */
-"Welcome to UTM" = "欢迎使用 UTM";
+"Welcome to UTM" = "欢迎使用 PC on iPhone";
 
 /* No comment provided by engineer. */
 "What's New" = "新版特性";
@@ -1765,10 +1765,10 @@ VMWizardOSMacView */
 "Your purchase could not be verified by the App Store." = "App Store 无法验证你的购买。";
 
 /* No comment provided by engineer. */
-"Your support is the driving force that helps UTM stay independent. Your contribution, no matter the size, makes a significant difference. It enables us to develop new features and maintain existing ones. Thank you for considering a donation to support us." = "你的支持是 UTM 保持独立的动力。你的贡献，无论多少，都会产生重大影响。这可以让我们开发功能，并维护现有的功能。感谢你考虑捐赠支持我们。";
+"Your support is the driving force that helps UTM stay independent. Your contribution, no matter the size, makes a significant difference. It enables us to develop new features and maintain existing ones. Thank you for considering a donation to support us." = "你的支持是 PC on iPhone 保持独立的动力。你的贡献，无论多少，都会产生重大影响。这可以让我们开发功能，并维护现有的功能。感谢你考虑捐赠支持我们。";
 
 /* ContentView */
-"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "你的 iOS 版本不支持在未经修改的情况下运行虚拟机，必须在越狱时运行 UTM 或附加远程调试器。有关更多详细信息，请参阅 https://getutm.app/install/。";
+"Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details." = "你的 iOS 版本不支持在未经修改的情况下运行虚拟机，必须在越狱时运行 PC on iPhone 或附加远程调试器。有关更多详细信息，请参阅 https://getutm.app/install/。";
 
 // Additional Strings (These strings are unable to be extracted by Xcode)
 
@@ -1830,7 +1830,7 @@ VMWizardOSMacView */
 "Automatic" = "自动";
 
 /* No comment provided by engineer. */
-"Automatically start UTM server" = "自动启动 UTM 服务器";
+"Automatically start UTM server" = "自动启动 PC on iPhone 服务器";
 
 /* No comment provided by engineer. */
 "Background Color" = "背景颜色";
@@ -2076,7 +2076,7 @@ VMWizardOSMacView */
 "Enable Sound" = "启用声音";
 
 /* No comment provided by engineer. */
-"Enable UTM Server" = "启用 UTM 服务器";
+"Enable UTM Server" = "启用 PC on iPhone 服务器";
 
 /* No comment provided by engineer. */
 "Engine" = "引擎";
@@ -2085,7 +2085,7 @@ VMWizardOSMacView */
 "Expert Mode" = "专家模式";
 
 /* No comment provided by engineer. */
-"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "将所有参数导出为文本文件。此功能仅用于调试目的，因为 UTM 的内置 QEMU 与上游 QEMU 在支持的参数上有所不同。";
+"Export all arguments as a text file. This is only for debugging purposes as UTM's built-in QEMU differs from upstream QEMU in supported arguments." = "将所有参数导出为文本文件。此功能仅用于调试目的，因为 PC on iPhone 的内置 QEMU 与上游 QEMU 在支持的参数上有所不同。";
 
 /* No comment provided by engineer. */
 "Export Debug Log" = "导出调试日志";
@@ -2359,7 +2359,7 @@ VMWizardOSMacView */
 "No VM screenshots will be taken." = "不会截屏虚拟机。";
 
 /* No comment provided by engineer. */
-"Older versions of UTM added each IDE device to a separate bus. Check this to change the configuration to place two units on each bus." = "旧版本的 UTM 会将每个 IDE 设备添加到单独的总线上。选中此项可更改配置，以在每个总线上放置两个设备。";
+"Older versions of UTM added each IDE device to a separate bus. Check this to change the configuration to place two units on each bus." = "旧版本的 PC on iPhone 会将每个 IDE 设备添加到单独的总线上。选中此项可更改配置，以在每个总线上放置两个设备。";
 
 /* No comment provided by engineer. */
 "One Time Donation" = "一次性捐赠";
@@ -2380,7 +2380,7 @@ VMWizardOSMacView */
 "Open VM Settings" = "打开虚拟机设置";
 
 /* No comment provided by engineer. */
-"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "(可选) 选择一个可在虚拟机内访问的目录。请注意，客户机操作系统对共享目录的支持各不相同，可能需要安装额外的客户机驱动程序。有关详细信息，请参阅 UTM 支持页面。";
+"Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details." = "(可选) 选择一个可在虚拟机内访问的目录。请注意，客户机操作系统对共享目录的支持各不相同，可能需要安装额外的客户机驱动程序。有关详细信息，请参阅 PC on iPhone 支持页面。";
 
 /* No comment provided by engineer. */
 "Options here only apply on next boot and are not saved." = "此处的选项只在下次启动时生效，不会存储。";
@@ -2452,7 +2452,7 @@ VMWizardOSMacView */
 "Require Password" = "需要密码";
 
 /* No comment provided by engineer. */
-"Requires restarting UTM to take affect." = "需要重新打开 UTM 以生效。";
+"Requires restarting UTM to take affect." = "需要重新打开 PC on iPhone 以生效。";
 
 /* No comment provided by engineer. */
 "Requires SPICE guest agent tools to be installed." = "需要安装 SPICE 客户机代理工具。";
@@ -2581,10 +2581,10 @@ VMWizardOSMacView */
 "Show the main window." = "显示主窗口。";
 
 /* No comment provided by engineer. */
-"Show UTM" = "显示 UTM";
+"Show UTM" = "显示 PC on iPhone";
 
 /* No comment provided by engineer. */
-"Show UTM preferences" = "显示 UTM 偏好设置";
+"Show UTM preferences" = "显示 PC on iPhone 偏好设置";
 
 /* No comment provided by engineer. */
 "Skip Boot Image" = "跳过启动映像";
@@ -2632,7 +2632,7 @@ VMWizardOSMacView */
 "Target" = "目标";
 
 /* No comment provided by engineer. */
-"Terminate UTM and stop all running VMs." = "终止 UTM 并停止所有正在运行的虚拟机。";
+"Terminate UTM and stop all running VMs." = "终止 PC on iPhone 并停止所有正在运行的虚拟机。";
 
 /* No comment provided by engineer. */
 "Test" = "测试";
@@ -2677,7 +2677,7 @@ VMWizardOSMacView */
 "This virtual machine cannot be found at: %@" = "虚拟机无法通过此路径找到：%@";
 
 /* No comment provided by engineer. */
-"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "必须使用访达打开此虚拟机，将其重新添加到 UTM 中。你可以通过此路径找到：%@";
+"This virtual machine must be re-added to UTM by opening it with Finder. You can find it at the path: %@" = "必须使用访达打开此虚拟机，将其重新添加到 PC on iPhone 中。你可以通过此路径找到：%@";
 
 /* No comment provided by engineer. */
 "This virtual machine uses custom QEMU arguments which is potentially dangerous and can cause damage to your machine. You should only run this virtual machine if you trust it." = "此虚拟机使用了自定义的 QEMU 参数，这可能存在风险，并可能对你的机器造成损害。仅在你信任该虚拟机时，才应该运行它。";
@@ -2738,10 +2738,10 @@ VMWizardOSMacView */
 "Use Virtualization" = "使用虚拟化";
 
 /* No comment provided by engineer. */
-"UTM Library" = "UTM 资源库";
+"UTM Library" = "PC on iPhone 资源库";
 
 /* No comment provided by engineer. */
-"UTM Server" = "UTM 服务器";
+"UTM Server" = "PC on iPhone 服务器";
 
 /* No comment provided by engineer. */
 "Version" = "版本号";
@@ -2777,7 +2777,7 @@ VMWizardOSMacView */
 "Windows Install Guide" = "Windows 安装指南";
 
 /* No comment provided by engineer. */
-"You can configure additional host networks in UTM Settings." = "你可以在 UTM 设置中配置其他主机网络。";
+"You can configure additional host networks in UTM Settings." = "你可以在 PC on iPhone 设置中配置其他主机网络。";
 
 /* No comment provided by engineer. */
 "You can use this if your boot options are corrupted or if you wish to re-enroll in the default keys for secure boot." = "若你的启动选项已损坏，或者希望重新注册安全启动的默认密钥，可以使用此功能。";

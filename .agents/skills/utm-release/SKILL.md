@@ -1,6 +1,6 @@
 ---
 name: utm-release
-description: Publish a new UTM release on GitHub. Drafts the release notes from the commits and pull requests since the last release, has the user approve them, bumps the version in Build.xcconfig, commits and tags it, pushes, and creates the GitHub release with a discussion in the "Releases" category, which starts the release pipeline. Use this when the user wants to cut, publish, tag, or draft a UTM release or beta, or runs /utm-release.
+description: Publish a new PC on iPhone release on GitHub. Drafts the release notes from the commits and pull requests since the last release, has the user approve them, bumps the version in Build.xcconfig, commits and tags it, pushes, and creates the GitHub release with a discussion in the "Releases" category, which starts the release pipeline. Use this when the user wants to cut, publish, tag, or draft a PC on iPhone release or beta, or runs /utm-release.
 ---
 
 # utm-release
@@ -118,7 +118,7 @@ title:
 - **Leave out** changes that users can't see: docs, CI, agent skills, tests,
   refactors, and build scripts that don't change what ships. Keep build fixes
   that do change the shipped app. For example, a dependency link fix that makes
-  UTM run on older macOS is user-visible. Keep a list of what you left out, to
+  PC on iPhone run on older macOS is user-visible. Keep a list of what you left out, to
   show the user.
 
 Put the new bullets in `## Changes (vx.y.z)`, directly above the previous
