@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "PC on iPhone";
-
-/* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "PC on iPhone 需要您的授權才能使用麥克風。";
-
-/* (No Comment) */
-"UTM virtual machine" = "PC on iPhone 虛擬機";
-

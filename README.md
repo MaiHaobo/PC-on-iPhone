@@ -4,12 +4,10 @@
 >
 > —— 艾伦·图灵（Alan Turing），1936 年
 
-PC on iPhone 是适用于 iOS 与 macOS 的全功能系统模拟器与虚拟机宿主。它基于 QEMU，让你在 Mac、iPhone 和 iPad 上运行 Windows、Linux 等系统。
+PC on iPhone 是适用于 iOS 的全功能系统模拟器与虚拟机宿主。它基于 QEMU，让你在 iPhone 和 iPad 上运行 Windows、Linux 等系统。
 
 <p align="center">
   <img width="450px" alt="在 iPhone 上运行的 PC on iPhone" src="screen.png">
-  <br>
-  <img width="450px" alt="在 MacBook 上运行的 PC on iPhone" src="screenmac.png">
 </p>
 
 ---
@@ -22,13 +20,8 @@ PC on iPhone 是适用于 iOS 与 macOS 的全功能系统模拟器与虚拟机�
 - 文本终端模式
 - USB 设备直通
 - 基于 QEMU TCG 的 JIT 加速
-- 采用最新 API，为 macOS 11+ 与 iOS 11+ 从头设计的前端
+- 采用最新 API，为 iOS 11+ 从头设计的前端
 - 直接在设备上创建、管理与运行虚拟机
-
-### macOS 专属能力
-
-- 基于 Hypervisor.framework 与 QEMU 的硬件加速虚拟化
-- 在 macOS 12+ 上通过 Virtualization.framework 启动 macOS 客户机
 
 ## 关于 SE 版本
 

@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "PC on iPhone";
-
-/* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Für Mikrofonzugriff in der VM wird Ihre Erlaubnis benötigt.";
-
-/* (No Comment) */
-"UTM virtual machine" = "Virtuelle Maschine (PC on iPhone)";
-

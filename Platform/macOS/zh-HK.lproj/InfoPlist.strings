@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "PC on iPhone";
-
-/* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "任何虛擬機都需要權限才能從咪高風錄製。";
-
-/* No comment provided by engineer. */
-"UTM virtual machine" = "PC on iPhone 虛擬機";
-
