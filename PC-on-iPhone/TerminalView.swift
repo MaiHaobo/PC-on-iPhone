@@ -228,11 +228,11 @@ struct TerminalView: View {
         probe = p
         Task {
             do {
-                let banner = try await p.probe(host: conn.host, port: conn.port)
+                let result = try await p.probe(host: conn.host, port: conn.port)
                 await MainActor.run {
                     phase = .ready
-                    append("✓ 已连通 \(conn.host):\(conn.port)")
-                    append(banner)
+                    append("✓ 已连通 \(conn.host):\(conn.port)  耗时 \(String(format: "%.2f", result.elapsed))s")
+                    append(result.banner)
                     append("")
                     append("SSH 协议栈实现中（里程碑 1b），当前可验证连通性。")
                 }

@@ -34,71 +34,114 @@ enum SSHStore {
     }
 }
 
-// MARK: - TCP 连通性检测 / 服务端横幅读取
+// MARK: - TCP 连通性探测
 //
-// 用系统自带的 Network.framework 建立到目标主机的 TCP 连接：
+// 用系统自带的 Network.framework 连接目标主机端口：
 // 成功即说明「网络可达 + SSH 端口在监听」，并读取服务端版本横幅。
-// 这正是完整 SSH 协议的第一步（RFC 4253 版本交换阶段）。
+// 这是完整 SSH 协议的第一步（RFC 4253 版本交换阶段）。
+//
+// 并发安全：用专用串行队列 + 状态锁保证 resume 只被调用一次。
+
+/// 探测结果
+struct ProbeResult {
+    let banner: String
+    let elapsed: TimeInterval
+}
 
 final class TCPProbe {
+    private let queue = DispatchQueue(label: "com.pcfoni.tcp-probe")
+    private let lock = NSLock()
     private var connection: NWConnection?
-    private let queue = DispatchQueue(label: "tcp.probe")
+    private var hasResumed = false
+    private var continuation: CheckedContinuation<ProbeResult, Error>?
 
     /// 连接目标端口并读取服务端首行横幅
-    /// - Returns: 服务端横幅，例如 "SSH-2.0-OpenSSH_9.6"
-    func probe(host: String, port: Int, timeout: TimeInterval = 10) async throws -> String {
-        guard let nwPort = NWEndpoint.Port(rawValue: UInt16(clamping: port)) else {
-            throw NSError(domain: "TCPProbe", code: -2,
-                          userInfo: [NSLocalizedDescriptionKey: "端口号无效：\(port)"])
+    func probe(host: String, port: Int, timeout: TimeInterval = 10) async throws -> ProbeResult {
+        guard let nwPort = NWEndpoint.Port(rawValue: UInt16(truncatingIfNeeded: max(1, min(port, 65535)))) else {
+            throw ProbeError.invalidPort(port)
         }
+        let start = Date()
         let endpoint = NWEndpoint.hostPort(host: NWEndpoint.Host(host), port: nwPort)
         let conn = NWConnection(to: endpoint, using: .tcp)
+
+        lock.lock()
         connection = conn
+        hasResumed = false
+        lock.unlock()
 
-        return try await withCheckedThrowingContinuation { cont in
-            let lock = NSLock()
-            var finished = false
-            let finish: (Result<String, Error>) -> Void = { result in
-                lock.lock()
-                let alreadyDone = finished
-                finished = true
-                lock.unlock()
-                guard !alreadyDone else { return }
-                conn.cancel()
-                cont.resume(with: result)
-            }
+        defer {
+            conn.cancel()
+            lock.lock()
+            connection = nil
+            lock.unlock()
+        }
 
-            conn.stateUpdateHandler = { state in
+        let banner = try await withCheckedThrowingContinuation { (cont: CheckedContinuation<String, Error>) in
+            lock.lock()
+            continuation = cont
+            lock.unlock()
+
+            conn.stateUpdateHandler = { [weak self] state in
+                guard let self else { return }
                 switch state {
                 case .ready:
                     conn.receive(minimumIncompleteLength: 1, maximumLength: 1024) { data, _, _, error in
                         if let error {
-                            finish(.failure(error))
+                            self.finish(.failure(error))
                         } else if let data, let text = String(data: data, encoding: .utf8) {
-                            finish(.success(text.trimmingCharacters(in: .whitespacesAndNewlines)))
+                            self.finish(.success(text.trimmingCharacters(in: .whitespacesAndNewlines)))
                         } else {
-                            finish(.success("(服务端未发送横幅)"))
+                            self.finish(.success("(服务端未发送横幅)"))
                         }
                     }
                 case .failed(let error):
-                    finish(.failure(error))
+                    self.finish(.failure(error))
                 case .waiting(let error):
-                    // 例如目标不可达时 Network 会进入 waiting
-                    finish(.failure(error))
-                case .cancelled:
-                    break
+                    self.finish(.failure(error))
                 default:
                     break
                 }
             }
             conn.start(queue: queue)
 
-            queue.asyncAfter(deadline: .now() + timeout) {
-                finish(.failure(NSError(domain: "TCPProbe", code: -1,
-                                        userInfo: [NSLocalizedDescriptionKey: "连接超时（\(Int(timeout)) 秒）"])))
+            queue.asyncAfter(deadline: .now() + timeout) { [weak self] in
+                self?.finish(.failure(ProbeError.timeout(Int(timeout))))
             }
         }
+
+        return ProbeResult(banner: banner, elapsed: Date().timeIntervalSince(start))
     }
 
-    func cancel() { connection?.cancel() }
+    /// 线程安全的完成回调：保证 continuation 只 resume 一次
+    private func finish(_ result: Result<String, Error>) {
+        lock.lock()
+        guard !hasResumed, let cont = continuation else {
+            lock.unlock()
+            return
+        }
+        hasResumed = true
+        continuation = nil
+        lock.unlock()
+
+        cont.resume(with: result)
+    }
+
+    func cancel() {
+        lock.lock()
+        let conn = connection
+        lock.unlock()
+        conn?.cancel()
+    }
+}
+
+enum ProbeError: LocalizedError {
+    case invalidPort(Int)
+    case timeout(Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidPort(let p): return "端口号无效：\(p)"
+        case .timeout(let t):     return "连接超时（\(t) 秒），请检查地址与网络"
+        }
+    }
 }
