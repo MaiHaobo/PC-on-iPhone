@@ -1,0 +1,52 @@
+.name: Build IPA
+
+# 打包逻辑在 scripts/build-ipa.sh 里（改逻辑不用动本文件）
+# Secrets: BUILD_CERTIFICATE_BASE64 / P12_PASSWORD
+#          BUILD_PROVISION_PROFILE_BASE64 / KEYCHAIN_PASSWORD
+
+on:
+  workflow_dispatch:
+    inputs:
+      export_method:
+        description: '导出方式（auto = 自动判断）'
+        default: 'auto'
+        type: choice
+        options: [auto, development, ad-hoc, app-store, enterprise]
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 编译并打包 IPA
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          EXPORT_METHOD: ${{ github.event.inputs.export_method || 'auto' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash scripts/build-ipa.sh
+
+      - name: 上传 IPA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PC-on-iPhone-IPA
+          path: build/export/*.ipa
+          retention-days: 30
+
+      - name: 上传日志（失败时）
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: ${{ runner.temp }}/*.log
+          if-no-files-found: ignore
