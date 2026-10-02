@@ -83,9 +83,11 @@ xcodebuild archive \
 ARCHIVE_EXIT=$?
 
 if [ "$ARCHIVE_EXIT" -ne 0 ]; then
-  echo "────── 编译失败，日志最后 80 行 ──────"
-  tail -80 "$TMP/archive.log"
-  echo "────── 日志结束 ──────"
+  echo "════════ 编译错误摘要（error: 行）════════"
+  grep -E "error:|error :|❌|fatal error" "$TMP/archive.log" | head -40 || echo "（未匹配到 error: 行，见下方末尾输出）"
+  echo "════════ 编译日志末尾 120 行 ════════"
+  tail -120 "$TMP/archive.log"
+  echo "════════ 日志结束 ════════"
   die "编译失败（完整日志见 build-logs 产物）"
 fi
 
