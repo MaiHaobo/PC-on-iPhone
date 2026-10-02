@@ -12,7 +12,6 @@
 		2F0000000000000000000309 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F0000000000000000000209 /* Assets.xcassets */; };
 		2F0000000000000000000311 /* SSHConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0000000000000000000211 /* SSHConnection.swift */; };
 		2F0000000000000000000312 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0000000000000000000212 /* TerminalView.swift */; };
-		2F0000000000000000000323 /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = 2F0000000000000000000322 /* Citadel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,8 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F0000000000000000000323 /* Citadel in Frameworks */,
-			);
+					);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -84,9 +82,6 @@
 			productName = PC-on-iPhone;
 			productReference = 2F0000000000000000000011 /* PC-on-iPhone.app */;
 			productType = "com.apple.product-type.application";
-			packageProductDependencies = (
-				2F0000000000000000000322 /* Citadel */,
-			);
 		};
 /* End PBXNativeTarget section */
 
@@ -111,9 +106,6 @@
 				en,
 				Base,
 				"zh-Hans",
-			);
-			packageReferences = (
-				2F0000000000000000000321 /* XCRemoteSwiftPackageReference "Citadel" */,
 			);
 			mainGroup = 2F000000000000000000000B /* PC-on-iPhone */;
 			productRefGroup = 2F000000000000000000000C /* Products */;
@@ -346,24 +338,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		2F0000000000000000000321 /* XCRemoteSwiftPackageReference "Citadel" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orlandos-nl/Citadel.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		2F0000000000000000000322 /* Citadel */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2F0000000000000000000321 /* XCRemoteSwiftPackageReference "Citadel" */;
-			productName = Citadel;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2F000000000000000000000A /* Project object */;
 }

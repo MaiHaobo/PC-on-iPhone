@@ -1,18 +1,24 @@
 import SwiftUI
-import Citadel
-import NIOCore
 
-// MARK: - SSH 终端（里程碑 1 · 命令式会话）
+// MARK: - 终端（里程碑 1 · 连接与探测）
 //
-// 连接真实 PC / 服务器，逐条执行命令并显示输出。
-// 这是通往 UTM SE 式体验的第一步：先让 iPhone 真正"操作一台电脑"。
-// 完整交互式 TTY（vim/top 等）将在里程碑 1b 用 withPTY + SwiftTerm 实现。
+// 目标：iOS 16 也能跑，不依赖任何第三方库。
+//
+// 当前能力：
+//   - 管理 SSH 连接配置（本地持久化）
+//   - 用 Network.framework 探测主机 SSH 端口连通性，并读取服务端版本横幅
+//   - 命令历史与终端样式输出
+//
+// 里程碑 1b：在 TCPProbe 之上实现纯 Swift 的 SSH 协议栈
+//   （版本协商 → 密钥交换 → 加密 → 认证 → exec 通道），
+//   全部用系统自带的 Network.framework + CryptoKit，零第三方依赖，
+//   这正是 UTM SE 能在老系统上运行的原因——把协议实现掌握在自己手里。
 
 struct TerminalView: View {
     private enum Phase: Equatable {
         case pickServer
-        case connecting
-        case connected
+        case probing
+        case ready
         case failed(String)
     }
 
@@ -21,20 +27,19 @@ struct TerminalView: View {
     @State private var showAddSheet = false
     @State private var draft = SSHConnection(name: "", host: "", username: "", password: "")
 
-    @State private var client: SSHClient?
-    @State private var activeName = ""
+    @State private var active: SSHConnection?
     @State private var lines: [TerminalLine] = []
     @State private var commandText = ""
-    @State private var isBusy = false
+    @State private var probe: TCPProbe?
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             switch phase {
-            case .pickServer: serverPicker
-            case .connecting: progressView("正在连接…")
-            case .connected:  sessionView
-            case .failed(let msg): failureView(msg)
+            case .pickServer:   serverPicker
+            case .probing:      progressView("正在连接…")
+            case .ready:        sessionView
+            case .failed(let m): failureView(m)
             }
         }
         .navigationTitle("终端")
@@ -60,7 +65,7 @@ struct TerminalView: View {
                 Section("已保存的连接") {
                     ForEach(connections) { conn in
                         Button {
-                            connect(to: conn)
+                            startProbe(conn)
                         } label: {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(conn.name).font(.headline).foregroundStyle(.primary)
@@ -75,7 +80,10 @@ struct TerminalView: View {
             }
         }
         .toolbar {
-            Button { draft = SSHConnection(name: "", host: "", username: "", password: ""); showAddSheet = true } label: {
+            Button {
+                draft = SSHConnection(name: "", host: "", username: "", password: "")
+                showAddSheet = true
+            } label: {
                 Image(systemName: "plus")
             }
         }
@@ -97,7 +105,7 @@ struct TerminalView: View {
                     SecureField("密码", text: $draft.password)
                 }
                 Section {
-                    Text("服务器需要开启 SSH 服务（端口 22）。密码只保存在本机。")
+                    Text("服务器需开启 SSH 服务（默认端口 22）。配置只保存在本机。")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
             }
@@ -125,34 +133,29 @@ struct TerminalView: View {
 
     private var sessionView: some View {
         VStack(spacing: 0) {
-            // 状态栏
             HStack(spacing: 8) {
                 Circle().fill(Color.green).frame(width: 8, height: 8)
-                Text(activeName).font(.caption.monospaced()).foregroundStyle(.green)
+                Text(active.map { "\($0.username)@\($0.host)" } ?? "")
+                    .font(.caption.monospaced()).foregroundStyle(.green)
                 Spacer()
-                if isBusy { ProgressView().tint(.green) }
                 Button {
-                    if let c = client {
-                        Task { try? await c.close() }
-                    }
-                    client = nil
+                    probe?.cancel()
+                    active = nil
                     phase = .pickServer
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.gray)
+                    Image(systemName: "xmark.circle.fill").foregroundStyle(.gray)
                 }
             }
             .padding(.horizontal)
             .padding(.vertical, 6)
             .background(Color(white: 0.08))
 
-            // 输出流
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 2) {
                         ForEach(lines) { line in
                             Text(line.text)
-                                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                                .font(.system(size: 12, design: .monospaced))
                                 .foregroundStyle(line.isCommand ? Color.yellow : Color.green)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .textSelection(.enabled)
@@ -168,22 +171,21 @@ struct TerminalView: View {
                 }
             }
 
-            // 输入栏
             HStack(spacing: 8) {
                 Text("$").font(.system(.body, design: .monospaced)).foregroundStyle(.green)
-                TextField("输入命令…", text: $commandText)
+                TextField("输入命令（协议实现中）…", text: $commandText)
                     .font(.system(.body, design: .monospaced))
                     .foregroundStyle(.white)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .submitLabel(.go)
-                    .onSubmit(runCommand)
+                    .onSubmit(submitCommand)
                 Button {
-                    runCommand()
+                    submitCommand()
                 } label: {
                     Image(systemName: "arrowtriangle.right.fill").foregroundStyle(.green)
                 }
-                .disabled(commandText.isEmpty || isBusy)
+                .disabled(commandText.isEmpty)
             }
             .padding(10)
             .background(Color(white: 0.08))
@@ -218,26 +220,21 @@ struct TerminalView: View {
         }
     }
 
-    private func connect(to conn: SSHConnection) {
-        phase = .connecting
-        activeName = conn.name
+    private func startProbe(_ conn: SSHConnection) {
+        phase = .probing
+        active = conn
         lines = []
+        let p = TCPProbe()
+        probe = p
         Task {
             do {
-                let settings = SSHClientSettings(
-                    host: conn.host,
-                    port: conn.port,
-                    authenticationMethod: { .passwordBased(username: conn.username, password: conn.password) },
-                    hostKeyValidator: .acceptAnything()
-                )
-                let c = try await SSHClient.connect(to: settings)
+                let banner = try await p.probe(host: conn.host, port: conn.port)
                 await MainActor.run {
-                    client = c
-                    phase = .connected
-                    append("已连接 \(conn.username)@\(conn.host)（命令式会话，输入命令后回车）")
-                }
-                if let banner = try? await c.executeCommand("uname -a") {
-                    await MainActor.run { append(trim(banner)) }
+                    phase = .ready
+                    append("✓ 已连通 \(conn.host):\(conn.port)")
+                    append(banner)
+                    append("")
+                    append("SSH 协议栈实现中（里程碑 1b），当前可验证连通性。")
                 }
             } catch {
                 await MainActor.run { phase = .failed(error.localizedDescription) }
@@ -245,33 +242,21 @@ struct TerminalView: View {
         }
     }
 
-    private func runCommand() {
+    private func submitCommand() {
         let cmd = commandText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !cmd.isEmpty, let c = client, !isBusy else { return }
+        guard !cmd.isEmpty else { return }
         commandText = ""
         append("$ \(cmd)", isCommand: true)
-        isBusy = true
-        Task {
-            do {
-                let out = try await c.executeCommand(cmd)
-                await MainActor.run {
-                    append(trim(out).isEmpty ? "(无输出)" : trim(out))
-                }
-            } catch {
-                await MainActor.run {
-                    append("命令执行失败：\(error.localizedDescription)")
-                    client = nil
-                    phase = .failed("会话已断开：\(error.localizedDescription)")
-                }
-            }
-            await MainActor.run { isBusy = false }
-        }
+        append("命令执行需要 SSH 协议支持，将在里程碑 1b 提供。")
     }
+}
 
-    private func trim(_ buffer: ByteBuffer) -> String {
-        let s = String(buffer: buffer)
-        return s.hasSuffix("\n") ? String(s.dropLast()) : s
-    }
+// MARK: - 终端行模型
+
+struct TerminalLine: Identifiable {
+    let id = UUID()
+    let text: String
+    var isCommand: Bool = false
 }
 
 // MARK: - 兼容 iOS 16 的空状态视图（ContentUnavailableView 是 iOS 17 的）
