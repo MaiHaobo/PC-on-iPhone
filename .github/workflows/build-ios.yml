@@ -295,11 +295,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # DEBUG: mirrors build-sysroot — re-add the iOS-SE entry when the
-        # sysroot build is green again:
-        #   - { arch: arm64, sdk: iphoneos, platform: ios-tci, scheme: iOS-SE, label: 'iOS SE' }
+        # Each entry archives exactly one scheme, because build_utm.sh picks a
+        # single .app out of the archive (`find … -name '*.app' | head -1`).
+        # Both entries run in parallel, so the wall-clock cost of shipping the
+        # JIT build and the SE build together is the cost of one archive.
+        # The iOS-SE scheme produces "UTM SE.app" via the iOS-SE target.
         include:
           - { arch: arm64, sdk: iphoneos, platform: ios, scheme: iOS, label: 'iOS' }
+          - { arch: arm64, sdk: iphoneos, platform: ios, scheme: iOS-SE, label: 'iOS SE' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -332,17 +335,30 @@ jobs:
           path: UTM.xcarchive.tgz
 
   package-ios:
-    name: Package ${{ matrix.name }}
+    name: Package ${{ matrix.label }}
     runs-on: ${{ fromJSON(needs.configuration.outputs.runner) }}
     needs: [configuration, build-ios]
+    # Both entry points produce the same set of IPAs:
+    #   - a Release, which attaches them to the release
+    #   - a manual dispatch with package_ipa=true, which uploads them as
+    #     build artifacts
     if: github.event_name == 'release' || github.event.inputs.package_ipa == 'true'
     strategy:
       fail-fast: false
       matrix:
+        # `archive` is the scheme whose xcarchive this entry unpacks, `mode` is
+        # the package.sh mode, and `path` is the file package.sh writes — note
+        # package.sh names the output after the bundle name, which for the SE
+        # build is literally "UTM SE.ipa" (with a space).
+        #
+        # The JIT build yields two IPAs from the SAME archive: `ipa` keeps the
+        # dynamic-codesigning entitlement (needs a JIT-enabling app like
+        # StikDebug/UTM SE's own mechanism) and `ipa-hv` drops it, so the build
+        # runs without JIT on a stock device.
         include:
-          - { scheme: iOS,    mode: ipa,    name: 'PC-on-iPhone.ipa',    path: 'PC-on-iPhone.ipa' }
-          - { scheme: iOS,    mode: ipa-hv, name: 'PC-on-iPhone-HV.ipa', path: 'PC-on-iPhone.ipa' }
-          - { scheme: iOS-SE, mode: ipa-se, name: 'PC-on-iPhone-SE.ipa', path: 'PC-on-iPhone SE.ipa' }
+          - { label: 'PC-on-iPhone.ipa',    archive: iOS,    mode: ipa,    path: 'UTM.ipa' }
+          - { label: 'PC-on-iPhone-HV.ipa', archive: iOS,    mode: ipa-hv, path: 'UTM.ipa' }
+          - { label: 'PC-on-iPhone-SE.ipa', archive: iOS-SE, mode: ipa-se, path: 'UTM SE.ipa' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -350,7 +366,7 @@ jobs:
       - name: Download Archive
         uses: actions/download-artifact@v4
         with:
-          name: Archive-${{ matrix.scheme }}-arm64
+          name: Archive-${{ matrix.archive }}-arm64
 
       - name: Install ldid
         run: brew install ldid dpkg
@@ -360,15 +376,21 @@ jobs:
           tar -xf UTM.xcarchive.tgz
           ./scripts/package.sh ${{ matrix.mode }} UTM.xcarchive .
 
+      # Rename to the release-facing name so the asset is unambiguous even
+      # though package.sh derives the filename from the bundle name.
+      - name: Rename for release
+        if: matrix.path != matrix.label
+        run: mv -v "${{ matrix.path }}" "${{ matrix.label }}"
+
       - name: Upload Artifact
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.name }}
-          path: ${{ matrix.path }}
+          name: ${{ matrix.label }}
+          path: ${{ matrix.label }}
 
       - name: Upload Release Asset
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.path }}" --clobber
+        run: gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.label }}" --clobber

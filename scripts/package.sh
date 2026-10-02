@@ -186,7 +186,10 @@ create_fake_ipa() {
 
 	pwd="$(pwd)"
 	mkdir -p "$OUTPUT"
-	rm -rf "$OUTPUT/Applications" "$OUTPUT/Payload" "$OUTPUT/UTM.ipa"
+	# Clear the previous run's leftovers. The IPA is named after the bundle
+	# ("UTM.ipa", "UTM SE.ipa", …), so glob rather than hardcoding "UTM.ipa" —
+	# the old hardcoded name left a stale "UTM SE.ipa" behind on reruns.
+	rm -rf "$OUTPUT/Applications" "$OUTPUT/Payload" "$OUTPUT"/*.ipa
 	fake_sign "$NAME" "$BUNDLE_ID" "$INPUT/Products/Applications" "$OUTPUT" "$FAKEENT"
 	mv "$OUTPUT/Applications" "$OUTPUT/Payload"
 	cd "$OUTPUT"
@@ -335,6 +338,7 @@ ipa-se )
 </plist>
 EOL
 	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT"
+	rm "$FAKEENT"
 	;;
 ipa-remote )
 	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT"
