@@ -36,24 +36,43 @@ BUNDLE_ID=
 
 case $MODE in
 deb | ipa | ipa-hv | ipa-signed )
-	NAME="UTM"
+	APP_NAME="UTM"
+	OUTPUT_NAME="UTM"
 	BUNDLE_ID="com.utmapp.UTM"
 	INPUT_APP="$INPUT/Products/Applications/UTM.app"
 	;;
 ipa-se | ipa-se-signed )
-	NAME="UTM SE"
+	APP_NAME="PC on iPhone SE"
+	OUTPUT_NAME="UTM SE"
 	BUNDLE_ID="com.utmapp.UTM-SE"
-	INPUT_APP="$INPUT/Products/Applications/UTM SE.app"
+	INPUT_APP="$INPUT/Products/Applications/PC on iPhone SE.app"
 	;;
 ipa-remote | ipa-remote-signed )
-	NAME="UTM Remote"
+	APP_NAME="PC on iPhone Remote"
+	OUTPUT_NAME="UTM Remote"
 	BUNDLE_ID="com.utmapp.UTM-Remote"
-	INPUT_APP="$INPUT/Products/Applications/UTM Remote.app"
+	INPUT_APP="$INPUT/Products/Applications/PC on iPhone Remote.app"
 	;;
 * )
 	usage
 	;;
 esac
+
+# Legacy alias: internal helpers still refer to the bundle name via $NAME.
+NAME="$APP_NAME"
+
+# PRODUCT_NAME (and therefore the .app directory name) can change independently
+# of the packaging mode. Fall back to the single .app in the archive so a brand
+# rename does not silently break packaging with "Invalid xcarchive input!".
+if [ ! -d "$INPUT_APP" ]; then
+	_fallback=$(find "$INPUT/Products/Applications" -maxdepth 1 -name '*.app' 2>/dev/null | head -1)
+	if [ -n "$_fallback" ]; then
+		echo "Note: expected '$INPUT_APP', using '$_fallback' instead"
+		INPUT_APP="$_fallback"
+		APP_NAME="$(basename "$_fallback" .app)"
+		NAME="$APP_NAME"
+	fi
+fi
 
 if [ ! -d "$INPUT_APP" ]; then
 	echo "Invalid xcarchive input!"
@@ -183,17 +202,21 @@ create_fake_ipa() {
 	local INPUT=$3
 	local OUTPUT=$4
 	local FAKEENT=$5
+	# Filename of the produced IPA. Defaults to the bundle name for the legacy
+	# callers (deb); IPA modes pass it explicitly so a brand rename of
+	# PRODUCT_NAME does not silently change the release artifact names.
+	local IPA_NAME=${6:-$NAME}
 
 	pwd="$(pwd)"
 	mkdir -p "$OUTPUT"
-	# Clear the previous run's leftovers. The IPA is named after the bundle
-	# ("UTM.ipa", "UTM SE.ipa", …), so glob rather than hardcoding "UTM.ipa" —
-	# the old hardcoded name left a stale "UTM SE.ipa" behind on reruns.
+	# Clear the previous run's leftovers. The IPA name depends on the caller,
+	# so glob rather than hardcoding "UTM.ipa" — the old hardcoded name left a
+	# stale "UTM SE.ipa" behind on reruns.
 	rm -rf "$OUTPUT/Applications" "$OUTPUT/Payload" "$OUTPUT"/*.ipa
 	fake_sign "$NAME" "$BUNDLE_ID" "$INPUT/Products/Applications" "$OUTPUT" "$FAKEENT"
 	mv "$OUTPUT/Applications" "$OUTPUT/Payload"
 	cd "$OUTPUT"
-	zip -r "$NAME.ipa" "Payload" -x "._*" -x ".DS_Store" -x "__MACOSX"
+	zip -r "$IPA_NAME.ipa" "Payload" -x "._*" -x ".DS_Store" -x "__MACOSX"
 	rm -r "Payload"
 	cd "$pwd"
 }
@@ -266,7 +289,7 @@ ipa )
 </dict>
 </plist>
 EOL
-	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT"
+	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT" "$OUTPUT_NAME"
 	rm "$FAKEENT"
 	;;
 ipa-hv )
@@ -320,7 +343,7 @@ ipa-hv )
 </dict>
 </plist>
 EOL
-	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT"
+	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT" "$OUTPUT_NAME"
 	rm "$FAKEENT"
 	;;
 ipa-se )
@@ -337,11 +360,11 @@ ipa-se )
 </dict>
 </plist>
 EOL
-	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT"
+	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "$FAKEENT" "$OUTPUT_NAME"
 	rm "$FAKEENT"
 	;;
 ipa-remote )
-	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT"
+	create_fake_ipa "$NAME" "$BUNDLE_ID" "$INPUT" "$OUTPUT" "" "$OUTPUT_NAME"
 	;;
 ipa-signed | ipa-se-signed )
 	FAKEENT="/tmp/fakeent.$$.plist"

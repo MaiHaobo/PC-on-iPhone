@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CEF7F5812AEEDCC400E34952"
-               BuildableName = "UTM Remote.app"
+               BuildableName = "PC on iPhone Remote.app"
                BlueprintName = "iOS-Remote"
                ReferencedContainer = "container:UTM.xcodeproj">
             </BuildableReference>
@@ -44,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CEF7F5812AEEDCC400E34952"
-            BuildableName = "UTM Remote.app"
+            BuildableName = "PC on iPhone Remote.app"
             BlueprintName = "iOS-Remote"
             ReferencedContainer = "container:UTM.xcodeproj">
          </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CEF7F5812AEEDCC400E34952"
-            BuildableName = "UTM Remote.app"
+            BuildableName = "PC on iPhone Remote.app"
             BlueprintName = "iOS-Remote"
             ReferencedContainer = "container:UTM.xcodeproj">
          </BuildableReference>

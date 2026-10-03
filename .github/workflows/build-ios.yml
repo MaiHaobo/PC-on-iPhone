@@ -437,9 +437,11 @@ jobs:
       fail-fast: false
       matrix:
         # `archive` is the scheme whose xcarchive this entry unpacks, `mode` is
-        # the package.sh mode, and `path` is the file package.sh writes — note
-        # package.sh names the output after the bundle name, which for the SE
-        # build is literally "UTM SE.ipa" (with a space).
+        # the package.sh mode, and `path` is the file package.sh writes.
+        #
+        # package.sh separates the bundle/PRODUCT_NAME (which decides the .app
+        # directory) from the destination IPA filename, so `path` stays stable
+        # here even though the SE bundle is now named "PC on iPhone SE".
         #
         # The JIT build yields two IPAs from the SAME archive: `ipa` keeps the
         # dynamic-codesigning entitlement (needs a JIT-enabling app like
