@@ -97,12 +97,24 @@ jobs:
       # of the key, so a Release on a new commit can still reuse a sysroot
       # built by an earlier CI run. To force a rebuild, pass
       # rebuild_sysroot=true from workflow_dispatch.
+      # Caches are scoped to the ref that wrote them, and a tag ref can never
+      # see a branch ref's cache. A release run therefore computed the right
+      # key and was still told "Cache not found", because the sysroot had only
+      # ever been saved from main. (Worse, GitHub recorded that tag save under
+      # the malformed ref "refs/heads/refs/tags/v0.2", so nothing could ever
+      # read it back.)
+      #
+      # restore-keys makes the lookup fall back to the newest cache whose key
+      # starts with the same sysroot-<platform>-<arch> prefix, so a release on
+      # a tag still picks up whatever main built. The exact key is tried first.
       - name: Restore Sysroot Cache
         id: cache-sysroot
         uses: actions/cache/restore@v4
         with:
           path: ./sysroot-${{ matrix.platform }}-${{ matrix.arch }}
           key: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
+          restore-keys: |
+            sysroot-${{ matrix.platform }}-${{ matrix.arch }}-
 
       - name: Setup Path
         shell: bash
@@ -325,6 +337,10 @@ jobs:
         with:
           path: ./sysroot-${{ matrix.sysroot }}-${{ matrix.arch }}
           key: sysroot-${{ matrix.sysroot }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
+          # Same cross-ref fallback as build-sysroot: a release run executes on
+          # a tag ref, which cannot see a cache written from main.
+          restore-keys: |
+            sysroot-${{ matrix.sysroot }}-${{ matrix.arch }}-
           fail-on-cache-miss: true
 
       # SwiftPM clones 17 dependencies from scratch on every run, and with the
