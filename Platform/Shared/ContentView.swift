@@ -21,14 +21,8 @@ import IQKeyboardManagerSwift
 #endif
 import TipKit
 
-// on visionOS, there is no text to show more than UTM
-#if WITH_QEMU_TCI && !os(visionOS)
-let productName = "UTM SE"
-#elseif WITH_REMOTE && !os(visionOS)
-let productName = "UTM Remote"
-#else
-let productName = "UTM"
-#endif
+// The app-facing product name, used as the main list title.
+let productName = "PC on iPhone"
 
 struct ContentView: View {
     @State private var editMode = false
