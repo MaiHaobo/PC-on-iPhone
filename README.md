@@ -1,10 +1,6 @@
 # PC on iPhone
 
-> 发明一台可用于计算任何可计算序列的机器是可行的。
->
-> —— 艾伦·图灵（Alan Turing），1936 年
-
-PC on iPhone 是适用于 iOS 的全功能系统模拟器与虚拟机宿主。它基于 QEMU，让你在 iPhone 和 iPad 上运行 Windows、Linux 等系统。
+PC on iPhone 是 UTM 的优化版，适用于 iOS 的全功能系统模拟器与虚拟机宿主。它基于 QEMU，让你在 iPhone 和 iPad 上运行 Windows、Linux 等系统。
 
 <p align="center">
   <img width="450px" alt="在 iPhone 上运行的 PC on iPhone" src="screen.png">
