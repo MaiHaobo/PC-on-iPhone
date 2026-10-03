@@ -264,7 +264,11 @@ jobs:
             done
             echo ""
             echo "-- distutils location --"
-            python3 -c "import distutils; print(distutils.__file__)" 2>&1 | head -3
+            # On the cache-hit path Install Requirements is skipped, so
+            # setuptools may be absent and the import fails; that is exactly
+            # the information this step exists to report, not a reason to fail
+            # the job (pipefail would otherwise kill the step here).
+            (python3 -c "import distutils; print(distutils.__file__)" 2>&1 | head -3) || true
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
