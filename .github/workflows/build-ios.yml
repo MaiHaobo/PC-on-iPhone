@@ -23,6 +23,12 @@ on:
         type: choice
         options: ['false', 'true']
 
+# The default token is read-only, which makes `gh release upload` fail with
+# "HTTP 403: Resource not accessible by integration". Uploading release assets
+# needs contents: write.
+permissions:
+  contents: write
+
 env:
   # macOS 26 image, which ships Xcode 26.6 (Build 17F113) as the default at
   # /Applications/Xcode_26.6.app; /Applications/Xcode.app symlinks to it.
@@ -457,8 +463,15 @@ jobs:
           name: ${{ matrix.label }}
           path: ${{ matrix.label }}
 
+      # A failure here is almost always the token, not the upload itself, so
+      # check the API's own view of the permission before trying: the default
+      # token is read-only and produces a bare "HTTP 403: Resource not
+      # accessible by integration" that says nothing about why.
       - name: Upload Release Asset
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.label }}" --clobber
+        run: |
+          echo "token permissions for this repo: $(gh api repos/${{ github.repository }} --jq '.permissions // "unknown"' 2>&1 | head -1)"
+          ls -la "${{ matrix.label }}"
+          gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.label }}" --clobber
