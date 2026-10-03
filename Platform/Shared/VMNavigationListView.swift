@@ -186,9 +186,16 @@ private struct VMListModifier: ViewModifier {
             #endif
             #if !WITH_REMOTE
             #if os(iOS) // ToolbarSpacer is unavailable on visionOS
+            // ToolbarContentBuilder.buildIf is iOS 16+, but the app deployment
+            // target is iOS 15, so even an `#available`-guarded conditional
+            // here fails to compile on the iOS 26 SDK. Upstream builds this
+            // with the iOS 27 SDK where the builder constraints differ; on
+            // Xcode 26 (Swift 6.3) the spacer is simply omitted.
+            #if compiler(>=6.4)
             if #available(iOS 26, *) {
                 ToolbarSpacer(.fixed, placement: .navigationBarLeading)
             }
+            #endif
             #endif
             ToolbarItem(placement: .navigationBarLeading) {
                 if #available(iOS 17, visionOS 99, *) {

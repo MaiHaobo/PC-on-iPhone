@@ -66,8 +66,15 @@ extension View {
     /// scenes from the Info.plist scene manifest; the content must be registered as a scene
     /// accessory instead. Older systems keep using the Info.plist configuration and
     /// `UTMExternalSceneDelegate`.
+    ///
+    /// `sceneAccessory` and `ExternalNonInteractiveAccessory` only exist in the
+    /// iOS 27 SDK, so a runtime availability check is not enough to compile
+    /// against the iOS 26 SDK. Xcode 27 ships Swift 6.4 (Xcode 26.x is Swift
+    /// 6.3.x), which makes the compiler version a clean stand-in for "building
+    /// with the iOS 27 SDK".
     @ViewBuilder
     func externalDisplayAccessory() -> some View {
+        #if compiler(>=6.4)
         if #available(iOS 27, *) {
             sceneAccessory {
                 ExternalNonInteractiveAccessory {
@@ -77,5 +84,8 @@ extension View {
         } else {
             self
         }
+        #else
+        self
+        #endif
     }
 }

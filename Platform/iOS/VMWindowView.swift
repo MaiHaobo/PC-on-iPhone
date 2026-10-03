@@ -352,6 +352,11 @@ private struct VMWindowCloseConfirmationModifier: ViewModifier {
         #if os(visionOS) || WITH_REMOTE
         content
         #else
+        // dismissalConfirmationDialog is declared unavailable on iOS in the
+        // iOS 26 SDK; only the iOS 27 SDK exposes it for iOS. Gate on the
+        // compiler (Xcode 27 = Swift 6.4) in addition to #available, or the
+        // symbol lookup itself fails when building with Xcode 26.
+        #if compiler(>=6.4)
         if #available(iOS 27, *) {
             content.dismissalConfirmationDialog("This virtual machine is still running.", shouldPresent: isLastWindowOfRunningVM) {
                 Button("Stop", role: .destructive) {
@@ -363,6 +368,9 @@ private struct VMWindowCloseConfirmationModifier: ViewModifier {
         } else {
             content
         }
+        #else
+        content
+        #endif
         #endif
     }
 }

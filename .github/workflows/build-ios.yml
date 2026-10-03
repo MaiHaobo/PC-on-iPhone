@@ -335,9 +335,50 @@ jobs:
           xcodebuild -version
 
       - name: Build
+        id: build-archive
+        shell: bash
         run: |
-          ./scripts/build_utm.sh -k ${{ matrix.sdk }} -s ${{ matrix.scheme }} -a ${{ matrix.arch }} -o UTM -d "$PWD/.swiftpm-cache"
+          set -o pipefail
+          ./scripts/build_utm.sh -k ${{ matrix.sdk }} -s ${{ matrix.scheme }} -a ${{ matrix.arch }} -o UTM -d "$PWD/.swiftpm-cache" 2>&1 | tee /tmp/utm-build.log
           tar -acf UTM.xcarchive.tgz UTM.xcarchive
+
+      # Same rationale as the sysroot diagnostics: the raw log endpoint
+      # redirects to Azure Blob storage, which is not always reachable, and
+      # xcodebuild's exit code alone says nothing. Swift compile errors are
+      # prefixed "file:line:col: error:" which this surfaces directly.
+      - name: Publish archive build diagnostics
+        if: failure() && steps.build-archive.outcome == 'failure'
+        continue-on-error: true
+        shell: bash
+        run: |
+          LOG=/tmp/utm-build.log
+          emit () { echo "::error::$(printf '%s' "$1" | tail -c 900)"; }
+
+          # Every distinct compile error, in file:line:col form. Deduplicated
+          # because xcodebuild repeats them across compile batches.
+          ERRLINES=$(grep -aoE '[^ ]+\.(swift|m|h|mm|cpp):[0-9]+:[0-9]+: error: .*' "$LOG" 2>/dev/null | sed 's|.*/PC-on-iPhone/||' | sort -u | head -n 8 || true)
+          TAIL=$(grep -av '^[[:space:]]*$' "$LOG" 2>/dev/null | tail -n 20 || true)
+          FAILED=$(grep -a "The following build commands failed:" -A 8 "$LOG" 2>/dev/null | tail -n 8 || true)
+
+          {
+            echo "## Archive build failed: ${{ matrix.scheme }}"
+            echo ""
+            echo '```text'
+            printf '%s\n' "$FAILED"
+            printf '%s\n' "$ERRLINES"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "::error::--- compile errors (deduped, up to 8) ---"
+          while IFS= read -r l; do
+            if [ -n "$l" ]; then emit "$l"; fi
+          done <<< "$ERRLINES"
+          if [ -z "$ERRLINES" ]; then
+            echo "::error::--- no compiler errors found; last output lines ---"
+            while IFS= read -r l; do
+              if [ -n "$l" ]; then emit "$l"; fi
+            done <<< "$(printf '%s\n' "$TAIL" | tail -n 4)"
+          fi
 
       # Both matrix entries race to save this key. GitHub only accepts the
       # first write for a given key and fails the loser, which is harmless —
