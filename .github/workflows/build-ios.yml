@@ -2,14 +2,10 @@ name: Build iOS
 
 # 只做 iOS。macOS / visionOS 的 target 已从项目中移除。
 on:
-  push:
-    branches: ['main']
-    tags-ignore: ['**']
-    paths-ignore:
-      - 'LICENSE'
-      - '**.md'
-      - '.github/ISSUE_TEMPLATE/**'
-  pull_request:
+  # Pushes intentionally do NOT trigger this workflow: every debug push used
+  # to burn a full runner pass and flood the Actions list with numbered runs.
+  # Builds happen on a Release (attaches the IPAs) or manually from the
+  # Actions tab (workflow_dispatch, can also just build + upload artifacts).
   release:
     types: [created]
   workflow_dispatch:
@@ -67,12 +63,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # DEBUG: ios-tci disabled while the sysroot build is being debugged —
-        # it fails at the same place as ios and doubles the cost of every
-        # iteration. Restore once `Build Sysroot (ios, arm64)` is green:
-        #   - { platform: ios-tci, arch: arm64, label: iOS SE }
+        # ios       — JIT sysroot for the main app
+        # ios-tci   — threaded-interpreter QEMU for UTM SE, which bundles
+        #             sysroot-iOS-TCI-arm64/share/qemu (see PLATFORM_SUFFIX
+        #             = "-TCI" in the project). Slow: NCPU is pinned to 1
+        #             because the TCI QEMU build OOMs otherwise. Built once,
+        #             then reused from the cache.
         include:
           - { platform: ios, arch: arm64, label: iOS }
+          - { platform: ios-tci, arch: arm64, label: iOS SE }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -303,10 +302,12 @@ jobs:
         # single .app out of the archive (`find … -name '*.app' | head -1`).
         # Both entries run in parallel, so the wall-clock cost of shipping the
         # JIT build and the SE build together is the cost of one archive.
-        # The iOS-SE scheme produces "UTM SE.app" via the iOS-SE target.
+        # `sysroot` selects which sysroot the scheme consumes: the iOS-SE
+        # target links against sysroot-iOS-TCI-arm64 (PLATFORM_SUFFIX=-TCI),
+        # everything else uses the plain iOS sysroot.
         include:
-          - { arch: arm64, sdk: iphoneos, platform: ios, scheme: iOS, label: 'iOS' }
-          - { arch: arm64, sdk: iphoneos, platform: ios, scheme: iOS-SE, label: 'iOS SE' }
+          - { arch: arm64, sdk: iphoneos, platform: ios, sysroot: ios, scheme: iOS, label: 'iOS' }
+          - { arch: arm64, sdk: iphoneos, platform: ios, sysroot: ios-tci, scheme: iOS-SE, label: 'iOS SE' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -316,8 +317,8 @@ jobs:
       - name: Cache Sysroot
         uses: actions/cache/restore@v4
         with:
-          path: ./sysroot-${{ matrix.platform }}-${{ matrix.arch }}
-          key: sysroot-${{ matrix.platform }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
+          path: ./sysroot-${{ matrix.sysroot }}-${{ matrix.arch }}
+          key: sysroot-${{ matrix.sysroot }}-${{ matrix.arch }}-${{ hashFiles('scripts/build_dependencies.sh', 'scripts/fixup.sh') }}-${{ hashFiles('patches/**') }}
           fail-on-cache-miss: true
 
       # SwiftPM clones 17 dependencies from scratch on every run, and with the
