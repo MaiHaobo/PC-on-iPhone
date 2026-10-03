@@ -144,9 +144,14 @@ extension View {
 
 extension UTType {
     static let UTM = UTType(exportedAs: "com.utmapp.utm")
-    
-    // SwiftUI BUG: exportedAs: "com.utmapp.utm" doesn't work on macOS and older iOS
-    static let UTMextension = UTType(exportedAs: "utm")
+
+    /// Alias for the exported UTM package type.
+    ///
+    /// The identifier passed to `UTType(exportedAs:)` must be a reverse-DNS
+    /// string that is actually declared in Info.plist. The previous value
+    /// (`"utm"`) was neither, so it resolved to an invalid type and made the
+    /// document picker show every file as unselectable.
+    static let UTMextension = UTType.UTM
     
     static let appleLog = UTType(filenameExtension: "log")!
 
