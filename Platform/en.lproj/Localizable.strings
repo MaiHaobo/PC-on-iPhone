@@ -48,3 +48,22 @@
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "Virtual Machines";
 "Cache" = "Cache";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "Details";
+"Snapshots" = "Snapshots";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "Current State";
+"Disks Only" = "Disks Only";
+"No Snapshots" = "No Snapshots";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "Save the current state of the virtual machine as a snapshot to return to it later.";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost.";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost.";
+"Do you want to delete the snapshot “%@” and all its data?" = "Do you want to delete the snapshot “%@” and all its data?";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost.";
+"From “%@”" = "From “%@”";
+"Created %@" = "Created %@";
+"Modified %@" = "Modified %@";
+"Overwrite" = "Overwrite";
+"Restore" = "Restore";

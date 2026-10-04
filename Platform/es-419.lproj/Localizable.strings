@@ -1920,3 +1920,22 @@
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "Máquinas virtuales";
 "Cache" = "Caché";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "Detalles";
+"Snapshots" = "Instantáneas";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "Estado actual";
+"Disks Only" = "Solo discos";
+"No Snapshots" = "Sin instantáneas";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "Guarda el estado actual de la máquina virtual como una instantánea para volver a él más tarde.";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "¿Quieres sobrescribir la instantánea “%@” con el estado actual de la máquina virtual? Lo que contiene ahora se perderá.";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "¿Quieres eliminar el estado suspendido? La máquina virtual se iniciará con normalidad y se perderán todos los datos no guardados.";
+"Do you want to delete the snapshot “%@” and all its data?" = "¿Quieres eliminar la instantánea “%@” y todos sus datos?";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "¿Quieres restaurar la instantánea “%@”? El estado actual de la máquina virtual se sobrescribirá y los cambios que no estén guardados como instantánea se perderán.";
+"From “%@”" = "De “%@”";
+"Created %@" = "Creada: %@";
+"Modified %@" = "Modificada: %@";
+"Overwrite" = "Sobrescribir";
+"Restore" = "Restaurar";

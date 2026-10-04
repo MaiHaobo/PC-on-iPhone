@@ -1224,3 +1224,22 @@
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "仮想マシン";
 "Cache" = "キャッシュ";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "詳細";
+"Snapshots" = "スナップショット";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "現在の状態";
+"Disks Only" = "ディスクのみ";
+"No Snapshots" = "スナップショットなし";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "仮想マシンの現在の状態をスナップショットとして保存すれば、後でその状態に戻れます。";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "仮想マシンの現在の状態でスナップショット“%@”を上書きしますか？現在の内容は失われます。";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "一時停止状態を削除しますか？仮想マシンは通常どおり起動し、保存されていないデータはすべて失われます。";
+"Do you want to delete the snapshot “%@” and all its data?" = "スナップショット“%@”とそのすべてのデータを削除しますか？";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "スナップショット“%@”を復元しますか？仮想マシンの現在の状態が上書きされ、スナップショットとして保存されていない変更は失われます。";
+"From “%@”" = "“%@”から";
+"Created %@" = "作成: %@";
+"Modified %@" = "変更: %@";
+"Overwrite" = "上書き";
+"Restore" = "復元";

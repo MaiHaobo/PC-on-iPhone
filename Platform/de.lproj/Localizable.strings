@@ -1100,3 +1100,22 @@
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "Virtuelle Maschinen";
 "Cache" = "Cache";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "Details";
+"Snapshots" = "Snapshots";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "Aktueller Zustand";
+"Disks Only" = "Nur Datenträger";
+"No Snapshots" = "Keine Snapshots";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "Speichere den aktuellen Zustand der virtuellen Maschine als Snapshot, um später dorthin zurückzukehren.";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "Möchtest du den Snapshot „%@“ mit dem aktuellen Zustand der virtuellen Maschine überschreiben? Der aktuelle Inhalt geht dabei verloren.";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "Möchtest du den angehaltenen Zustand löschen? Die virtuelle Maschine startet normal und alle nicht gespeicherten Daten gehen verloren.";
+"Do you want to delete the snapshot “%@” and all its data?" = "Möchtest du den Snapshot „%@“ und alle seine Daten löschen?";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "Möchtest du den Snapshot „%@“ wiederherstellen? Der aktuelle Zustand der virtuellen Maschine wird überschrieben und alle Änderungen, die nicht als Snapshot gespeichert wurden, gehen verloren.";
+"From “%@”" = "Von „%@“";
+"Created %@" = "Erstellt: %@";
+"Modified %@" = "Geändert: %@";
+"Overwrite" = "Überschreiben";
+"Restore" = "Wiederherstellen";

@@ -2848,3 +2848,22 @@ VMWizardOSMacView */
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "虚拟机";
 "Cache" = "缓存";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "详情";
+"Snapshots" = "快照";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "当前状态";
+"Disks Only" = "仅磁盘";
+"No Snapshots" = "暂无快照";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "将虚拟机的当前状态保存为快照，以便日后恢复。";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "你确定要用虚拟机的当前状态覆盖快照“%@”吗？该快照现有的内容将会丢失。";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "你确定要删除挂起状态吗？虚拟机将正常启动，所有未保存的数据将会丢失。";
+"Do you want to delete the snapshot “%@” and all its data?" = "你确定要删除快照“%@”及其所有数据吗？";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "你确定要恢复快照“%@”吗？虚拟机的当前状态将被覆盖，未保存为快照的更改将会丢失。";
+"From “%@”" = "来自“%@”";
+"Created %@" = "创建于 %@";
+"Modified %@" = "修改于 %@";
+"Overwrite" = "覆盖";
+"Restore" = "恢复";

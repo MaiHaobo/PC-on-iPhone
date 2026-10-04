@@ -63,30 +63,31 @@ struct VMDetailsView: View {
                 Spacer()
             }
         } else {
-            ScrollViewReader { scrollProxy in
-                ScrollView {
-                    Screenshot(vm: vm, large: regularScreenSizeClass)
-                        .id(ScrollAnchor.screenshot)
-                    #if WITH_REMOTE // FIXME: implement remote feature
+        ScrollViewReader { scrollProxy in
+            ScrollView {
+                Screenshot(vm: vm, large: regularScreenSizeClass)
+                    .id(ScrollAnchor.screenshot)
+                #if WITH_REMOTE // FIXME: implement remote feature
+                detailsPane
+                #else
+                if let wrapped = vm.wrapped, UTMSnapshotService.isSupported(for: wrapped) {
+                    tabs(scrollProxy: scrollProxy)
+                } else {
                     detailsPane
-                    #else
-                    if let wrapped = vm.wrapped, UTMSnapshotService.isSupported(for: wrapped) {
-                        tabs(scrollProxy: scrollProxy)
-                    } else {
-                        detailsPane
-                    }
-                    #endif
-                }
-                #if !WITH_REMOTE
-                .onChange(of: selectedTab) { tab in
-                    withAnimation {
-                        scrollProxy.scrollTo(tab == .snapshots ? ScrollAnchor.tabs : ScrollAnchor.screenshot, anchor: .top)
-                    }
                 }
                 #endif
             }
-            .modifier(VMOptionalNavigationTitleModifier(vm: vm))
-            .modifier(VMToolbarModifier(vm: vm, bottom: !regularScreenSizeClass))
+            #if !WITH_REMOTE
+            .onChange(of: selectedTab) { tab in
+                withAnimation {
+                    scrollProxy.scrollTo(tab == .snapshots ? ScrollAnchor.tabs : ScrollAnchor.screenshot, anchor: .top)
+                }
+            }
+            #endif
+        }
+        .modifier(VMOptionalNavigationTitleModifier(vm: vm))
+        .modifier(VMToolbarModifier(vm: vm, bottom: !regularScreenSizeClass))
+        .modifier(VMHideTabBarModifier())
             .sheet(isPresented: $data.showSettingsModal) {
                 if let qemuConfig = vm.config as? UTMQemuConfiguration {
                     VMSettingsView(vm: vm, config: qemuConfig)
@@ -562,7 +563,7 @@ private struct OptionalSelectableText: View {
 
 struct VMDetailsView_Previews: PreviewProvider {
     @State static private var config = UTMQemuConfiguration()
-    
+
     static var previews: some View {
         VMDetailsView(vm: VMData(from: .empty))
         .onAppear {
@@ -578,3 +579,22 @@ struct VMDetailsView_Previews: PreviewProvider {
         }
     }
 }
+
+#if os(iOS)
+/// Hides the bottom tab bar while the details screen is on screen.
+///
+/// When the compact layout pushes this view from inside `VMMainTabView`, the
+/// tab bar would otherwise stay visible and cover the bottom toolbar of the
+/// details screen. `.toolbar(_:for:)` is iOS 16+, so on iOS 15 this modifier
+/// is a no-op and the tab bar simply stays visible; the bar hides again
+/// automatically when the user navigates back to the list.
+private struct VMHideTabBarModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 16, *) {
+            content.toolbar(.hidden, for: .tabBar)
+        } else {
+            content
+        }
+    }
+}
+#endif

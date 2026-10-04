@@ -1224,3 +1224,22 @@
 /* Main tab bar title and cache settings screen (v0.3.0) */
 "Virtual Machines" = "가상 머신";
 "Cache" = "캐시";
+
+/* VM details screen segmented tabs (v0.3.0) */
+"Details" = "세부정보";
+"Snapshots" = "스냅샷";
+
+/* Snapshots screen (v0.3.0) */
+"Current State" = "현재 상태";
+"Disks Only" = "디스크만";
+"No Snapshots" = "스냅샷 없음";
+"Save the current state of the virtual machine as a snapshot to return to it later." = "나중에 돌아갈 수 있도록 가상 머신의 현재 상태를 스냅샷으로 저장하세요.";
+"Do you want to overwrite the snapshot “%@” with the current state of the virtual machine? What it holds now will be lost." = "가상 머신의 현재 상태로 스냅샷 “%@”을(를) 덮어쓰시겠습니까? 현재 저장된 내용은 손실됩니다.";
+"Do you want to delete the suspended state? The virtual machine will start up normally and all unsaved data will be lost." = "일시 중지된 상태를 삭제하시겠습니까? 가상 머신이 정상적으로 시작되며 저장하지 않은 데이터는 모두 손실됩니다.";
+"Do you want to delete the snapshot “%@” and all its data?" = "스냅샷 “%@”과(와) 모든 데이터를 삭제하시겠습니까?";
+"Do you want to restore the snapshot “%@”? The current state of the virtual machine will be overwritten and any changes that are not saved as a snapshot will be lost." = "스냅샷 “%@”을(를) 복원하시겠습니까? 가상 머신의 현재 상태가 덮어쓰워지며 스냅샷으로 저장하지 않은 변경 사항은 손실됩니다.";
+"From “%@”" = "“%@”에서";
+"Created %@" = "생성: %@";
+"Modified %@" = "수정: %@";
+"Overwrite" = "덮어쓰기";
+"Restore" = "복원";
