@@ -136,6 +136,8 @@ enum AlertItem: Identifiable {
         beginObservingChanges()
         #endif
         listLoadFromDefaults()
+        prepareDocumentsDirectory()
+        Task { await importPendingPackages() }
     }
     
     // MARK: - VM listing
@@ -646,6 +648,45 @@ enum AlertItem: Identifiable {
             return id1.isEqual(id2)
         }
         return url1.standardizedFileURL == url2.standardizedFileURL
+    }
+
+    /// Create the Documents (and Inbox) directories at startup so the app's
+    /// folder always shows up in the Files app, even before the first virtual
+    /// machine is imported. iOS hides the "On My iPhone" entry for apps whose
+    /// Documents directory does not exist yet, which previously made it
+    /// impossible to copy a .utm package into the app as an alternative to the
+    /// document picker.
+    private func prepareDocumentsDirectory() {
+        let inbox = documentsURL.appendingPathComponent("Inbox", isDirectory: true)
+        try? fileManager.createDirectory(at: documentsURL, withIntermediateDirectories: true)
+        try? fileManager.createDirectory(at: inbox, withIntermediateDirectories: true)
+    }
+
+    /// Import any .utm packages that the user copied into the app's Documents
+    /// directory (or its Inbox) from the Files app.
+    ///
+    /// This is an alternative to the document picker: on iOS 26, apps installed
+    /// via side-loading may find that the picker refuses to offer .utm packages
+    /// for selection. Copying the package into the app's own folder does not go
+    /// through the picker, and `importUTM(from:)` recognizes packages that are
+    /// already registered as virtual machines, so repeated launches are safe.
+    private func importPendingPackages() async {
+        let inbox = documentsURL.appendingPathComponent("Inbox", isDirectory: true)
+        var urls: [URL] = []
+        for directory in [documentsURL, inbox] {
+            let contents = (try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
+            urls.append(contentsOf: contents.filter { $0.pathExtension == "utm" })
+        }
+        for url in urls {
+            guard !virtualMachines.contains(where: { isSameFile($0.pathUrl, as: url) }) else {
+                continue
+            }
+            do {
+                try await importUTM(from: url)
+            } catch {
+                logger.error("Failed to import '\(url.lastPathComponent)': \(error.localizedDescription)")
+            }
+        }
     }
 
     /// Handles UTM file URLs
