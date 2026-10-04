@@ -200,3 +200,6 @@
 
 /* (No Comment) */
 "Clear Cache" = "清理缓存";
+
+/* Cache settings */
+"Cache" = "缓存";

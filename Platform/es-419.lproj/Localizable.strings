@@ -1898,3 +1898,21 @@
 
 /* Clear cache (Settings) */
 "Freed %@." = "Se liberaron %@.";
+
+/* Cache settings */
+"Cache Usage" = "Uso de caché";
+
+/* Cache settings */
+"Total" = "Total";
+
+/* Cache settings */
+"Breakdown" = "Desglose";
+
+/* Cache settings */
+"Downloads" = "Descargas";
+
+/* Cache settings */
+"Clear Cache" = "Borrar caché";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "Solo archivos temporales. Las máquinas virtuales y sus datos se guardan por separado y no se ven afectados.";

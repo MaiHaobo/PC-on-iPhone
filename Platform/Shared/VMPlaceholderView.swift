@@ -33,9 +33,6 @@ fileprivate struct VMPlaceholderViewOld: View {
             HStack {
                 FirstRow()
             }
-            HStack {
-                SecondRow()
-            }
         }
     }
 }
@@ -50,9 +47,6 @@ fileprivate struct VMPlaceholderViewNew: View {
             Grid {
                 GridRow {
                     FirstRow()
-                }
-                GridRow {
-                    SecondRow()
                 }
                 #if os(macOS)
                 GridRow {
@@ -89,24 +83,9 @@ fileprivate struct FirstRow: View {
     }
 }
 
-fileprivate struct SecondRow: View {
-    @Environment(\.openURL) private var openURL
-
-    var body: some View {
-        TileButton(Label(String.guide, systemImage: "book.circle")) {
-            openURL(URL(string: "https://docs.getutm.app/basics/basics/")!)
-        }
-        TileButton(Label(String.support, systemImage: "questionmark.circle")) {
-            openURL(URL(string: "https://docs.getutm.app/")!)
-        }
-    }
-}
-
 fileprivate extension String {
     static let create = NSLocalizedString("Create a New Virtual Machine", comment: "Welcome view")
     static let open = NSLocalizedString("Open Existing Virtual Machine", comment: "Welcome view")
-    static let guide = NSLocalizedString("User Guide", comment: "Welcome view")
-    static let support = NSLocalizedString("Support", comment: "Welcome view")
     static let server = NSLocalizedString("Server", comment: "Server view")
 }
 

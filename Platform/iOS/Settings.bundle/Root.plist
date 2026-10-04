@@ -3287,12 +3287,14 @@
 			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
+			<key>IASKViewControllerClass</key>
+			<string>IASKCacheSettingsViewController</string>
 			<key>Key</key>
-			<string>clear_cache_button</string>
+			<string>cache_child</string>
 			<key>Title</key>
-			<string>Clear Cache</string>
+			<string>Cache</string>
 			<key>Type</key>
-			<string>IASKButtonSpecifier</string>
+			<string>IASKCustomViewSpecifier</string>
 		</dict>
 		<dict>
 			<key>Title</key>

@@ -200,3 +200,6 @@
 
 /* (No Comment) */
 "Clear Cache" = "清理快取";
+
+/* Cache settings */
+"Cache" = "快取";

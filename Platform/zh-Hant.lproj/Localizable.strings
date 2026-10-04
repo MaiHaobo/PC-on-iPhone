@@ -2042,3 +2042,21 @@
 
 /* Clear cache (Settings) */
 "Freed %@." = "已釋放 %@。";
+
+/* Cache settings */
+"Cache Usage" = "快取佔用";
+
+/* Cache settings */
+"Total" = "總計";
+
+/* Cache settings */
+"Breakdown" = "分類明細";
+
+/* Cache settings */
+"Downloads" = "下載";
+
+/* Cache settings */
+"Clear Cache" = "清理快取";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "僅清理暫存檔案。虛擬機器及其資料分開存放，不受任何影響。";

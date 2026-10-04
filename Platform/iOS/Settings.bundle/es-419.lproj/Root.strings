@@ -180,3 +180,6 @@
 
 /* (No Comment) */
 "Clear Cache" = "Borrar caché";
+
+/* Cache settings */
+"Cache" = "Caché";

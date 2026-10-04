@@ -2823,3 +2823,24 @@ VMWizardOSMacView */
 
 /* Clear cache (Settings) */
 "Freed %@." = "已释放 %@。";
+
+/* Cache settings */
+"Cache Usage" = "缓存占用";
+
+/* Cache settings */
+"Total" = "总计";
+
+/* Cache settings */
+"Breakdown" = "分类明细";
+
+/* Cache settings */
+"Downloads" = "下载";
+
+/* Cache settings */
+"QEMU" = "QEMU";
+
+/* Cache settings */
+"Clear Cache" = "清理缓存";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "仅清理临时文件。虚拟机及其数据分开存放，不受任何影响。";

@@ -167,3 +167,6 @@
 
 /* (No Comment) */
 "Clear Cache" = "キャッシュを消去";
+
+/* Cache settings */
+"Cache" = "キャッシュ";

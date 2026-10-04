@@ -128,15 +128,8 @@ private struct VMListModifier: ViewModifier {
     @EnvironmentObject private var data: UTMData
     @State private var settingsPresented = false
     @State private var sheetPresented = false
-    @State private var donatePresented = false
 
-    private let _donateTip: Any?
     private let _createTip: Any?
-
-    @available(iOS 17, macOS 14, *)
-    private var donateTip: UTMTipDonate {
-        _donateTip as! UTMTipDonate
-    }
 
     @available(iOS 17, macOS 14, *)
     private var createTip: UTMTipCreateVM {
@@ -145,10 +138,8 @@ private struct VMListModifier: ViewModifier {
 
     init() {
         if #available(iOS 17, macOS 14, *) {
-            _donateTip = UTMTipDonate()
             _createTip = UTMTipCreateVM()
         } else {
-            _donateTip = nil
             _createTip = nil
         }
     }
@@ -197,27 +188,6 @@ private struct VMListModifier: ViewModifier {
             }
             #endif
             #endif
-            ToolbarItem(placement: .navigationBarLeading) {
-                if #available(iOS 17, visionOS 99, *) {
-                    Button {
-                        donateTip.invalidate(reason: .actionPerformed)
-                        donatePresented.toggle()
-                    } label: {
-                        Image(systemName: "heart.fill") // SwiftUI bug: tip won't show up if this is a label
-                    }.popoverTip(donateTip, arrowEdge: .top) { action in
-                        donateTip.invalidate(reason: .actionPerformed)
-                        if action.id == "donate" {
-                            donatePresented.toggle()
-                        }
-                    }
-                } else {
-                    Button {
-                        donatePresented.toggle()
-                    } label: {
-                        Label("Donate", systemImage: "heart.fill")
-                    }
-                }
-            }
             #endif
             #if !os(visionOS) && !WITH_REMOTE
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -240,37 +210,23 @@ private struct VMListModifier: ViewModifier {
                 #if !WITH_REMOTE
                 UTMSettingsView()
                 #endif
-            } else if donatePresented {
-                #if !os(macOS) && !WITH_REMOTE
-                UTMDonateView()
-                #endif
             }
         }
         .onChange(of: data.showNewVMSheet) { newValue in
             if newValue {
                 settingsPresented = false
-                donatePresented = false
                 sheetPresented = true
             }
         }
         .onChange(of: settingsPresented) { newValue in
             if newValue {
                 data.showNewVMSheet = false
-                donatePresented = false
-                sheetPresented = true
-            }
-        }
-        .onChange(of: donatePresented) { newValue in
-            if newValue {
-                data.showNewVMSheet = false
-                settingsPresented = false
                 sheetPresented = true
             }
         }
         .onChange(of: sheetPresented) { newValue in
             if !newValue {
                 settingsPresented = false
-                donatePresented = false
                 data.showNewVMSheet = false
             }
         }
@@ -281,11 +237,6 @@ private struct VMListModifier: ViewModifier {
         .sheet(isPresented: $data.showNewVMSheet) {
             VMWizardView()
         }
-        #if !os(macOS) && !WITH_REMOTE
-        .sheet(isPresented: $donatePresented) {
-            UTMDonateView()
-        }
-        #endif
         .onReceive(NSNotification.OpenVirtualMachine) { _ in
             data.showNewVMSheet = false
         }

@@ -17,6 +17,10 @@
 import SwiftUI
 
 struct UTMSettingsView: View {
+    /// `true` when shown as a modal sheet (has a "Close" button),
+    /// `false` when hosted as the root of a tab (nothing to close).
+    var isPresentedAsSheet: Bool = true
+
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
     private var hasContainer: Bool {
@@ -34,9 +38,11 @@ struct UTMSettingsView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .appSettingsShowPrivacyLink(hasContainer)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Close") {
-                            presentationMode.wrappedValue.dismiss()
+                    if isPresentedAsSheet {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Close") {
+                                presentationMode.wrappedValue.dismiss()
+                            }
                         }
                     }
                 }

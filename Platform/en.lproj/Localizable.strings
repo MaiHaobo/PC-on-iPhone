@@ -20,3 +20,27 @@
 
 /* Clear cache (Settings) */
 "Cancel" = "Cancel";
+
+/* Cache settings */
+"Cache Usage" = "Cache Usage";
+
+/* Cache settings */
+"Total" = "Total";
+
+/* Cache settings */
+"Breakdown" = "Breakdown";
+
+/* Cache settings */
+"Downloads" = "Downloads";
+
+/* Cache settings */
+"QEMU" = "QEMU";
+
+/* Cache settings */
+"Other" = "Other";
+
+/* Cache settings */
+"Clear Cache" = "Clear Cache";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "Temporary files only. Virtual machines and their data are stored separately and are never affected.";

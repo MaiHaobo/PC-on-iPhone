@@ -17,31 +17,6 @@
 import TipKit
 
 @available(iOS 17, macOS 14, *)
-struct UTMTipDonate: Tip {
-    @Parameter
-    static var timesLaunched: Int = 0
-
-    var title: Text {
-        Text("Support UTM")
-    }
-
-    var message: Text? {
-        Text("Enjoying the app? Consider making a donation to support development.")
-    }
-
-    var actions: [Action] {
-        Action(id: "donate", title: "Donate")
-        Action(id: "no-thanks", title: "No Thanks")
-    }
-
-    var rules: [Rule] {
-        #Rule(Self.$timesLaunched) {
-            $0 > 3
-        }
-    }
-}
-
-@available(iOS 17, macOS 14, *)
 struct UTMTipHideToolbar: Tip {
     @Parameter
     static var didHideToolbar: Bool = true

@@ -40,12 +40,6 @@ struct VMCommands: Commands {
             Button(action: { NotificationCenter.default.post(name: NSNotification.ShowReleaseNotes, object: nil) }, label: {
                 Text("What's New")
             }).keyboardShortcut(KeyEquivalent("1"), modifiers: [.command, .control])
-            Button(action: { openLink("https://mac.getutm.app/gallery/") }, label: {
-                Text("Virtual Machine Gallery")
-            }).keyboardShortcut(KeyEquivalent("2"), modifiers: [.command, .control])
-            Button(action: { openLink("https://docs.getutm.app/") }, label: {
-                Text("Support")
-            }).keyboardShortcut(KeyEquivalent("3"), modifiers: [.command, .control])
             Button(action: { openLink("https://mac.getutm.app/licenses/") }, label: {
                 Text("License")
             }).keyboardShortcut(KeyEquivalent("4"), modifiers: [.command, .control])

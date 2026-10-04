@@ -1075,3 +1075,24 @@
 
 /* Clear cache (Settings) */
 "Freed %@." = "%@ freigegeben.";
+
+/* Cache settings */
+"Cache Usage" = "Cache-Belegung";
+
+/* Cache settings */
+"Total" = "Gesamt";
+
+/* Cache settings */
+"Breakdown" = "Aufschlüsselung";
+
+/* Cache settings */
+"Downloads" = "Downloads";
+
+/* Cache settings */
+"QEMU" = "QEMU";
+
+/* Cache settings */
+"Clear Cache" = "Cache leeren";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "Nur temporäre Dateien. Virtuelle Maschinen und ihre Daten werden getrennt gespeichert und sind nicht betroffen.";

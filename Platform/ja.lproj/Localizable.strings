@@ -1202,3 +1202,21 @@
 
 /* Clear cache (Settings) */
 "Freed %@." = "%@ を解放しました。";
+
+/* Cache settings */
+"Cache Usage" = "キャッシュ使用量";
+
+/* Cache settings */
+"Total" = "合計";
+
+/* Cache settings */
+"Breakdown" = "内訳";
+
+/* Cache settings */
+"Downloads" = "ダウンロード";
+
+/* Cache settings */
+"Clear Cache" = "キャッシュを消去";
+
+/* Cache settings */
+"Temporary files only. Virtual machines and their data are stored separately and are never affected." = "一時ファイルのみを削除します。仮想マシンとそのデータは別に保存されており、影響を受けません。";

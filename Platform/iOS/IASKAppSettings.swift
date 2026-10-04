@@ -33,38 +33,13 @@ struct IASKAppSettings: UIViewControllerRepresentable {
         Coordinator()
     }
 
-    /// Handles custom buttons declared in Settings.bundle (IASKButtonSpecifier).
-    ///
-    /// InAppSettingsKit 3.x declares the callbacks in `IASKSettingsDelegate`
-    /// (bridged from Objective-C, assigned via `IASKAppSettingsViewController.delegate`).
-    /// `settingsViewControllerDidEnd` is the only @required member; the view is
-    /// dismissed via the SwiftUI "Close" button, so no extra action is needed.
+    /// InAppSettingsKit requires a delegate to be assigned; `IASKSettingsDelegate`
+    /// has exactly one @required member (`settingsViewControllerDidEnd`), which is
+    /// a no-op here because the settings sheet is dismissed by the SwiftUI "Close"
+    /// button. Custom rows (such as the Cache screen) are implemented as
+    /// `IASKCustomViewSpecifier` child view controllers instead of delegate calls.
     final class Coordinator: NSObject, IASKSettingsDelegate {
         func settingsViewControllerDidEnd(_ settingsViewController: IASKAppSettingsViewController) {
-        }
-
-        func settingsViewController(_ settingsViewController: IASKAppSettingsViewController, buttonTappedFor specifier: IASKSpecifier) {
-            guard specifier.key == "clear_cache_button" else { return }
-            let formatter = ByteCountFormatter()
-            formatter.countStyle = .file
-            let size = formatter.string(fromByteCount: AppCacheCleaner.totalSize())
-            let alert = UIAlertController(
-                title: NSLocalizedString("Clear Cache?", comment: "Settings"),
-                message: String(format: NSLocalizedString("This will delete %@ of temporary files from the app cache. Virtual machines are not affected. Close any running virtual machines first.", comment: "Settings"), size),
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Clear", comment: "Settings"), style: .destructive) { _ in
-                let freed = AppCacheCleaner.clear()
-                let done = UIAlertController(
-                    title: NSLocalizedString("Cache Cleared", comment: "Settings"),
-                    message: String(format: NSLocalizedString("Freed %@.", comment: "Settings"), formatter.string(fromByteCount: freed)),
-                    preferredStyle: .alert
-                )
-                done.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Settings"), style: .default))
-                settingsViewController.present(done, animated: true)
-            })
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Settings"), style: .cancel))
-            settingsViewController.present(alert, animated: true)
         }
     }
 }
@@ -99,6 +74,38 @@ enum AppCacheCleaner {
 
     static func totalSize() -> Int64 {
         cacheDirectories.reduce(0) { $0 + size(of: $1) }
+    }
+
+    /// Known cache categories, matched by the name of the top-level item inside
+    /// the cache directories. Anything unmatched is reported as "Other".
+    private static let knownCategories: [(title: String, names: [String])] = [
+        ("Downloads", ["Downloads", "com.apple.nsurlsessiond", "ipsw"]),
+        ("QEMU", ["qemu"]),
+    ]
+
+    /// Breakdown of the cache by category, plus the total.
+    static func breakdown() -> (total: Int64, categories: [(title: String, size: Int64)]) {
+        let fileManager = FileManager.default
+        var buckets: [String: Int64] = [:]
+        var total: Int64 = 0
+        for directory in cacheDirectories {
+            let contents = (try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
+            for item in contents {
+                let itemSize = size(of: item)
+                total += itemSize
+                let name = item.lastPathComponent
+                let category = knownCategories.first(where: { $0.names.contains(name) })?.title ?? "Other"
+                buckets[category, default: 0] += itemSize
+            }
+        }
+        var ordered: [(String, Int64)] = []
+        for category in knownCategories {
+            if let value = buckets.removeValue(forKey: category.title), value > 0 {
+                ordered.append((category.title, value))
+            }
+        }
+        ordered.append(("Other", buckets["Other"] ?? 0))
+        return (total, ordered)
     }
 
     /// Removes every top-level item in the cache directories.

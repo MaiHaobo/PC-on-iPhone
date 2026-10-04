@@ -167,3 +167,6 @@
 
 /* (No Comment) */
 "Clear Cache" = "캐시 지우기";
+
+/* Cache settings */
+"Cache" = "캐시";

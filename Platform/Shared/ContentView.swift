@@ -32,8 +32,28 @@ struct ContentView: View {
     @Environment(\.openURL) var openURL
     @AppStorage("ServerAutostart") private var isServerAutostart: Bool = false
 
+    #if os(iOS)
+    /// The bottom tab bar only makes sense in a single-column layout. On iPad
+    /// (and iPhone landscape on the larger models) the app keeps the existing
+    /// two-column `NavigationSplitView` instead.
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompactWidth: Bool {
+        horizontalSizeClass == .compact
+    }
+    #endif
+
     var body: some View {
-        VMNavigationListView()
+        Group {
+            #if os(iOS)
+            if #available(iOS 16, *), isCompactWidth {
+                VMMainTabView()
+            } else {
+                VMNavigationListView()
+            }
+            #else
+            VMNavigationListView()
+            #endif
+        }
         .overlay(data.showSettingsModal ? AnyView(EmptyView()) : AnyView(BusyOverlay()))
         #if os(macOS) || os(visionOS)
         .frame(minWidth: 800, idealWidth: 1200, minHeight: 600, idealHeight: 800)
@@ -83,7 +103,6 @@ struct ContentView: View {
                 if #available(iOS 17, macOS 14, *) {
                     if !releaseHelper.isReleaseNotesShown {
                         UTMTipCreateVM.isVMListEmpty = data.virtualMachines.count == 0
-                        UTMTipDonate.timesLaunched += 1
                     }
                 }
                 #if os(macOS)
