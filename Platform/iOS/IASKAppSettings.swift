@@ -20,7 +20,7 @@ import InAppSettingsKit
 struct IASKAppSettings: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> IASKAppSettingsViewController {
         let vc = IASKAppSettingsViewController()
-        vc.settingsDelegate = context.coordinator
+        vc.delegate = context.coordinator
         return vc
     }
 
@@ -34,7 +34,10 @@ struct IASKAppSettings: UIViewControllerRepresentable {
     }
 
     /// Handles custom buttons declared in Settings.bundle (IASKButtonSpecifier).
-    final class Coordinator: NSObject, IASKAppSettingsViewControllerDelegate {
+    ///
+    /// InAppSettingsKit 3.x declares the callbacks in `IASKSettingsDelegate`
+    /// (bridged from Objective-C, assigned via `IASKAppSettingsViewController.delegate`).
+    final class Coordinator: NSObject, IASKSettingsDelegate {
         func settingsViewController(_ settingsViewController: IASKAppSettingsViewController, buttonTappedFor specifier: IASKSpecifier) {
             guard specifier.key == "clear_cache_button" else { return }
             let formatter = ByteCountFormatter()
