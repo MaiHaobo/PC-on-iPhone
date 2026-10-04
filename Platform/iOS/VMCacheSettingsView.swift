@@ -140,19 +140,22 @@ private enum CacheAlert: Identifiable {
 /// Hosting controller registered in `Settings.bundle/Root.plist` via
 /// `IASKViewControllerClass`. InAppSettingsKit pushes this onto its navigation
 /// stack when the user taps the "Cache" row.
+///
+/// InAppSettingsKit instantiates the class with `[vcClass alloc]` followed by
+/// a plain no-argument `init` (unless `IASKViewControllerSelector` says
+/// otherwise), so the parameterless initializer below is the required entry
+/// point. `UIHostingController` does not expose `init(nibName:bundle:)` to
+/// Swift subclasses, so `init(rootView:)` is called directly.
 @objc(IASKCacheSettingsViewController)
 final class IASKCacheSettingsViewController: UIHostingController<VMCacheSettingsView> {
-    @objc override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    @objc init() {
+        super.init(rootView: VMCacheSettingsView())
         // We never draw our own bars; the parent settings controller provides them.
-        self.navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .never
     }
 
     @objc required dynamic init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    @objc convenience init() {
-        self.init(rootView: VMCacheSettingsView())
+        // InAppSettingsKit only constructs this class programmatically.
+        fatalError("init(coder:) has not been implemented")
     }
 }

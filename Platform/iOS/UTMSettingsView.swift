@@ -38,8 +38,13 @@ struct UTMSettingsView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .appSettingsShowPrivacyLink(hasContainer)
                 .toolbar {
-                    if isPresentedAsSheet {
-                        ToolbarItem(placement: .navigationBarLeading) {
+                    // The conditional must live *inside* the ToolbarItem:
+                    // ToolbarContentBuilder.buildIf is iOS 16+, but the app
+                    // deploys to iOS 15. ViewBuilder.buildIf (used inside the
+                    // item) is available since iOS 13, and SwiftUI drops
+                    // toolbar items that only contain an EmptyView.
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        if isPresentedAsSheet {
                             Button("Close") {
                                 presentationMode.wrappedValue.dismiss()
                             }
