@@ -37,7 +37,12 @@ struct IASKAppSettings: UIViewControllerRepresentable {
     ///
     /// InAppSettingsKit 3.x declares the callbacks in `IASKSettingsDelegate`
     /// (bridged from Objective-C, assigned via `IASKAppSettingsViewController.delegate`).
+    /// `settingsViewControllerDidEnd` is the only @required member; the view is
+    /// dismissed via the SwiftUI "Close" button, so no extra action is needed.
     final class Coordinator: NSObject, IASKSettingsDelegate {
+        func settingsViewControllerDidEnd(_ settingsViewController: IASKAppSettingsViewController) {
+        }
+
         func settingsViewController(_ settingsViewController: IASKAppSettingsViewController, buttonTappedFor specifier: IASKSpecifier) {
             guard specifier.key == "clear_cache_button" else { return }
             let formatter = ByteCountFormatter()
