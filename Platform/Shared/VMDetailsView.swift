@@ -581,17 +581,25 @@ struct VMDetailsView_Previews: PreviewProvider {
 }
 
 #if os(iOS)
-/// Hides the bottom tab bar while the details screen is on screen.
+/// Hides the bottom tab bar while the details screen is pushed.
 ///
 /// When the compact layout pushes this view from inside `VMMainTabView`, the
 /// tab bar would otherwise stay visible and cover the bottom toolbar of the
-/// details screen. `.toolbar(_:for:)` is iOS 16+, so on iOS 15 this modifier
-/// is a no-op and the tab bar simply stays visible; the bar hides again
+/// details screen. The guard on the horizontal size class keeps the bar in
+/// place on the larger iPhone models in landscape, where the split view shows
+/// sidebar and details side by side instead of pushing. `.toolbar(_:for:)` is
+/// iOS 16+, so on iOS 15 this modifier is a no-op; the bar hides again
 /// automatically when the user navigates back to the list.
 private struct VMHideTabBarModifier: ViewModifier {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     func body(content: Content) -> some View {
         if #available(iOS 16, *) {
-            content.toolbar(.hidden, for: .tabBar)
+            if horizontalSizeClass == .compact {
+                content.toolbar(.hidden, for: .tabBar)
+            } else {
+                content
+            }
         } else {
             content
         }

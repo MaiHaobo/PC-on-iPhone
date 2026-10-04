@@ -18,6 +18,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 #if os(iOS)
 import IQKeyboardManagerSwift
+import UIKit
 #endif
 import TipKit
 
@@ -33,19 +34,19 @@ struct ContentView: View {
     @AppStorage("ServerAutostart") private var isServerAutostart: Bool = false
 
     #if os(iOS)
-    /// The bottom tab bar only makes sense in a single-column layout. On iPad
-    /// (and iPhone landscape on the larger models) the app keeps the existing
-    /// two-column `NavigationSplitView` instead.
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    private var isCompactWidth: Bool {
-        horizontalSizeClass == .compact
+    /// The bottom tab bar is used on every iPhone, in both orientations. The
+    /// two-column `NavigationSplitView` remains for iPad. The horizontal size
+    /// class cannot decide this: the larger iPhone models report `.regular`
+    /// in landscape, which used to drop the tab bar when rotating.
+    private var isPhone: Bool {
+        UIDevice.current.userInterfaceIdiom == .phone
     }
     #endif
 
     var body: some View {
         Group {
             #if os(iOS)
-            if #available(iOS 16, *), isCompactWidth {
+            if #available(iOS 16, *), isPhone {
                 VMMainTabView()
             } else {
                 VMNavigationListView()

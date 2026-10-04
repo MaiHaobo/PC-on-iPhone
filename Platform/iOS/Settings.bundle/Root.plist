@@ -3294,7 +3294,7 @@
 			<key>Title</key>
 			<string>Cache</string>
 			<key>Type</key>
-			<string>IASKCustomViewSpecifier</string>
+			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>Title</key>
