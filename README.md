@@ -3,7 +3,8 @@
 PC on iPhone 是 UTM 的优化版，适用于 iOS 的全功能系统模拟器与虚拟机宿主。它基于 QEMU，让你在 iPhone 和 iPad 上运行 Windows、Linux 等系统。
 
 <p align="center">
-  <img width="450px" alt="在 iPhone 上运行的 PC on iPhone" src="screen.png">
+  <img width="380px" alt="在 iPhone 上运行 Mac OS 9.2" src="screen-macos.png">
+  <img width="380px" alt="在 iPhone 上启动 Windows XP" src="screen-windows.png">
 </p>
 
 ---
