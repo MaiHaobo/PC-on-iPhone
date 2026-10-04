@@ -44,3 +44,7 @@
 
 /* Cache settings */
 "Temporary files only. Virtual machines and their data are stored separately and are never affected." = "Temporary files only. Virtual machines and their data are stored separately and are never affected.";
+
+/* Main tab bar title and cache settings screen (v0.3.0) */
+"Virtual Machines" = "Virtual Machines";
+"Cache" = "Cache";

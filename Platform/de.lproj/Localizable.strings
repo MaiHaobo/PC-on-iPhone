@@ -1096,3 +1096,7 @@
 
 /* Cache settings */
 "Temporary files only. Virtual machines and their data are stored separately and are never affected." = "Nur temporäre Dateien. Virtuelle Maschinen und ihre Daten werden getrennt gespeichert und sind nicht betroffen.";
+
+/* Main tab bar title and cache settings screen (v0.3.0) */
+"Virtual Machines" = "Virtuelle Maschinen";
+"Cache" = "Cache";

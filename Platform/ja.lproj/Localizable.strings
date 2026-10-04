@@ -1220,3 +1220,7 @@
 
 /* Cache settings */
 "Temporary files only. Virtual machines and their data are stored separately and are never affected." = "一時ファイルのみを削除します。仮想マシンとそのデータは別に保存されており、影響を受けません。";
+
+/* Main tab bar title and cache settings screen (v0.3.0) */
+"Virtual Machines" = "仮想マシン";
+"Cache" = "キャッシュ";

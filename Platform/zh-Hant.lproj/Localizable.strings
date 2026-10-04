@@ -2060,3 +2060,7 @@
 
 /* Cache settings */
 "Temporary files only. Virtual machines and their data are stored separately and are never affected." = "僅清理暫存檔案。虛擬機器及其資料分開存放，不受任何影響。";
+
+/* Main tab bar title and cache settings screen (v0.3.0) */
+"Virtual Machines" = "虛擬機";
+"Cache" = "快取";

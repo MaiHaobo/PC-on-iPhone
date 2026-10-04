@@ -2844,3 +2844,7 @@ VMWizardOSMacView */
 
 /* Cache settings */
 "Temporary files only. Virtual machines and their data are stored separately and are never affected." = "仅清理临时文件。虚拟机及其数据分开存放，不受任何影响。";
+
+/* Main tab bar title and cache settings screen (v0.3.0) */
+"Virtual Machines" = "虚拟机";
+"Cache" = "缓存";
