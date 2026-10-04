@@ -194,3 +194,9 @@
 
 /* (No Comment) */
 "Version" = "版本";
+
+/* (No Comment) */
+"Storage" = "存储";
+
+/* (No Comment) */
+"Clear Cache" = "清理缓存";

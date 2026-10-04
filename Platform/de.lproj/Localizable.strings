@@ -1063,3 +1063,15 @@
 
 /* VMKeyboardAccessoryView */
 "Hide Keyboard" = "Tastatur ausblenden";
+
+/* Clear cache (Settings) */
+"Clear Cache?" = "Cache leeren?";
+
+/* Clear cache (Settings) */
+"This will delete %@ of temporary files from the app cache. Virtual machines are not affected. Close any running virtual machines first." = "Es werden %@ temporäre Dateien aus dem App-Cache gelöscht. Virtuelle Maschinen sind nicht betroffen. Beenden Sie zuerst laufende virtuelle Maschinen.";
+
+/* Clear cache (Settings) */
+"Cache Cleared" = "Cache geleert";
+
+/* Clear cache (Settings) */
+"Freed %@." = "%@ freigegeben.";

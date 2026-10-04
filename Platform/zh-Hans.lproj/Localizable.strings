@@ -2811,3 +2811,15 @@ VMWizardOSMacView */
 
 /* VMKeyboardAccessoryView */
 "Hide Keyboard" = "隐藏键盘";
+
+/* Clear cache (Settings) */
+"Clear Cache?" = "清理缓存？";
+
+/* Clear cache (Settings) */
+"This will delete %@ of temporary files from the app cache. Virtual machines are not affected. Close any running virtual machines first." = "将从应用缓存中删除 %@ 的临时文件，虚拟机不受影响。清理前请先关闭正在运行的虚拟机。";
+
+/* Clear cache (Settings) */
+"Cache Cleared" = "缓存已清理";
+
+/* Clear cache (Settings) */
+"Freed %@." = "已释放 %@。";

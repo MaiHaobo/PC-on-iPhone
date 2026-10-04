@@ -2030,3 +2030,15 @@
 
 /* VMKeyboardAccessoryView */
 "Hide Keyboard" = "隱藏鍵盤";
+
+/* Clear cache (Settings) */
+"Clear Cache?" = "清理快取？";
+
+/* Clear cache (Settings) */
+"This will delete %@ of temporary files from the app cache. Virtual machines are not affected. Close any running virtual machines first." = "將從應用快取中刪除 %@ 的暫存檔案，虛擬機器不受影響。清理前請先關閉正在執行的虛擬機器。";
+
+/* Clear cache (Settings) */
+"Cache Cleared" = "快取已清理";
+
+/* Clear cache (Settings) */
+"Freed %@." = "已釋放 %@。";

@@ -1190,3 +1190,15 @@
 
 // UTMQemuMonitor.m
 "Guest panic" = "ゲストがパニック状態に陥りました";
+
+/* Clear cache (Settings) */
+"Clear Cache?" = "キャッシュを消去しますか？";
+
+/* Clear cache (Settings) */
+"This will delete %@ of temporary files from the app cache. Virtual machines are not affected. Close any running virtual machines first." = "アプリのキャッシュから %@ の一時ファイルを削除します。仮想マシンには影響しません。実行中の仮想マシンは先に終了してください。";
+
+/* Clear cache (Settings) */
+"Cache Cleared" = "キャッシュを消去しました";
+
+/* Clear cache (Settings) */
+"Freed %@." = "%@ を解放しました。";
