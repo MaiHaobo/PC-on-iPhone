@@ -51,14 +51,29 @@ struct UTMSettingsView: View {
     @AppStorage("ShowAdvancedSettings") private var showAdvanced = false
 
     var body: some View {
-        NavigationSplitView {
-            SettingsSidebar(isPresentedAsSheet: isPresentedAsSheet,
-                            showAdvanced: $showAdvanced,
-                            onClose: { presentationMode.wrappedValue.dismiss() })
-        } detail: {
-            SettingsDetailPlaceholder()
+        // The iOS deployment target is 15.0, so the split view (iOS 16+) needs an
+        // availability branch. On iOS 15 a `NavigationView` provides the same
+        // two-column-on-wide / push-on-narrow behaviour with the older API.
+        if #available(iOS 16, *) {
+            NavigationSplitView {
+                SettingsSidebar(isPresentedAsSheet: isPresentedAsSheet,
+                                showAdvanced: $showAdvanced,
+                                onClose: { presentationMode.wrappedValue.dismiss() })
+            } detail: {
+                SettingsDetailPlaceholder()
+            }
+            .navigationSplitViewStyle(.balanced)
+        } else {
+            // Mirror the VM list's iOS 15 fallback: two children in a
+            // `NavigationView` give the default double-column behaviour, and
+            // destination-based `NavigationLink`s push within it.
+            NavigationView {
+                SettingsSidebarLegacy(isPresentedAsSheet: isPresentedAsSheet,
+                                      showAdvanced: $showAdvanced,
+                                      onClose: { presentationMode.wrappedValue.dismiss() })
+                SettingsDetailPlaceholder()
+            }
         }
-        .navigationSplitViewStyle(.balanced)
     }
 }
 
@@ -74,9 +89,39 @@ enum SettingsPane: Hashable {
 
 // MARK: - Sidebar (the list)
 
-/// The settings list itself: a native grouped `List` with the compact/full
-/// toggle at the top. Rows that open a pane are `NavigationLink(value:)`, which
-/// fills the detail column on wide layouts and pushes on narrow ones.
+/// The shared list content: the compact/full toggle followed by every group.
+/// Both sidebar variants (iOS 16 split view and iOS 15 navigation view) render
+/// this, so the two never drift apart.
+private struct SettingsListContent: View {
+    @Binding var showAdvanced: Bool
+    /// `true` for the iOS 16 sidebar (value-based `NavigationLink`), `false` for
+    /// the iOS 15 fallback (destination-based `NavigationLink`).
+    let usesValueNavigation: Bool
+
+    var body: some View {
+        Section {
+            Toggle(isOn: $showAdvanced) {
+                Label {
+                    Text("Show Advanced Settings")
+                } icon: {
+                    Image(systemName: "slider.horizontal.3")
+                }
+            }
+        } footer: {
+            Text("Show the full set of options, including graphics, gestures, cursor and gamepad.")
+        }
+
+        SettingsCoreSections(usesValueNavigation: usesValueNavigation)
+
+        if showAdvanced {
+            SettingsAdvancedSections(usesValueNavigation: usesValueNavigation)
+        }
+    }
+}
+
+/// iOS 16+ sidebar: a `NavigationLink(value:)` fills the detail column, and the
+/// split view collapses to a push on narrow layouts.
+@available(iOS 16, *)
 private struct SettingsSidebar: View {
     let isPresentedAsSheet: Bool
     @Binding var showAdvanced: Bool
@@ -84,57 +129,50 @@ private struct SettingsSidebar: View {
 
     var body: some View {
         List {
-            Section {
-                Toggle(isOn: $showAdvanced) {
-                    Label {
-                        Text("Show Advanced Settings")
-                    } icon: {
-                        Image(systemName: "slider.horizontal.3")
-                    }
-                }
-            } footer: {
-                Text("Show the full set of options, including graphics, gestures, cursor and gamepad.")
-            }
-
-            SettingsCoreSections()
-
-            if showAdvanced {
-                SettingsAdvancedSections()
-            }
+            SettingsListContent(showAdvanced: $showAdvanced, usesValueNavigation: true)
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: SettingsPane.self) { pane in
-            SettingsDetailColumn(pane: pane)
+            SettingsDetailDestination(pane: pane)
         }
         .toolbar {
-            if isPresentedAsSheet {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close", action: onClose)
-                }
-            }
+            settingsToolbar(isPresentedAsSheet: isPresentedAsSheet, onClose: onClose)
+        }
+    }
+}
+
+/// iOS 15 fallback sidebar: rows are `NavigationLink(destination:)` so tapping
+/// one pushes the pane onto the navigation stack.
+private struct SettingsSidebarLegacy: View {
+    let isPresentedAsSheet: Bool
+    @Binding var showAdvanced: Bool
+    let onClose: () -> Void
+
+    var body: some View {
+        List {
+            SettingsListContent(showAdvanced: $showAdvanced, usesValueNavigation: false)
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            settingsToolbar(isPresentedAsSheet: isPresentedAsSheet, onClose: onClose)
+        }
+    }
+}
+
+@ViewBuilder
+private func settingsToolbar(isPresentedAsSheet: Bool, onClose: @escaping () -> Void) -> some View {
+    if isPresentedAsSheet {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Close", action: onClose)
         }
     }
 }
 
 // MARK: - Detail column
-
-/// The pane shown for a given `SettingsPane`.
-private struct SettingsDetailColumn: View {
-    let pane: SettingsPane
-
-    var body: some View {
-        switch pane {
-        case .cache:
-            VMCacheSettingsView()
-        case .license:
-            SettingsLicenseView()
-        case .jitStreamer:
-            SettingsJitStreamerView()
-        }
-    }
-}
 
 /// Neutral placeholder shown in the detail column before a row is selected.
 private struct SettingsDetailPlaceholder: View {

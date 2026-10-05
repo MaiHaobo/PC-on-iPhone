@@ -94,6 +94,15 @@ private struct SettingsSliderRow: View {
     }
 
     var body: some View {
+        // `Slider` needs a `Double` binding; the stored value stays an Int so
+        // the ObjC consumers keep reading it with `integerForKey:`. Capturing
+        // the projected value in a local first avoids reaching into self from
+        // inside the escaping binding closures.
+        let intBinding = $value
+        let doubleBinding = Binding<Double>(
+            get: { Double(intBinding.wrappedValue) },
+            set: { intBinding.wrappedValue = Int($0.rounded()) }
+        )
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(title)
@@ -104,12 +113,9 @@ private struct SettingsSliderRow: View {
                         .monospacedDigit()
                 }
             }
-            // `Slider` needs a `Double` binding; the stored value stays an Int
-            // so the ObjC consumers keep reading it with `integerForKey:`.
-            Slider(value: Binding(
-                get: { Double($value.wrappedValue) },
-                set: { $value.wrappedValue = Int($0.rounded()) }
-            ), in: Double(range.lowerBound)...Double(range.upperBound), step: 1)
+            Slider(value: doubleBinding,
+                   in: Double(range.lowerBound)...Double(range.upperBound),
+                   step: 1)
         }
     }
 }
@@ -118,6 +124,8 @@ private struct SettingsSliderRow: View {
 
 /// The four groups shown in the compact layout: the ones most people touch.
 struct SettingsCoreSections: View {
+    let usesValueNavigation: Bool
+
     var body: some View {
         SettingsGroup(title: "Background") {
             SettingsToggleRow(title: "Continue running VM in the background",
@@ -143,7 +151,8 @@ struct SettingsCoreSections: View {
         SettingsGroup(title: "Storage") {
             SettingsSelectableRow(title: "Cache",
                                   systemImage: "internaldrive",
-                                  pane: .cache)
+                                  pane: .cache,
+                                  usesValueNavigation: usesValueNavigation)
         }
 
         SettingsGroup(title: "About") {
@@ -151,7 +160,8 @@ struct SettingsCoreSections: View {
             SettingsInfoRow(title: "Build", value: SettingsInfo.build)
             SettingsSelectableRow(title: "License",
                                   systemImage: "doc.text",
-                                  pane: .license)
+                                  pane: .license,
+                                  usesValueNavigation: usesValueNavigation)
         }
     }
 }
@@ -161,6 +171,8 @@ struct SettingsCoreSections: View {
 /// The remaining groups from the original plist, revealed by the "advanced"
 /// toggle.
 struct SettingsAdvancedSections: View {
+    let usesValueNavigation: Bool
+
     var body: some View {
         SettingsGroup(title: "Devices") {
             SettingsToggleRow(title: "Do not show prompt when USB device is plugged in",
@@ -253,7 +265,8 @@ struct SettingsAdvancedSections: View {
                               defaultValue: false)
             SettingsSelectableRow(title: "JitStreamer IP Address",
                                   systemImage: "network",
-                                  pane: .jitStreamer)
+                                  pane: .jitStreamer,
+                                  usesValueNavigation: usesValueNavigation)
         }
     }
 }
@@ -295,19 +308,55 @@ private struct SettingsInfoRow: View {
     }
 }
 
-/// A row that opens a detail pane. Uses `NavigationLink(value:)` so the
-/// surrounding `NavigationSplitView` shows the pane in the detail column on
-/// wide layouts and pushes it on narrow ones (the split view collapses
-/// automatically). The `.navigationDestination(for:)` that resolves the value
-/// lives on the sidebar's `List`.
+/// A row that opens a detail pane.
+///
+/// On iOS 16+ (`usesValueNavigation`) it is a `NavigationLink(value:)` resolved
+/// by the sidebar's `.navigationDestination(for:)`: the surrounding
+/// `NavigationSplitView` shows the pane in the detail column on wide layouts and
+/// pushes it on narrow ones. On iOS 15 it is a `NavigationLink(destination:)`,
+/// which pushes onto the enclosing `NavigationView` stack.
 private struct SettingsSelectableRow: View {
     let title: LocalizedStringKey
     let systemImage: String
     let pane: SettingsPane
+    let usesValueNavigation: Bool
 
     var body: some View {
-        NavigationLink(value: pane) {
+        if usesValueNavigation {
+            if #available(iOS 16, *) {
+                NavigationLink(value: pane) {
+                    Label(title, systemImage: systemImage)
+                }
+            } else {
+                legacyLink
+            }
+        } else {
+            legacyLink
+        }
+    }
+
+    private var legacyLink: some View {
+        NavigationLink {
+            SettingsDetailDestination(pane: pane)
+        } label: {
             Label(title, systemImage: systemImage)
+        }
+    }
+}
+
+/// Resolves a `SettingsPane` to its view. Shared by the iOS 16
+/// `navigationDestination` and the iOS 15 destination-based `NavigationLink`.
+struct SettingsDetailDestination: View {
+    let pane: SettingsPane
+
+    var body: some View {
+        switch pane {
+        case .cache:
+            VMCacheSettingsView()
+        case .license:
+            SettingsLicenseView()
+        case .jitStreamer:
+            SettingsJitStreamerView()
         }
     }
 }
