@@ -1877,3 +1877,70 @@
 
 /* No comment provided by engineer. */
 "Zoom" = "Приблизить";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "О программе";
+"Apple Pencil Input" = "Ввод Apple Pencil";
+"Auto save on background" = "Автосохранение в фоне";
+"Auto save on low memory" = "Автосохранение при нехватке памяти";
+"Background" = "Фон";
+"Backspace" = "Backspace";
+"Caps" = "Caps";
+"Click & Hold" = "Нажать и удерживать";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "Продолжать работу ВМ в фоне";
+"Ctrl" = "Ctrl";
+"Cursor" = "Курсор";
+"Cursor - Scroll Wheel" = "Курсор — колесо прокрутки";
+"Cursor Speed" = "Скорость курсора";
+"Del" = "Del";
+"Disable screen dimming when idle" = "Отключать затемнение экрана в простое";
+"Drag Speed" = "Скорость перетаскивания";
+"Drag cursor" = "Перетаскивание курсора";
+"Enable JitStreamer Attach" = "Включить подключение JitStreamer";
+"End" = "End";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "Геймпад";
+"Gestures" = "Жесты";
+"Graphics" = "Графика";
+"Home" = "Home";
+"Idle" = "Простой";
+"Ins" = "Ins";
+"Invert Scroll" = "Инвертировать прокрутку";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "IP-адрес JitStreamer";
+"Long Press" = "Долгое нажатие";
+"Middle Click" = "Средний клик";
+"Middle Click & Hold" = "Средний клик и удержание";
+"Mouse Left Button" = "Левая кнопка мыши";
+"Mouse Middle Button" = "Средняя кнопка мыши";
+"Mouse Right Button" = "Правая кнопка мыши";
+"Mouse Wheel (per swipe)" = "Колесо мыши (за свайп)";
+"Move Screen" = "Перемещение экрана";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "Предпочитать микрофон устройства внешнему";
+"Right Click" = "Правый клик";
+"Right Click & Hold" = "Правый клик и удержание";
+"Select an option from the list to see its details." = "Выберите пункт из списка, чтобы просмотреть подробности.";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "Показать все параметры, включая графику, жесты, курсор и геймпад.";
+"Space" = "Пробел";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "Режим планшета (всегда показывать курсор)";
+"Tablet mode (try hiding cursor)" = "Режим планшета (скрывать курсор)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "IP-адрес машины, на которой запущен JitStreamer и которая доступна с этого устройства.";
+"Three Finger Pan" = "Перемещение тремя пальцами";
+"Touch Input" = "Сенсорный ввод";
+"Touch mode (always show cursor)" = "Сенсорный режим (всегда показывать курсор)";
+"Touch mode (drag to scroll)" = "Сенсорный режим (перетаскивание для прокрутки)";
+"Touch mode (try hiding cursor)" = "Сенсорный режим (скрывать курсор)";
+"Two Finger Pan" = "Перемещение двумя пальцами";
+"Two Finger Swipe" = "Свайп двумя пальцами";
+"Two Finger Tap" = "Нажатие двумя пальцами";

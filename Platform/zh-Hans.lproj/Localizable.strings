@@ -2867,3 +2867,73 @@ VMWizardOSMacView */
 "Modified %@" = "修改于 %@";
 "Overwrite" = "覆盖";
 "Restore" = "恢复";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* Only keys not already present in this table are added here so the   */
+/* existing translations stay authoritative and untouched.             */
+/* ------------------------------------------------------------------ */
+
+"About" = "关于";
+"Apple Pencil Input" = "Apple Pencil 输入";
+"Auto save on background" = "在后台运行时自动保存";
+"Auto save on low memory" = "在内存不足时自动保存";
+"Background" = "后台";
+"Backspace" = "退格";
+"Caps" = "大写锁定";
+"Click & Hold" = "点击并按住";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "在后台继续运行虚拟机";
+"Ctrl" = "Ctrl";
+"Cursor" = "光标";
+"Cursor - Scroll Wheel" = "光标 - 滚轮";
+"Cursor Speed" = "光标速度";
+"Del" = "Del";
+"Disable screen dimming when idle" = "闲置时禁用屏幕变暗";
+"Drag Speed" = "拖放速度";
+"Drag cursor" = "拖动光标";
+"Enable JitStreamer Attach" = "启用 JitStreamer 连接";
+"End" = "End";
+"Enter" = "回车";
+"Esc" = "Esc";
+"Gamepad" = "手柄";
+"Gestures" = "手势";
+"Graphics" = "图形";
+"Home" = "Home";
+"Idle" = "闲置";
+"Ins" = "Ins";
+"Invert Scroll" = "反转滚动";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "JitStreamer IP 地址";
+"Long Press" = "长按";
+"Middle Click" = "中键单击";
+"Middle Click & Hold" = "中键按住";
+"Mouse Left Button" = "鼠标左键";
+"Mouse Middle Button" = "鼠标中键";
+"Mouse Right Button" = "鼠标右键";
+"Mouse Wheel" = "鼠标滚轮";
+"Mouse Wheel (per swipe)" = "鼠标滚轮 (每次轻扫)";
+"Move Screen" = "移动屏幕";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "优先使用设备麦克风而非外置麦克风";
+"Right Click" = "右键单击";
+"Right Click & Hold" = "右键按住";
+"Select an option from the list to see its details." = "从列表中选择一项以查看详情。";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "显示全部设置项，包括图形、手势、光标和手柄。";
+"Space" = "空格";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "平板模式 (始终显示光标)";
+"Tablet mode (try hiding cursor)" = "平板模式 (尝试隐藏光标)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "运行 JitStreamer 的机器的 IP 地址，需可被本设备访问。";
+"Three Finger Pan" = "三指拖移";
+"Touch Input" = "触摸输入";
+"Touch mode (always show cursor)" = "触摸模式 (始终显示光标)";
+"Touch mode (drag to scroll)" = "触摸模式 (拖动以滚动)";
+"Touch mode (try hiding cursor)" = "触摸模式 (尝试隐藏光标)";
+"Two Finger Pan" = "双指拖移";
+"Two Finger Swipe" = "双指轻扫";
+"Two Finger Tap" = "双指轻点";

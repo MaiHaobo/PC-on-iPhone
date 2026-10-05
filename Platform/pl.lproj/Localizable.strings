@@ -1303,3 +1303,69 @@
 "VirtIO Drive" = "Dysk VirtIO";
 "NVMe Drive" = "Dysk NVMe";
 "USB Drive" = "Dysk USB";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "Informacje";
+"Apple Pencil Input" = "Wprowadzanie Apple Pencil";
+"Auto save on background" = "Automatyczny zapis w tle";
+"Auto save on low memory" = "Automatyczny zapis przy niskiej pamięci";
+"Background" = "Tło";
+"Backspace" = "Backspace";
+"Caps" = "Caps";
+"Click & Hold" = "Kliknij i przytrzymaj";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "Kontynuuj uruchamianie maszyny wirtualnej w tle";
+"Ctrl" = "Ctrl";
+"Cursor" = "Kursor";
+"Cursor - Scroll Wheel" = "Kursor — kółko przewijania";
+"Cursor Speed" = "Szybkość kursora";
+"Del" = "Del";
+"Disable screen dimming when idle" = "Wyłącz przyciemnianie ekranu w bezczynności";
+"Drag Speed" = "Szybkość przeciągania";
+"Drag cursor" = "Przeciągnij kursor";
+"Enable JitStreamer Attach" = "Włącz połączenie JitStreamer";
+"End" = "End";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "Gamepad";
+"Gestures" = "Gesty";
+"Graphics" = "Grafika";
+"Idle" = "Bezczynność";
+"Ins" = "Ins";
+"Invert Scroll" = "Odwróć przewijanie";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "Adres IP JitStreamer";
+"Long Press" = "Długie naciśnięcie";
+"Middle Click" = "Kliknięcie środkowym";
+"Middle Click & Hold" = "Środkowy klik i przytrzymanie";
+"Mouse Left Button" = "Lewy przycisk myszy";
+"Mouse Middle Button" = "Środkowy przycisk myszy";
+"Mouse Right Button" = "Prawy przycisk myszy";
+"Mouse Wheel (per swipe)" = "Kółko myszy (na przesunięcie)";
+"Move Screen" = "Przesuń ekran";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "Preferuj mikrofon urządzenia zamiast zewnętrznego";
+"Right Click" = "Kliknięcie prawym";
+"Right Click & Hold" = "Prawy klik i przytrzymanie";
+"Select an option from the list to see its details." = "Wybierz pozycję z listy, aby zobaczyć szczegóły.";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "Pokaż wszystkie opcje, w tym grafikę, gesty, kursor i gamepad.";
+"Space" = "Spacja";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "Tryb tabletu (zawsze pokazuj kursor)";
+"Tablet mode (try hiding cursor)" = "Tryb tabletu (ukryj kursor)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "Adres IP maszyny z uruchomionym JitStreamer, osiągalnej z tego urządzenia.";
+"Three Finger Pan" = "Przesuwanie trzema palcami";
+"Touch Input" = "Wprowadzanie dotykiem";
+"Touch mode (always show cursor)" = "Tryb dotykowy (zawsze pokazuj kursor)";
+"Touch mode (drag to scroll)" = "Tryb dotykowy (przeciągnij, aby przewinąć)";
+"Touch mode (try hiding cursor)" = "Tryb dotykowy (ukryj kursor)";
+"Two Finger Pan" = "Przesuwanie dwoma palcami";
+"Two Finger Swipe" = "Przesunięcie dwoma palcami";
+"Two Finger Tap" = "Dotknięcie dwoma palcami";

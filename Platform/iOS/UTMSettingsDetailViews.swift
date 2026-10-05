@@ -22,8 +22,10 @@ import SwiftUI
 /// assignable keys. Reusing one picker keeps the group readable.
 struct SettingsGamepadRows: View {
     /// Every key the gamepad buttons can be mapped to, in the same order as the
-    /// original `Root.plist`.
-    static let keyOptions: [(title: String, value: Int)] = [
+    /// original `Root.plist`. Labels are `LocalizedStringKey` so the picker
+    /// localises them; single-letter and symbol keys simply have no entry in
+    /// the strings table and fall back to themselves.
+    static let keyOptions: [(title: LocalizedStringKey, value: Int)] = [
         ("Disabled", 0),
         ("Mouse Left Button", -1),
         ("Mouse Right Button", -3),

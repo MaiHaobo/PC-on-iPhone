@@ -44,14 +44,17 @@ private struct SettingsGroup<Content: View>: View {
 private struct SettingsPickerRow: View {
     let title: LocalizedStringKey
     let key: String
-    let options: [(title: String, value: Int)]
+    /// Option labels are `LocalizedStringKey` (not `String`) so the menu items
+    /// go through the localisation lookup too — `Text` only localises when it
+    /// receives a key, and a plain `String` bypasses the table entirely.
+    let options: [(title: LocalizedStringKey, value: Int)]
 
     @AppStorage private var rawValue: Int
 
     init(title: LocalizedStringKey,
          key: String,
          default defaultValue: Int,
-         options: [(title: String, value: Int)]) {
+         options: [(title: LocalizedStringKey, value: Int)]) {
         self.title = title
         self.key = key
         self.options = options

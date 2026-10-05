@@ -1939,3 +1939,68 @@
 "Modified %@" = "Modificada: %@";
 "Overwrite" = "Sobrescribir";
 "Restore" = "Restaurar";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "Acerca de";
+"Apple Pencil Input" = "Entrada de Apple Pencil";
+"Auto save on background" = "Guardado automático en segundo plano";
+"Auto save on low memory" = "Guardado automático en memoria baja";
+"Background" = "Segundo plano";
+"Backspace" = "Retroceso";
+"Caps" = "Mayús";
+"Click & Hold" = "Click y mantener";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "Continuar ejecutando la VM en segundo plano";
+"Ctrl" = "Ctrl";
+"Cursor" = "Cursor";
+"Cursor - Scroll Wheel" = "Cursor - Rueda de desplazamiento";
+"Cursor Speed" = "Velocidad del cursor";
+"Del" = "Supr";
+"Disable screen dimming when idle" = "Deshabilitar la atenuación de la pantalla cuando esté inactivo";
+"Drag Speed" = "Velocidad de arrastre";
+"Drag cursor" = "Arrastre el cursor";
+"Enable JitStreamer Attach" = "Habilitar conexión JitStreamer";
+"Enter" = "Intro";
+"Esc" = "Esc";
+"Gamepad" = "Mando";
+"Gestures" = "Gestos";
+"Graphics" = "Gráficos";
+"Idle" = "Inactividad";
+"Ins" = "Ins";
+"Invert Scroll" = "Invertir desplazamiento";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "Dirección IP de JitStreamer";
+"Long Press" = "Pulsación larga";
+"Middle Click" = "Click central";
+"Middle Click & Hold" = "Click central y mantener";
+"Mouse Left Button" = "Botón Izquierdo del Mouse";
+"Mouse Middle Button" = "Botón Central del Mouse";
+"Mouse Right Button" = "Botón Derecho del Mouse";
+"Mouse Wheel (per swipe)" = "Rueda del mouse (por deslizamiento)";
+"Move Screen" = "Mover Pantalla";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "AvPág";
+"PgUp" = "RePág";
+"Prefer device to external microphone" = "Preferir el micrófono del dispositivo al externo";
+"Right Click" = "Click derecho";
+"Right Click & Hold" = "Click derecho y mantener";
+"Select an option from the list to see its details." = "Selecciona una opción de la lista para ver sus detalles.";
+"Shift" = "Mayús";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "Mostrar todas las opciones, incluidos gráficos, gestos, cursor y mando.";
+"Space" = "Espacio";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "Modo tablet (siempre mostrar el cursor)";
+"Tablet mode (try hiding cursor)" = "Modo tablet (intentar ocultar el cursor)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "La dirección IP de la máquina que ejecuta JitStreamer, accesible desde este dispositivo.";
+"Three Finger Pan" = "Panorámica con 3 dedos";
+"Touch Input" = "Entrada táctil";
+"Touch mode (always show cursor)" = "Modo táctil (siempre mostrar el cursor)";
+"Touch mode (drag to scroll)" = "Modo táctil (arrastrar para desplazar)";
+"Touch mode (try hiding cursor)" = "Modo táctil (intentar ocultar el cursor)";
+"Two Finger Pan" = "Panorámica con 2 dedos";
+"Two Finger Swipe" = "Deslizar con 2 dedos";
+"Two Finger Tap" = "Tocar con 2 dedos";

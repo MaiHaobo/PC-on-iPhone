@@ -1442,3 +1442,67 @@
 
 /* VMKeyboardAccessoryView */
 "Hide Keyboard" = "Piilota näppäimistö";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "Tietoja";
+"Apple Pencil Input" = "Apple Pencil -syöte";
+"Auto save on background" = "Automaattinen tallennus taustalla";
+"Auto save on low memory" = "Automaattinen tallennus muistin ollessa vähissä";
+"Background" = "Tausta";
+"Backspace" = "Askelpalautin";
+"Caps" = "Caps";
+"Click & Hold" = "Napsauta ja pidä";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "Jatka virtuaalikoneen suorittamista taustalla";
+"Ctrl" = "Ctrl";
+"Cursor" = "Kohdistin";
+"Cursor - Scroll Wheel" = "Kohdistin - vieritysrulla";
+"Cursor Speed" = "Kohdistimen nopeus";
+"Del" = "Del";
+"Disable screen dimming when idle" = "Poista näytön himmeneminen käytöstä joutokäynnissä";
+"Drag Speed" = "Vedon nopeus";
+"Drag cursor" = "Vedä kohdistinta";
+"Enable JitStreamer Attach" = "Ota JitStreamer-yhteys käyttöön";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "Ohjain";
+"Gestures" = "Eleet";
+"Graphics" = "Grafiikka";
+"Idle" = "Joutokäynti";
+"Ins" = "Ins";
+"Invert Scroll" = "Käännä vieritys";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "JitStreamer IP-osoite";
+"Long Press" = "Pitkä painallus";
+"Middle Click" = "Keskinapsautus";
+"Middle Click & Hold" = "Keskinapsautus ja pito";
+"Mouse Left Button" = "Hiiren vasen painike";
+"Mouse Middle Button" = "Hiiren keskipainike";
+"Mouse Right Button" = "Hiiren oikea painike";
+"Mouse Wheel (per swipe)" = "Hiiren rulla (pyyhkäisyä kohti)";
+"Move Screen" = "Siirrä näyttöä";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "Suosi laitteen mikrofonia ulkoisen sijaan";
+"Right Click" = "Oikea napsautus";
+"Right Click & Hold" = "Oikea napsautus ja pito";
+"Select an option from the list to see its details." = "Valitse kohde luettelosta nähdäksesi sen tiedot.";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "Näytä kaikki asetukset, mukaan lukien grafiikka, eleet, kohdistin ja ohjain.";
+"Space" = "Välilyönti";
+"Tablet mode (always show cursor)" = "Tablettitila (näytä kohdistin aina)";
+"Tablet mode (try hiding cursor)" = "Tablettitila (yritä piilottaa kohdistin)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "Sen koneen IP-osoite, jossa JitStreamer on käynnissä ja joka on tavoitettavissa tästä laitteesta.";
+"Three Finger Pan" = "Kolmen sormen vieritys";
+"Touch Input" = "Kosketussyöte";
+"Touch mode (always show cursor)" = "Kosketustila (näytä kohdistin aina)";
+"Touch mode (drag to scroll)" = "Kosketustila (vedä vierittääksesi)";
+"Touch mode (try hiding cursor)" = "Kosketustila (yritä piilottaa kohdistin)";
+"Two Finger Pan" = "Kahden sormen vieritys";
+"Two Finger Swipe" = "Kahden sormen pyyhkäisy";
+"Two Finger Tap" = "Kahden sormen napautus";

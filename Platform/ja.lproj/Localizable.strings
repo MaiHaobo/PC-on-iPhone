@@ -1243,3 +1243,67 @@
 "Modified %@" = "変更: %@";
 "Overwrite" = "上書き";
 "Restore" = "復元";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "情報";
+"Apple Pencil Input" = "Apple Pencil入力";
+"Auto save on background" = "バックグラウンドで自動保存";
+"Auto save on low memory" = "メモリ不足時に自動保存";
+"Background" = "バックグラウンド";
+"Backspace" = "バックスペース";
+"Caps" = "Caps";
+"Click & Hold" = "クリック＆ホールド";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "バックグラウンドで仮想マシンの実行を続ける";
+"Ctrl" = "Ctrl";
+"Cursor" = "カーソル";
+"Cursor - Scroll Wheel" = "カーソル - スクロールホイール";
+"Cursor Speed" = "カーソル速度";
+"Del" = "Del";
+"Disable screen dimming when idle" = "アイドル時の画面の暗転を無効にする";
+"Drag Speed" = "ドラッグ速度";
+"Drag cursor" = "カーソルをドラッグ";
+"Enable JitStreamer Attach" = "JitStreamer接続を有効にする";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "ゲームパッド";
+"Gestures" = "ジェスチャ";
+"Graphics" = "グラフィックス";
+"Idle" = "アイドル";
+"Ins" = "Ins";
+"Invert Scroll" = "スクロールを反転";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "JitStreamer IPアドレス";
+"Long Press" = "長押し";
+"Middle Click" = "中クリック";
+"Middle Click & Hold" = "中クリック＆ホールド";
+"Mouse Left Button" = "マウス左ボタン";
+"Mouse Middle Button" = "マウス中ボタン";
+"Mouse Right Button" = "マウス右ボタン";
+"Mouse Wheel" = "マウスホイール";
+"Mouse Wheel (per swipe)" = "マウスホイール（スワイプごと）";
+"Move Screen" = "画面を移動";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "外部マイクにデバイスを優先";
+"Right Click" = "右クリック";
+"Right Click & Hold" = "右クリック＆ホールド";
+"Select an option from the list to see its details." = "リストから項目を選択すると詳細が表示されます。";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "グラフィックス、ジェスチャ、カーソル、ゲームパッドを含むすべての項目を表示します。";
+"Space" = "スペース";
+"Tablet mode (always show cursor)" = "タブレットモード（常にカーソルを表示）";
+"Tablet mode (try hiding cursor)" = "タブレットモード（カーソルの非表示を試みる）";
+"The IP address of the machine running JitStreamer, reachable by this device." = "JitStreamerを実行しているマシンのIPアドレス。このデバイスから到達可能である必要があります。";
+"Three Finger Pan" = "3本指でパン";
+"Touch Input" = "タッチ入力";
+"Touch mode (always show cursor)" = "タッチモード（常にカーソルを表示）";
+"Touch mode (drag to scroll)" = "タッチモード（ドラッグでスクロール）";
+"Touch mode (try hiding cursor)" = "タッチモード（カーソルの非表示を試みる）";
+"Two Finger Pan" = "2本指でパン";
+"Two Finger Swipe" = "2本指でスワイプ";
+"Two Finger Tap" = "2本指でタップ";

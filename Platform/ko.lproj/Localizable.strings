@@ -1243,3 +1243,67 @@
 "Modified %@" = "수정: %@";
 "Overwrite" = "덮어쓰기";
 "Restore" = "복원";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "정보";
+"Apple Pencil Input" = "Apple Pencil 입력";
+"Auto save on background" = "백그라운드에서 자동 저장";
+"Auto save on low memory" = "메모리 부족 시 자동 저장";
+"Background" = "백그라운드";
+"Backspace" = "Backspace";
+"Caps" = "Caps";
+"Click & Hold" = "클릭 & 홀드";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "가상 머신을 백그라운드에서 계속 실행";
+"Ctrl" = "Ctrl";
+"Cursor" = "커서";
+"Cursor - Scroll Wheel" = "커서 - 스크롤 휠";
+"Cursor Speed" = "커서 속도";
+"Del" = "Del";
+"Disable screen dimming when idle" = "유휴 상태일 때 화면 어둡게 하지 않기";
+"Drag Speed" = "드래그 속도";
+"Drag cursor" = "커서 드래그";
+"Enable JitStreamer Attach" = "JitStreamer 연결 활성화";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "게임패드";
+"Gestures" = "제스처";
+"Graphics" = "그래픽";
+"Idle" = "유휴 상태";
+"Ins" = "Ins";
+"Invert Scroll" = "스크롤 방향 반전";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "JitStreamer IP 주소";
+"Long Press" = "길게 누르기";
+"Middle Click" = "마우스 가운데 클릭";
+"Middle Click & Hold" = "가운데 클릭 & 홀드";
+"Mouse Left Button" = "마우스 왼쪽 버튼";
+"Mouse Middle Button" = "마우스 가운데 버튼";
+"Mouse Right Button" = "마우스 오른쪽 버튼";
+"Mouse Wheel" = "마우스 휠";
+"Mouse Wheel (per swipe)" = "마우스 휠 (스와이프마다)";
+"Move Screen" = "화면 이동";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "외부 마이크 대신 기기의 마이크 우선 사용";
+"Right Click" = "마우스 우클릭";
+"Right Click & Hold" = "우클릭 & 홀드";
+"Select an option from the list to see its details." = "목록에서 항목을 선택하면 세부 정보가 표시됩니다.";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "그래픽, 제스처, 커서 및 게임패드를 포함한 모든 옵션을 표시합니다.";
+"Space" = "Space";
+"Tablet mode (always show cursor)" = "태블릿 모드 (커서 항상 표시)";
+"Tablet mode (try hiding cursor)" = "태블릿 모드 (커서 숨기기 시도)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "JitStreamer를 실행하는 머신의 IP 주소이며, 이 기기에서 접근할 수 있어야 합니다.";
+"Three Finger Pan" = "세 손가락으로 패닝";
+"Touch Input" = "터치 입력";
+"Touch mode (always show cursor)" = "터치 모드 (커서 항상 표시)";
+"Touch mode (drag to scroll)" = "터치 모드 (드래그하여 스크롤)";
+"Touch mode (try hiding cursor)" = "터치 모드 (커서 숨기기 시도)";
+"Two Finger Pan" = "두 손가락으로 패닝";
+"Two Finger Swipe" = "두 손가락으로 스와이프";
+"Two Finger Tap" = "두 손가락으로 탭";

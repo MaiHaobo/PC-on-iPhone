@@ -2198,3 +2198,71 @@
 
 /* No comment provided by engineer. */
 "Zoom" = "تكبير";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "حول";
+"Apple Pencil Input" = "إدخال Apple Pencil";
+"Auto save on background" = "الحفظ التلقائي في الخلفية";
+"Auto save on low memory" = "الحفظ التلقائي عند انخفاض الذاكرة";
+"Background" = "الخلفية";
+"Backspace" = "Backspace";
+"Caps" = "Caps";
+"Click & Hold" = "النقر مع الاستمرار";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "الاستمرار في تشغيل الجهاز الافتراضي في الخلفية";
+"Ctrl" = "Ctrl";
+"Cursor" = "المؤشر";
+"Cursor - Scroll Wheel" = "المؤشر - عجلة التمرير";
+"Cursor Speed" = "سرعة المؤشر";
+"Del" = "Del";
+"Disable screen dimming when idle" = "تعطيل تعتيم الشاشة عند الخمول";
+"Drag Speed" = "سرعة السحب";
+"Drag cursor" = "سحب المؤشر";
+"Enable JitStreamer Attach" = "تمكين اتصال JitStreamer";
+"End" = "End";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "ذراع التحكم";
+"Gestures" = "الإيماءات";
+"Graphics" = "الرسومات";
+"Home" = "Home";
+"Idle" = "الخمول";
+"Ins" = "Ins";
+"Invert Scroll" = "عكس التمرير";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "عنوان IP لـ JitStreamer";
+"Long Press" = "ضغطة مطولة";
+"Middle Click" = "النقر بزر الفأرة الأوسط";
+"Middle Click & Hold" = "النقر الأوسط مع الاستمرار";
+"Mouse Left Button" = "زر الفأرة الأيسر";
+"Mouse Middle Button" = "زر الفأرة الأوسط";
+"Mouse Right Button" = "زر الفأرة الأيمن";
+"Mouse Wheel" = "عجلة الفأرة";
+"Mouse Wheel (per swipe)" = "عجلة الفأرة (لكل سحبة)";
+"Move Screen" = "تحريك الشاشة";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "تفضيل ميكروفون الجهاز على الميكروفون الخارجي";
+"Right Click" = "النقر بزر الفأرة الأيمن";
+"Right Click & Hold" = "النقر الأيمن مع الاستمرار";
+"Select an option from the list to see its details." = "اختر عنصرًا من القائمة لعرض تفاصيله.";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "عرض كل الخيارات، بما في ذلك الرسومات والإيماءات والمؤشر وذراع التحكم.";
+"Space" = "مسافة";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "وضع الجهاز اللوحي (إظهار المؤشر دائمًا)";
+"Tablet mode (try hiding cursor)" = "وضع الجهاز اللوحي (محاولة إخفاء المؤشر)";
+"The IP address of the machine running JitStreamer, reachable by this device." = "عنوان IP للجهاز الذي يعمل عليه JitStreamer، ويمكن الوصول إليه من هذا الجهاز.";
+"Three Finger Pan" = "تحريك بثلاثة أصابع";
+"Touch Input" = "الإدخال باللمس";
+"Touch mode (always show cursor)" = "وضع اللمس (إظهار المؤشر دائمًا)";
+"Touch mode (drag to scroll)" = "وضع اللمس (اسحب للتمرير)";
+"Touch mode (try hiding cursor)" = "وضع اللمس (محاولة إخفاء المؤشر)";
+"Two Finger Pan" = "تحريك بإصبعين";
+"Two Finger Swipe" = "سحب بإصبعين";
+"Two Finger Tap" = "نقر بإصبعين";

@@ -2867,3 +2867,71 @@ VMWizardOSMacView */
 "Modified %@" = "修改於 %@";
 "Overwrite" = "覆蓋";
 "Restore" = "還原";
+
+
+/* ------------------------------------------------------------------ */
+/* Settings screen (native SwiftUI rebuild)                            */
+/* ------------------------------------------------------------------ */
+
+"About" = "關於";
+"Apple Pencil Input" = "Apple Pencil 輸入";
+"Auto save on background" = "在背景自動儲存";
+"Auto save on low memory" = "在記憶體不足時自動儲存";
+"Background" = "背景";
+"Backspace" = "Backspace";
+"Caps" = "Caps";
+"Click & Hold" = "按住";
+"Command/Windows" = "Command/Windows";
+"Continue running VM in the background" = "在背景執行虛擬機";
+"Ctrl" = "Ctrl";
+"Cursor" = "指標";
+"Cursor - Scroll Wheel" = "指標 - 捲動輪";
+"Cursor Speed" = "指標速度";
+"Del" = "Del";
+"Disable screen dimming when idle" = "閒置時停用變暗螢幕";
+"Drag Speed" = "拖放速度";
+"Drag cursor" = "拖動指標";
+"Enable JitStreamer Attach" = "啟用 JitStreamer 連接";
+"End" = "End";
+"Enter" = "Enter";
+"Esc" = "Esc";
+"Gamepad" = "遊戲手柄";
+"Gestures" = "手勢";
+"Graphics" = "圖形";
+"Home" = "Home";
+"Idle" = "閒置";
+"Ins" = "Ins";
+"Invert Scroll" = "反轉捲動";
+"JitStreamer" = "JitStreamer";
+"JitStreamer IP Address" = "JitStreamer IP 位址";
+"Long Press" = "長時間按下";
+"Middle Click" = "點按中按鈕";
+"Middle Click & Hold" = "按住中按鈕";
+"Mouse Left Button" = "滑鼠左側按鈕";
+"Mouse Middle Button" = "滑鼠中間按鈕";
+"Mouse Right Button" = "滑鼠右側按鈕";
+"Mouse Wheel" = "滑鼠滾輪";
+"Mouse Wheel (per swipe)" = "滑鼠滾輪（每次輕掃）";
+"Move Screen" = "移動螢幕";
+"Option/Alt" = "Option/Alt";
+"PgDn" = "PgDn";
+"PgUp" = "PgUp";
+"Prefer device to external microphone" = "偏好外置咪高風裝置";
+"Right Click" = "點按右按鈕";
+"Right Click & Hold" = "按住右按鈕";
+"Select an option from the list to see its details." = "從清單中選擇項目以檢視詳細資料。";
+"Shift" = "Shift";
+"Show the full set of options, including graphics, gestures, cursor and gamepad." = "顯示全部設定項目，包括圖形、手勢、指標與遊戲手柄。";
+"Space" = "空格";
+"Tab" = "Tab";
+"Tablet mode (always show cursor)" = "平板電腦模式（始終顯示指標）";
+"Tablet mode (try hiding cursor)" = "平板電腦模式（嘗試隱藏指標）";
+"The IP address of the machine running JitStreamer, reachable by this device." = "執行 JitStreamer 的機器之 IP 位址，須可由此裝置存取。";
+"Three Finger Pan" = "三指平移";
+"Touch Input" = "觸控輸入";
+"Touch mode (always show cursor)" = "觸控模式（始終顯示指標）";
+"Touch mode (drag to scroll)" = "觸控模式（拖動以捲動）";
+"Touch mode (try hiding cursor)" = "觸控模式（嘗試隱藏指標）";
+"Two Finger Pan" = "兩指平移";
+"Two Finger Swipe" = "兩指輕掃";
+"Two Finger Tap" = "兩指輕按";
