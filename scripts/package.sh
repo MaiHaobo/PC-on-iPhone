@@ -35,16 +35,22 @@ OUTPUT=$3
 BUNDLE_ID=
 
 case $MODE in
-deb | ipa | ipa-hv | ipa-signed )
+deb | ipa | ipa-signed )
 	APP_NAME="UTM"
 	OUTPUT_NAME="UTM"
-	BUNDLE_ID="com.utmapp.UTM"
+	BUNDLE_ID="com.utmapp.poi"
+	INPUT_APP="$INPUT/Products/Applications/UTM.app"
+	;;
+ipa-hv )
+	APP_NAME="UTM"
+	OUTPUT_NAME="UTM"
+	BUNDLE_ID="com.utmapp.poi-HV"
 	INPUT_APP="$INPUT/Products/Applications/UTM.app"
 	;;
 ipa-se | ipa-se-signed )
 	APP_NAME="PC on iPhone SE"
 	OUTPUT_NAME="UTM SE"
-	BUNDLE_ID="com.utmapp.UTM-SE"
+	BUNDLE_ID="com.utmapp.poi-SE"
 	INPUT_APP="$INPUT/Products/Applications/PC on iPhone SE.app"
 	;;
 ipa-remote | ipa-remote-signed )
