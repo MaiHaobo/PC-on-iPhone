@@ -138,7 +138,11 @@ private struct SettingsSidebar: View {
             SettingsDetailDestination(pane: pane)
         }
         .toolbar {
-            settingsToolbar(isPresentedAsSheet: isPresentedAsSheet, onClose: onClose)
+            if isPresentedAsSheet {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close", action: onClose)
+                }
+            }
         }
     }
 }
@@ -158,16 +162,11 @@ private struct SettingsSidebarLegacy: View {
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            settingsToolbar(isPresentedAsSheet: isPresentedAsSheet, onClose: onClose)
-        }
-    }
-}
-
-@ViewBuilder
-private func settingsToolbar(isPresentedAsSheet: Bool, onClose: @escaping () -> Void) -> some View {
-    if isPresentedAsSheet {
-        ToolbarItem(placement: .cancellationAction) {
-            Button("Close", action: onClose)
+            if isPresentedAsSheet {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close", action: onClose)
+                }
+            }
         }
     }
 }
