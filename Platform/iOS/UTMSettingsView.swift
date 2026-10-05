@@ -233,7 +233,11 @@ final class UTMSettingsViewController: IASKAppSettingsViewController {
         guard #available(iOS 26, *) else {
             return
         }
-        let radius = Self.cornerRadius
+        // `.fixed(_:)` is required here: `UICornerRadius` conforms to
+        // `ExpressibleByFloatLiteral`, so a literal such as `.corners(radius:
+        // 14.5)` works, but a stored `CGFloat` variable does not convert
+        // implicitly.
+        let radius = UICornerRadius.fixed(Self.cornerRadius)
         for cell in tableView.visibleCells {
             guard let indexPath = tableView.indexPath(for: cell) else {
                 continue
