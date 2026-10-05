@@ -68,20 +68,22 @@ private struct SettingsPickerRow: View {
     }
 }
 
-/// A `PSSliderSpecifier` rendered as a labelled slider.
+/// A `PSSliderSpecifier` rendered as a labelled slider. The value is stored as
+/// an `Int` because the consumers (`VMCursor.m`, gamepad handling) read these
+/// keys with `integerForKey:`.
 private struct SettingsSliderRow: View {
     let title: LocalizedStringKey
     let key: String
-    let range: ClosedRange<Double>
-    let defaultValue: Double
+    let range: ClosedRange<Int>
+    let defaultValue: Int
     var showsValue = true
 
-    @AppStorage private var value: Double
+    @AppStorage private var value: Int
 
     init(title: LocalizedStringKey,
          key: String,
-         range: ClosedRange<Double>,
-         defaultValue: Double,
+         range: ClosedRange<Int>,
+         defaultValue: Int,
          showsValue: Bool = true) {
         self.title = title
         self.key = key
@@ -97,12 +99,17 @@ private struct SettingsSliderRow: View {
                 Text(title)
                 if showsValue {
                     Spacer()
-                    Text(String(format: "%.0f", value))
+                    Text("\(value)")
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
                 }
             }
-            Slider(value: $value, in: range)
+            // `Slider` needs a `Double` binding; the stored value stays an Int
+            // so the ObjC consumers keep reading it with `integerForKey:`.
+            Slider(value: Binding(
+                get: { Double($value.wrappedValue) },
+                set: { $value.wrappedValue = Int($0.rounded()) }
+            ), in: Double(range.lowerBound)...Double(range.upperBound), step: 1)
         }
     }
 }
@@ -224,8 +231,7 @@ struct SettingsAdvancedSections: View {
             SettingsSliderRow(title: "Drag Speed",
                               key: "DragCursorSpeed",
                               range: 1...100,
-                              defaultValue: 100)
-        }
+                              defaultValue: 100)        }
 
         SettingsGroup(title: "Cursor - Scroll Wheel") {
             SettingsToggleRow(title: "Invert Scroll",
