@@ -114,7 +114,7 @@ private struct SettingsListColumn: UIViewControllerRepresentable {
     @EnvironmentObject private var navigationModel: SettingsNavigationModel
 
     func makeUIViewController(context: Context) -> InterceptingNavigationController {
-        let settings = IASKAppSettingsViewController()
+        let settings = UTMSettingsViewController()
         settings.delegate = context.coordinator
         settings.neverShowPrivacySettings = !hasContainer
         settings.showCreditsFooter = false
@@ -205,6 +205,56 @@ private struct NavigationControllerView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
+    }
+}
+
+// MARK: - Rounded group styling
+
+/// InAppSettingsKit renders its rows with a stock `UITableView` in the
+/// `.insetGrouped` style. That style draws the group corners with a private
+/// layer, so the radius cannot be changed through `layer.cornerRadius` on a
+/// cell or its `backgroundView` (which is `nil` in inset-grouped tables).
+///
+/// Since iOS 26 the corner geometry is exposed on the cell as
+/// `cornerConfiguration`, which is exactly what this app deploys to. The
+/// radius is rewritten on every layout pass because UIKit recreates the
+/// configuration when cells are reused or the table is reloaded. Older systems
+/// keep the stock appearance.
+final class UTMSettingsViewController: IASKAppSettingsViewController {
+    /// Matches `BigButtonStyle` / `InListButtonStyle` elsewhere in the app.
+    private static let cornerRadius: CGFloat = 14
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        applyRoundedGroupStyle()
+    }
+
+    private func applyRoundedGroupStyle() {
+        guard #available(iOS 26, *) else {
+            return
+        }
+        let radius = Self.cornerRadius
+        for cell in tableView.visibleCells {
+            guard let indexPath = tableView.indexPath(for: cell) else {
+                continue
+            }
+            let rows = tableView.numberOfRows(inSection: indexPath.section)
+            if rows == 1 {
+                // Single-row group: round all four corners.
+                cell.cornerConfiguration = .corners(radius: radius)
+            } else if indexPath.row == 0 {
+                cell.cornerConfiguration = .corners(topLeftRadius: radius,
+                                                    topRightRadius: radius,
+                                                    bottomLeftRadius: nil,
+                                                    bottomRightRadius: nil)
+            } else if indexPath.row == rows - 1 {
+                cell.cornerConfiguration = .corners(topLeftRadius: nil,
+                                                    topRightRadius: nil,
+                                                    bottomLeftRadius: radius,
+                                                    bottomRightRadius: radius)
+            }
+            // Middle rows keep the default (square) configuration.
+        }
     }
 }
 
