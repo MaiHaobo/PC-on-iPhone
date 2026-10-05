@@ -1944,3 +1944,16 @@
 "Two Finger Pan" = "Перемещение двумя пальцами";
 "Two Finger Swipe" = "Свайп двумя пальцами";
 "Two Finger Tap" = "Нажатие двумя пальцами";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Крестовина вниз";
+"D-LEFT" = "Крестовина влево";
+"D-RIGHT" = "Крестовина вправо";
+"D-UP" = "Крестовина вверх";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Меню";
+"R1" = "R1";
+"R2" = "R2";

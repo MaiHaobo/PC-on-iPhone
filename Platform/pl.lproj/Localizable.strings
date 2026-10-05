@@ -1369,3 +1369,16 @@
 "Two Finger Pan" = "Przesuwanie dwoma palcami";
 "Two Finger Swipe" = "Przesunięcie dwoma palcami";
 "Two Finger Tap" = "Dotknięcie dwoma palcami";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Krzyżak w dół";
+"D-LEFT" = "Krzyżak w lewo";
+"D-RIGHT" = "Krzyżak w prawo";
+"D-UP" = "Krzyżak w górę";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Menu";
+"R1" = "R1";
+"R2" = "R2";

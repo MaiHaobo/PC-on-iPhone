@@ -1307,3 +1307,16 @@
 "Two Finger Pan" = "두 손가락으로 패닝";
 "Two Finger Swipe" = "두 손가락으로 스와이프";
 "Two Finger Tap" = "두 손가락으로 탭";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Down (D-Pad)";
+"D-LEFT" = "Left (D-Pad)";
+"D-RIGHT" = "Right (D-Pad)";
+"D-UP" = "Up (D-Pad)";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "메뉴";
+"R1" = "R1";
+"R2" = "R2";

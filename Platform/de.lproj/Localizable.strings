@@ -1186,3 +1186,16 @@
 "Two Finger Pan" = "Zwei-Finger-Ziehen";
 "Two Finger Swipe" = "Zwei-Finger-Wischen";
 "Two Finger Tap" = "Zwei-Finger-Tippen";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "D-Unten";
+"D-LEFT" = "D-Links";
+"D-RIGHT" = "D-Rechts";
+"D-UP" = "D-Oben";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Menü";
+"R1" = "R1";
+"R2" = "R2";

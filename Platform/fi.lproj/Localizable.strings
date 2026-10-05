@@ -1506,3 +1506,16 @@
 "Two Finger Pan" = "Kahden sormen vieritys";
 "Two Finger Swipe" = "Kahden sormen pyyhkäisy";
 "Two Finger Tap" = "Kahden sormen napautus";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Ristiohjain alas";
+"D-LEFT" = "Ristiohjain vasen";
+"D-RIGHT" = "Ristiohjain oikea";
+"D-UP" = "Ristiohjain ylös";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Valikko";
+"R1" = "R1";
+"R2" = "R2";

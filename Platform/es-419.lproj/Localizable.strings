@@ -2004,3 +2004,16 @@
 "Two Finger Pan" = "Panorámica con 2 dedos";
 "Two Finger Swipe" = "Deslizar con 2 dedos";
 "Two Finger Tap" = "Tocar con 2 dedos";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Cruceta abajo";
+"D-LEFT" = "Cruceta izquierda";
+"D-RIGHT" = "Cruceta derecha";
+"D-UP" = "Cruceta arriba";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Menú";
+"R1" = "R1";
+"R2" = "R2";

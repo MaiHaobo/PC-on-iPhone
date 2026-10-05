@@ -2151,3 +2151,16 @@
 "Two Finger Pan" = "兩指平移";
 "Two Finger Swipe" = "兩指撥動";
 "Two Finger Tap" = "兩指輕觸";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "下方向鍵";
+"D-LEFT" = "左方向鍵";
+"D-RIGHT" = "右方向鍵";
+"D-UP" = "上方向鍵";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "選單";
+"R1" = "R1";
+"R2" = "R2";

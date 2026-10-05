@@ -2935,3 +2935,16 @@ VMWizardOSMacView */
 "Two Finger Pan" = "兩指平移";
 "Two Finger Swipe" = "兩指輕掃";
 "Two Finger Tap" = "兩指輕按";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "向下鍵";
+"D-LEFT" = "向左鍵";
+"D-RIGHT" = "向右鍵";
+"D-UP" = "向上鍵";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "選單";
+"R1" = "R1";
+"R2" = "R2";

@@ -2266,3 +2266,16 @@
 "Two Finger Pan" = "تحريك بإصبعين";
 "Two Finger Swipe" = "سحب بإصبعين";
 "Two Finger Tap" = "نقر بإصبعين";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "أسفل (الأسهم)";
+"D-LEFT" = "يسار (الأسهم)";
+"D-RIGHT" = "يمين (الأسهم)";
+"D-UP" = "أعلى (الأسهم)";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "القائمة";
+"R1" = "R1";
+"R2" = "R2";

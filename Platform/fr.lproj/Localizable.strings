@@ -1318,3 +1318,16 @@
 "Two Finger Pan" = "Balayage à deux doigts";
 "Two Finger Swipe" = "Glissement à deux doigts";
 "Two Finger Tap" = "Appui à deux doigts";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Croix bas";
+"D-LEFT" = "Croix gauche";
+"D-RIGHT" = "Croix droite";
+"D-UP" = "Croix haut";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Menu";
+"R1" = "R1";
+"R2" = "R2";

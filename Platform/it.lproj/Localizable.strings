@@ -2173,3 +2173,16 @@
 "Two Finger Pan" = "Panoramica con due dita";
 "Two Finger Swipe" = "Scorri con due dita";
 "Two Finger Tap" = "Tocco con due dita";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "Croce giù";
+"D-LEFT" = "Croce sinistra";
+"D-RIGHT" = "Croce destra";
+"D-UP" = "Croce su";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "Menu";
+"R1" = "R1";
+"R2" = "R2";

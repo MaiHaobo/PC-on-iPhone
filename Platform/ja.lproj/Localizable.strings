@@ -1307,3 +1307,16 @@
 "Two Finger Pan" = "2本指でパン";
 "Two Finger Swipe" = "2本指でスワイプ";
 "Two Finger Tap" = "2本指でタップ";
+
+
+/* Gamepad button labels (missed in the first pass) */
+
+"D-DOWN" = "下（十字キー）";
+"D-LEFT" = "左（十字キー）";
+"D-RIGHT" = "右（十字キー）";
+"D-UP" = "上（十字キー）";
+"L1" = "L1";
+"L2" = "L2";
+"Menu" = "メニュー";
+"R1" = "R1";
+"R2" = "R2";
