@@ -221,8 +221,11 @@ private struct NavigationControllerView: UIViewControllerRepresentable {
 /// configuration when cells are reused or the table is reloaded. Older systems
 /// keep the stock appearance.
 final class UTMSettingsViewController: IASKAppSettingsViewController {
-    /// Matches `BigButtonStyle` / `InListButtonStyle` elsewhere in the app.
-    private static let cornerRadius: CGFloat = 14
+    /// Matches the stock `.insetGrouped` look used by the SwiftUI `List` on the
+    /// Cache pane, so both settings screens read as one design. UIKit applies
+    /// this value by default on iOS 26; the override below only exists to keep
+    /// it stable if the system default ever changes.
+    private static let cornerRadius: CGFloat = 26
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -235,7 +238,7 @@ final class UTMSettingsViewController: IASKAppSettingsViewController {
         }
         // `.fixed(_:)` is required here: `UICornerRadius` conforms to
         // `ExpressibleByFloatLiteral`, so a literal such as `.corners(radius:
-        // 14.5)` works, but a stored `CGFloat` variable does not convert
+        // 12.0)` compiles, but a stored `CGFloat` variable does not convert
         // implicitly.
         let radius = UICornerRadius.fixed(Self.cornerRadius)
         for cell in tableView.visibleCells {
