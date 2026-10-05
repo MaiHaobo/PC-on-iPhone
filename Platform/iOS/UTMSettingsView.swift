@@ -161,9 +161,12 @@ private struct SettingsSidebarLegacy: View {
         .listStyle(.insetGrouped)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
+        // The condition lives inside the ToolbarItem: the toolbar builder's
+        // `buildIf` is iOS 16+, so an `if` around the ToolbarItem itself would
+        // not compile against the iOS 15 deployment target.
         .toolbar {
-            if isPresentedAsSheet {
-                ToolbarItem(placement: .cancellationAction) {
+            ToolbarItem(placement: .cancellationAction) {
+                if isPresentedAsSheet {
                     Button("Close", action: onClose)
                 }
             }
