@@ -1331,3 +1331,13 @@
 "Menu" = "Menu";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"Cache" = "Cache";
+"DXMT" = "DXMT";
+"DirectX Driver" = "Pilote DirectX";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Options" = "Options";
+"Vulkan Driver" = "Pilote Vulkan";

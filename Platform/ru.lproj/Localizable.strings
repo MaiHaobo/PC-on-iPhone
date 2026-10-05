@@ -1957,3 +1957,23 @@
 "Menu" = "Меню";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"ANGLE (Metal)" = "ANGLE (Metal)";
+"ANGLE (OpenGL)" = "ANGLE (OpenGL)";
+"Build" = "Сборка";
+"Cache" = "Кэш";
+"DXMT" = "DXMT";
+"DirectX Driver" = "Драйвер DirectX";
+"Down" = "Вниз";
+"FPS Limit" = "Ограничение FPS";
+"KosmicKrisp" = "KosmicKrisp";
+"Left" = "Влево";
+"MoltenVK" = "MoltenVK";
+"Options" = "Параметры";
+"Renderer Backend" = "Бэкенд рендеринга";
+"Right" = "Вправо";
+"Up" = "Вверх";
+"Version" = "Версия";
+"Vulkan Driver" = "Драйвер Vulkan";

@@ -2017,3 +2017,18 @@
 "Menu" = "Menú";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"ANGLE (Metal)" = "ANGLE (Metal)";
+"ANGLE (OpenGL)" = "ANGLE (OpenGL)";
+"Build" = "Compilación";
+"DXMT" = "DXMT";
+"DirectX Driver" = "Controlador DirectX";
+"FPS Limit" = "Límite de FPS";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Options" = "Opciones";
+"Renderer Backend" = "Backend de renderizado";
+"Version" = "Versión";
+"Vulkan Driver" = "Controlador Vulkan";

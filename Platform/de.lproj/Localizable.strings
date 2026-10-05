@@ -1199,3 +1199,20 @@
 "Menu" = "Menü";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"ANGLE (Metal)" = "ANGLE (Metal)";
+"ANGLE (OpenGL)" = "ANGLE (OpenGL)";
+"Build" = "Build";
+"Close" = "Schließen";
+"DXMT" = "DXMT";
+"DirectX Driver" = "DirectX-Treiber";
+"FPS Limit" = "FPS-Limit";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Options" = "Optionen";
+"Renderer Backend" = "Renderer-Backend";
+"Settings" = "Einstellungen";
+"Version" = "Version";
+"Vulkan Driver" = "Vulkan-Treiber";

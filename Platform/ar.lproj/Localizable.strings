@@ -2279,3 +2279,17 @@
 "Menu" = "القائمة";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"Cache" = "الذاكرة المؤقتة";
+"DXMT" = "DXMT";
+"DirectX Driver" = "برنامج تشغيل DirectX";
+"Down" = "أسفل";
+"KosmicKrisp" = "KosmicKrisp";
+"Left" = "يسار";
+"MoltenVK" = "MoltenVK";
+"Options" = "خيارات";
+"Right" = "يمين";
+"Up" = "أعلى";
+"Vulkan Driver" = "برنامج تشغيل Vulkan";

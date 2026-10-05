@@ -2164,3 +2164,12 @@
 "Menu" = "選單";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"DXMT" = "DXMT";
+"DirectX Driver" = "DirectX 驅動程式";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Options" = "選項";
+"Vulkan Driver" = "Vulkan 驅動程式";

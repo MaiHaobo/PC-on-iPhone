@@ -2186,3 +2186,20 @@
 "Menu" = "Menu";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"ANGLE (Metal)" = "ANGLE (Metal)";
+"ANGLE (OpenGL)" = "ANGLE (OpenGL)";
+"Build" = "Build";
+"Cache" = "Cache";
+"DXMT" = "DXMT";
+"DirectX Driver" = "Driver DirectX";
+"Down" = "Giù";
+"KosmicKrisp" = "KosmicKrisp";
+"Left" = "Sinistra";
+"MoltenVK" = "MoltenVK";
+"Right" = "Destra";
+"Up" = "Su";
+"Version" = "Versione";
+"Vulkan Driver" = "Driver Vulkan";

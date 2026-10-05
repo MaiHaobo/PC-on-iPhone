@@ -1519,3 +1519,20 @@
 "Menu" = "Valikko";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"ANGLE (Metal)" = "ANGLE (Metal)";
+"ANGLE (OpenGL)" = "ANGLE (OpenGL)";
+"Build" = "Koontiversio";
+"Cache" = "Välimuisti";
+"DXMT" = "DXMT";
+"DirectX Driver" = "DirectX-ohjain";
+"FPS Limit" = "FPS-raja";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Options" = "Asetukset";
+"Renderer Backend" = "Renderöintitausta";
+"Up" = "Ylös";
+"Version" = "Versio";
+"Vulkan Driver" = "Vulkan-ohjain";

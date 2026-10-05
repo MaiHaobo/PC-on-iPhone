@@ -1320,3 +1320,11 @@
 "Menu" = "메뉴";
 "R1" = "R1";
 "R2" = "R2";
+
+/* Second-pass fill-in: keys absent in this language only */
+
+"DXMT" = "DXMT";
+"DirectX Driver" = "DirectX 드라이버";
+"KosmicKrisp" = "KosmicKrisp";
+"MoltenVK" = "MoltenVK";
+"Vulkan Driver" = "Vulkan 드라이버";
