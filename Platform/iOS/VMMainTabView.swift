@@ -80,8 +80,13 @@ struct VMMainTabView: View {
             selection
         } set: { newValue in
             if newValue == .create {
+                // Present via the local state only. Do NOT also set
+                // data.showNewVMSheet: the VM list still observes it and would
+                // try to present its own wizard sheet in the same transaction,
+                // and the two competing presentations cancel each other out
+                // (the wizard flashes on screen and immediately dismisses on
+                // the first tap).
                 createSheetPresented = true
-                data.showNewVMSheet = true
                 // Snap back to the last real page so the tab highlight does not
                 // get stuck on an empty placeholder.
                 selection = lastContentTab
