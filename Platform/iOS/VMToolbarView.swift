@@ -59,6 +59,16 @@ struct VMToolbarView: View {
             return "chevron.right"
         }
     }
+
+    /// The toggle button sits on this side of the group; collapsing scales
+    /// the buttons toward it so the motion reads as folding into the toggle.
+    private var collapseAnchor: UnitPoint {
+        if location == .topLeft || location == .bottomLeft {
+            return .leading
+        } else {
+            return .trailing
+        }
+    }
     
     private var toolbarToggleOpacity: Double {
         if state.device != nil && !state.isBusy && state.isRunning && isCollapsed && !isMoving {
@@ -155,6 +165,10 @@ struct VMToolbarView: View {
                     #endif
                 }.toolbarButtonStyle(horizontalSizeClass: horizontalSizeClass, verticalSizeClass: verticalSizeClass)
                 .disabled(state.isBusy)
+                // Collapse toward the toggle button so the group appears to
+                // fold into it instead of fading out in place (the glass
+                // morph alone leaves the buttons to fade as blurry circles).
+                .transition(.scale(scale: 0.5, anchor: collapseAnchor).combined(with: .opacity))
             }
             Button {
                 resetIdle()
@@ -403,9 +417,13 @@ private extension View {
     @ViewBuilder
     func animationUniqueID(_ id: (some Hashable & Sendable)?, in namespace: Namespace.ID) -> some View {
         if #available(iOS 26, *) {
+            // Only tag the glass shape. Adding `.matchedGeometryEffect` on
+            // top of `.glassEffectID` runs two competing transition systems
+            // on the same views: buttons that lose their glass morph fade
+            // out as blurry circles while the toggle button's glass merges
+            // with a neighbor and gets stretched by the geometry match.
             self
                 .glassEffectID(id, in: namespace)
-                .matchedGeometryEffect(id: id, in: namespace)
         } else {
             self
                 .matchedGeometryEffect(id: id, in: namespace)
