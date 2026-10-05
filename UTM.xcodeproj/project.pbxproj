@@ -283,6 +283,10 @@
 		84CE3DAC2904C14100FF068B /* InAppSettingsKit in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 84CE3DAB2904C14100FF068B /* InAppSettingsKit */; };
 		84CE3DAE2904C17C00FF068B /* IASKAppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CE3DAD2904C17C00FF068B /* IASKAppSettings.swift */; platformFilter = ios; };
 		282A5CA543507E60B6D1EF98 /* VMCacheSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C419CA8296CD240EE9A5A59 /* VMCacheSettingsView.swift */; platformFilter = ios; };
+		608642177D36CBBF875C340901 /* UTMSettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */; platformFilter = ios; };
+		608642177D36CBBF875C340902 /* UTMSettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */; platformFilter = ios; };
+		EAE775ACDBCD7A180073B5C101 /* UTMSettingsDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */; platformFilter = ios; };
+		EAE775ACDBCD7A180073B5C102 /* UTMSettingsDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */; platformFilter = ios; };
 		2633B08D5345E3839E38EE8D /* VMMainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */; platformFilter = ios; };
 		022B4CF17A74F2EDCAB3F741 /* VMMainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */; platformFilter = ios; };
 		263507AC5370AB9A1A10677F /* VMCacheSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C419CA8296CD240EE9A5A59 /* VMCacheSettingsView.swift */; platformFilter = ios; };
@@ -1932,6 +1936,8 @@
 		84C60FB9268269D700B58C00 /* VMDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMDisplayViewController.swift; sourceTree = "<group>"; };
 		84CE3DAD2904C17C00FF068B /* IASKAppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IASKAppSettings.swift; sourceTree = "<group>"; };
 		2C419CA8296CD240EE9A5A59 /* VMCacheSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMCacheSettingsView.swift; sourceTree = "<group>"; };
+		608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsSections.swift; sourceTree = "<group>"; };
+		EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsDetailViews.swift; sourceTree = "<group>"; };
 		4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMMainTabView.swift; sourceTree = "<group>"; };
 		84CE3DB02904C7A100FF068B /* UTMSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsView.swift; sourceTree = "<group>"; };
 		84CF5DD2288DCE6400D01721 /* VMDisplayHostedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMDisplayHostedView.swift; sourceTree = "<group>"; };
@@ -2961,6 +2967,8 @@
 				CED814EE24C7EB760042F0F1 /* ImagePicker.swift */,
 				84CE3DAD2904C17C00FF068B /* IASKAppSettings.swift */,
 				2C419CA8296CD240EE9A5A59 /* VMCacheSettingsView.swift */,
+				608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */,
+				EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */,
 				4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */,
 				CE08334A2B784FD400522C03 /* RemoteContentView.swift */,
 				841E58D02893AF5400137A20 /* UTMApp.swift */,
@@ -4139,6 +4147,8 @@
 				CE68E5442E3912E0006B3645 /* VMKeyboardShortcutsView.swift in Sources */,
 				84CE3DAE2904C17C00FF068B /* IASKAppSettings.swift in Sources */,
 				282A5CA543507E60B6D1EF98 /* VMCacheSettingsView.swift in Sources */,
+				608642177D36CBBF875C340901 /* UTMSettingsSections.swift in Sources */,
+				EAE775ACDBCD7A180073B5C101 /* UTMSettingsDetailViews.swift in Sources */,
 				2633B08D5345E3839E38EE8D /* VMMainTabView.swift in Sources */,
 				84C2E8652AA429E800B17308 /* VMWizardContent.swift in Sources */,
 				841E58CB28937EE200137A20 /* UTMExternalSceneDelegate.swift in Sources */,
@@ -4467,6 +4477,8 @@
 				84F90A00289488F90008DBE2 /* MenuLabel.swift in Sources */,
 				84CE3DAF2904C17C00FF068B /* IASKAppSettings.swift in Sources */,
 				263507AC5370AB9A1A10677F /* VMCacheSettingsView.swift in Sources */,
+				608642177D36CBBF875C340902 /* UTMSettingsSections.swift in Sources */,
+				EAE775ACDBCD7A180073B5C102 /* UTMSettingsDetailViews.swift in Sources */,
 				022B4CF17A74F2EDCAB3F741 /* VMMainTabView.swift in Sources */,
 				84C4D9032880CA8A00EC3B2B /* VMSettingsAddDeviceMenuView.swift in Sources */,
 				CEA45E5A263519B5002FA97D /* VMConfigSystemView.swift in Sources */,

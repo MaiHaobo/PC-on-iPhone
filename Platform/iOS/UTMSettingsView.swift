@@ -15,253 +15,144 @@
 //
 
 import SwiftUI
-import InAppSettingsKit
 
+/// Settings screen, rebuilt as a native SwiftUI `NavigationSplitView` that
+/// mirrors the system Settings app.
+///
+/// Earlier revisions embedded `IASKAppSettingsViewController` and hijacked its
+/// navigation stack to fake a split view, which broke in four ways (blank
+/// second-level panes in portrait, a stray Done button, missing rounded
+/// corners, and pushes landing in the wrong column). This version drops
+/// InAppSettingsKit entirely: the list is a plain SwiftUI `List` in the system
+/// `.insetGrouped` style, so the corners, spacing and navigation behaviour are
+/// all Apple's defaults.
+///
+/// Navigation uses the canonical `NavigationSplitView` pattern: a
+/// `NavigationLink(value:)` in the sidebar plus a matching
+/// `.navigationDestination(for:)`. On wide layouts (iPad, iPhone landscape) the
+/// destination appears in the detail column; on narrow layouts (iPhone
+/// portrait) the split view collapses and the destination is pushed on top of
+/// the list — one structure, correct in both orientations, with no manual size
+/// class juggling.
+///
+/// The "advanced" toggle at the top switches between a compact set of the most
+/// used groups and the full set. Every row reads and writes the same
+/// `UserDefaults` keys the old `Settings.bundle/Root.plist` used, so an
+/// over-the-top install keeps the user's existing preferences.
 struct UTMSettingsView: View {
     /// `true` when shown as a modal sheet (has a "Close" button),
     /// `false` when hosted as the root of a tab (nothing to close).
     var isPresentedAsSheet: Bool = true
 
-    /// Shared between the two columns: the left column hands a settings pane to
-    /// the navigation controller owned by the right column.
-    @StateObject private var navigationModel = SettingsNavigationModel()
-
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
-    private var hasContainer: Bool {
-        #if WITH_JIT
-        jb_has_container()
-        #else
-        true
-        #endif
-    }
+    /// Drives the compact vs. full list. Persisted so the choice survives
+    /// relaunches.
+    @AppStorage("ShowAdvancedSettings") private var showAdvanced = false
 
     var body: some View {
-        // Two-column layout mirroring the VM list screen: the left column holds
-        // the settings list, the right column shows whatever pane the user
-        // drills into (Cache, License, …).
-        //
-        // `IASKAppSettingsViewController` pushes its child panes through its own
-        // `navigationController` and exposes no hook to intercept that, so it is
-        // given an `InterceptingNavigationController` which diverts every pushed
-        // pane to the right column instead of stacking it on the list.
-        Group {
-            if #available(iOS 16, *) {
-                NavigationSplitView {
-                    SettingsListColumn(isPresentedAsSheet: isPresentedAsSheet,
-                                       hasContainer: hasContainer,
-                                       onClose: { presentationMode.wrappedValue.dismiss() })
-                        .environmentObject(navigationModel)
-                } detail: {
-                    SettingsDetailColumn()
-                        .environmentObject(navigationModel)
-                }
-                .navigationSplitViewStyle(.balanced)
-                // The split view shows both columns only at regular width;
-                // keep the interception logic in sync with that.
-                .onAppear { navigationModel.isDetachedDetailVisible = isRegularWidth }
-                .onChange(of: horizontalSizeClass) { _ in
-                    navigationModel.isDetachedDetailVisible = isRegularWidth
-                }
-            } else {
-                NavigationView {
-                    SettingsListColumn(isPresentedAsSheet: isPresentedAsSheet,
-                                       hasContainer: hasContainer,
-                                       onClose: { presentationMode.wrappedValue.dismiss() })
-                        .environmentObject(navigationModel)
-                    SettingsDetailColumn()
-                        .environmentObject(navigationModel)
-                }
-            }
+        NavigationSplitView {
+            SettingsSidebar(isPresentedAsSheet: isPresentedAsSheet,
+                            showAdvanced: $showAdvanced,
+                            onClose: { presentationMode.wrappedValue.dismiss() })
+        } detail: {
+            SettingsDetailPlaceholder()
         }
-    }
-
-    private var isRegularWidth: Bool {
-        horizontalSizeClass == .regular
+        .navigationSplitViewStyle(.balanced)
     }
 }
 
-/// Shared bridge between the settings list and the detail column.
-final class SettingsNavigationModel: ObservableObject {
-    /// Navigation controller hosted by the detail column; receives the panes
-    /// that InAppSettingsKit tries to push. Created up-front so the left column
-    /// can always reach it, regardless of view-update ordering.
-    let detailNavigation: UINavigationController
+// MARK: - Panes
 
-    /// `true` only while the detail column is actually on screen next to the
-    /// list. When it is collapsed (iPhone portrait) the left column must keep
-    /// pushing panes normally, otherwise they would be pushed into an
-    /// off-screen navigation controller and appear to do nothing.
-    @Published var isDetachedDetailVisible = false
-
-    init() {
-        let nav = UINavigationController()
-        nav.navigationBar.prefersLargeTitles = false
-        detailNavigation = nav
-    }
+/// Destinations reachable from the settings list. Everything that used to be a
+/// child pane in `Root.plist` is one of these.
+enum SettingsPane: Hashable {
+    case cache
+    case license
+    case jitStreamer
 }
 
-// MARK: - Left column
+// MARK: - Sidebar (the list)
 
-/// Wraps `IASKAppSettingsViewController` so that its child-pane navigation is
-/// redirected into the detail (right) column.
-private struct SettingsListColumn: UIViewControllerRepresentable {
+/// The settings list itself: a native grouped `List` with the compact/full
+/// toggle at the top. Rows that open a pane are `NavigationLink(value:)`, which
+/// fills the detail column on wide layouts and pushes on narrow ones.
+private struct SettingsSidebar: View {
     let isPresentedAsSheet: Bool
-    let hasContainer: Bool
+    @Binding var showAdvanced: Bool
     let onClose: () -> Void
 
-    @EnvironmentObject private var navigationModel: SettingsNavigationModel
-
-    func makeUIViewController(context: Context) -> InterceptingNavigationController {
-        let settings = UTMSettingsViewController()
-        settings.delegate = context.coordinator
-        settings.neverShowPrivacySettings = !hasContainer
-        settings.showCreditsFooter = false
-        settings.navigationItem.title = NSLocalizedString("Settings", comment: "")
-        settings.navigationItem.largeTitleDisplayMode = .never
-        if isPresentedAsSheet {
-            settings.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("Close", comment: ""),
-                style: .plain,
-                target: context.coordinator,
-                action: #selector(Coordinator.close)
-            )
-        }
-
-        let nav = InterceptingNavigationController(rootViewController: settings)
-        nav.navigationBar.prefersLargeTitles = false
-        // Divert every pane IASK pushes to the detail column, but only when the
-        // two columns are actually visible side by side. In a collapsed layout
-        // (iPhone portrait) the detail column is off-screen, so the pane would
-        // become unreachable — fall back to the standard push in that case.
-        nav.onPush = { [weak navigationModel] viewController in
-            guard let navigationModel, navigationModel.isDetachedDetailVisible else {
-                return false  // no visible detail column: normal push
+    var body: some View {
+        List {
+            Section {
+                Toggle(isOn: $showAdvanced) {
+                    Label {
+                        Text("Show Advanced Settings")
+                    } icon: {
+                        Image(systemName: "slider.horizontal.3")
+                    }
+                }
+            } footer: {
+                Text("Show the full set of options, including graphics, gestures, cursor and gamepad.")
             }
-            navigationModel.detailNavigation.pushViewController(viewController, animated: true)
-            return true
+
+            SettingsCoreSections()
+
+            if showAdvanced {
+                SettingsAdvancedSections()
+            }
         }
-        context.coordinator.onClose = onClose
-        return nav
-    }
-
-    func updateUIViewController(_ uiViewController: InterceptingNavigationController, context: Context) {
-        guard let settings = uiViewController.viewControllers.first as? IASKAppSettingsViewController else {
-            return
+        .listStyle(.insetGrouped)
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.large)
+        .navigationDestination(for: SettingsPane.self) { pane in
+            SettingsDetailColumn(pane: pane)
         }
-        settings.neverShowPrivacySettings = !hasContainer
-        settings.showCreditsFooter = false
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-
-    final class Coordinator: NSObject, IASKSettingsDelegate {
-        var onClose: (() -> Void)?
-
-        func settingsViewControllerDidEnd(_ settingsViewController: IASKAppSettingsViewController) {
-        }
-
-        @objc func close() {
-            onClose?()
+        .toolbar {
+            if isPresentedAsSheet {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close", action: onClose)
+                }
+            }
         }
     }
 }
 
-/// A `UINavigationController` that lets a closure decide what happens to pushed
-/// view controllers. Returning `true` from `onPush` suppresses the standard
-/// push, which is how InAppSettingsKit's child panes are diverted.
-final class InterceptingNavigationController: UINavigationController {
-    var onPush: ((UIViewController) -> Bool)?
+// MARK: - Detail column
 
-    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        if let onPush, onPush(viewController) {
-            return
-        }
-        super.pushViewController(viewController, animated: animated)
-    }
-}
-
-// MARK: - Right column
-
-/// Hosts the diverted settings pane. Empty (grouped background) until the user
-/// opens one, matching the system Settings app.
+/// The pane shown for a given `SettingsPane`.
 private struct SettingsDetailColumn: View {
-    @EnvironmentObject private var navigationModel: SettingsNavigationModel
+    let pane: SettingsPane
 
     var body: some View {
-        NavigationControllerView(navigationController: navigationModel.detailNavigation)
+        switch pane {
+        case .cache:
+            VMCacheSettingsView()
+        case .license:
+            SettingsLicenseView()
+        case .jitStreamer:
+            SettingsJitStreamerView()
+        }
     }
 }
 
-/// Bridges an externally created `UINavigationController` into SwiftUI.
-private struct NavigationControllerView: UIViewControllerRepresentable {
-    let navigationController: UINavigationController
-
-    func makeUIViewController(context: Context) -> UINavigationController {
-        navigationController
-    }
-
-    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
-    }
-}
-
-// MARK: - Rounded group styling
-
-/// InAppSettingsKit renders its rows with a stock `UITableView` in the
-/// `.insetGrouped` style. That style draws the group corners with a private
-/// layer, so the radius cannot be changed through `layer.cornerRadius` on a
-/// cell or its `backgroundView` (which is `nil` in inset-grouped tables).
-///
-/// Since iOS 26 the corner geometry is exposed on the cell as
-/// `cornerConfiguration`, which is exactly what this app deploys to. The
-/// radius is rewritten on every layout pass because UIKit recreates the
-/// configuration when cells are reused or the table is reloaded. Older systems
-/// keep the stock appearance.
-final class UTMSettingsViewController: IASKAppSettingsViewController {
-    /// Matches the stock `.insetGrouped` look used by the SwiftUI `List` on the
-    /// Cache pane, so both settings screens read as one design. UIKit applies
-    /// this value by default on iOS 26; the override below only exists to keep
-    /// it stable if the system default ever changes.
-    private static let cornerRadius: CGFloat = 26
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        applyRoundedGroupStyle()
-    }
-
-    private func applyRoundedGroupStyle() {
-        guard #available(iOS 26, *) else {
-            return
+/// Neutral placeholder shown in the detail column before a row is selected.
+private struct SettingsDetailPlaceholder: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "gearshape")
+                .font(.system(size: 44))
+                .foregroundStyle(.secondary)
+            Text("Settings")
+                .font(.title2.weight(.semibold))
+            Text("Select an option from the list to see its details.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
-        // `.fixed(_:)` is required here: `UICornerRadius` conforms to
-        // `ExpressibleByFloatLiteral`, so a literal such as `.corners(radius:
-        // 12.0)` compiles, but a stored `CGFloat` variable does not convert
-        // implicitly.
-        let radius = UICornerRadius.fixed(Self.cornerRadius)
-        for cell in tableView.visibleCells {
-            guard let indexPath = tableView.indexPath(for: cell) else {
-                continue
-            }
-            let rows = tableView.numberOfRows(inSection: indexPath.section)
-            if rows == 1 {
-                // Single-row group: round all four corners.
-                cell.cornerConfiguration = .corners(radius: radius)
-            } else if indexPath.row == 0 {
-                cell.cornerConfiguration = .corners(topLeftRadius: radius,
-                                                    topRightRadius: radius,
-                                                    bottomLeftRadius: nil,
-                                                    bottomRightRadius: nil)
-            } else if indexPath.row == rows - 1 {
-                cell.cornerConfiguration = .corners(topLeftRadius: nil,
-                                                    topRightRadius: nil,
-                                                    bottomLeftRadius: radius,
-                                                    bottomRightRadius: radius)
-            }
-            // Middle rows keep the default (square) configuration.
-        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(uiColor: .systemGroupedBackground))
     }
 }
 
