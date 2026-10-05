@@ -44,6 +44,7 @@ struct VMMainTabView: View {
     var body: some View {
         TabView(selection: tabSelection) {
             VMNavigationListView()
+                .environment(\.isInTabBar, true)
                 .tabItem {
                     Label("Virtual Machines", systemImage: "desktopcomputer")
                 }

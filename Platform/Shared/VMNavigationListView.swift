@@ -17,6 +17,21 @@
 import SwiftUI
 import TipKit
 
+/// `true` when the view is hosted inside `VMMainTabView`. The tab bar already
+/// provides the "new VM" and "settings" entries, so the duplicate toolbar
+/// buttons are suppressed. Defaults to `false`, which keeps the buttons for
+/// the iOS 15 fallback layout that has no tab bar.
+private struct IsInTabBarKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    var isInTabBar: Bool {
+        get { self[IsInTabBarKey.self] }
+        set { self[IsInTabBarKey.self] = newValue }
+    }
+}
+
 struct VMNavigationListView: View {
     @EnvironmentObject private var data: UTMData
     @State private var confirmAction: ConfirmAction?
@@ -128,6 +143,7 @@ private struct VMListModifier: ViewModifier {
     @EnvironmentObject private var data: UTMData
     @State private var settingsPresented = false
     @State private var sheetPresented = false
+    @Environment(\.isInTabBar) private var isInTabBar
 
     private let _createTip: Any?
 
@@ -162,16 +178,18 @@ private struct VMListModifier: ViewModifier {
             #else
             #if !WITH_REMOTE // FIXME: implement remote feature
             ToolbarItem(placement: .navigationBarLeading) {
-                if #available(iOS 17, visionOS 99, *) {
-                    Button {
-                        createTip.invalidate(reason: .actionPerformed)
-                        data.newVM()
-                    } label: {
-                        Image(systemName: "plus") // SwiftUI bug: tip won't show up if this is a label
-                    }.help("Create a new VM")
-                    .popoverTip(createTip, arrowEdge: .top)
-                } else {
-                    newButton
+                if !isInTabBar {
+                    if #available(iOS 17, visionOS 99, *) {
+                        Button {
+                            createTip.invalidate(reason: .actionPerformed)
+                            data.newVM()
+                        } label: {
+                            Image(systemName: "plus") // SwiftUI bug: tip won't show up if this is a label
+                        }.help("Create a new VM")
+                        .popoverTip(createTip, arrowEdge: .top)
+                    } else {
+                        newButton
+                    }
                 }
             }
             #endif
@@ -191,8 +209,10 @@ private struct VMListModifier: ViewModifier {
             #endif
             #if !os(visionOS) && !WITH_REMOTE
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Settings") {
-                    settingsPresented.toggle()
+                if !isInTabBar {
+                    Button("Settings") {
+                        settingsPresented.toggle()
+                    }
                 }
             }
             #endif
