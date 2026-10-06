@@ -42,8 +42,8 @@ struct ConfirmationIcon: View {
     /// Glyph drawn on top of the prominent fill. Rendered in the style's
     /// foreground colour (white), so no explicit colour is applied here.
     var systemName: String = "checkmark"
-    /// Symbol scale relative to the button's (or label's) text size.
-    var imageScale: Image.Scale = .medium
+    /// Point size of the glyph.
+    var pointSize: CGFloat = 17
     /// Additional horizontal padding for callers that want a wider capsule.
     var horizontalPadding: CGFloat = 4
     /// Additional vertical padding for callers that want a taller capsule.
@@ -51,8 +51,9 @@ struct ConfirmationIcon: View {
 
     var body: some View {
         Image(systemName: systemName)
-            .imageScale(imageScale)
-            .fontWeight(.semibold)
+            // `.fontWeight(_:)` is iOS 16+; the deployment target is iOS 15,
+            // so weight is applied through the font descriptor instead.
+            .font(.system(size: pointSize, weight: .semibold))
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
     }
@@ -67,22 +68,22 @@ struct ConfirmationIcon: View {
 struct ConfirmationButton: View {
     let title: LocalizedStringKey
     let systemName: String
-    let imageScale: Image.Scale
+    let pointSize: CGFloat
     let action: () -> Void
 
     init(_ title: LocalizedStringKey,
          systemName: String = "checkmark",
-         imageScale: Image.Scale = .medium,
+         pointSize: CGFloat = 17,
          action: @escaping () -> Void) {
         self.title = title
         self.systemName = systemName
-        self.imageScale = imageScale
+        self.pointSize = pointSize
         self.action = action
     }
 
     var body: some View {
         Button(action: action) {
-            ConfirmationIcon(systemName: systemName, imageScale: imageScale)
+            ConfirmationIcon(systemName: systemName, pointSize: pointSize)
         }
         .buttonStyle(.borderedProminent)
         .accessibilityLabel(Text(title))
