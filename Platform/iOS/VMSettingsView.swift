@@ -88,10 +88,7 @@ struct VMSettingsView: View {
                         .labelStyle(.iconOnly)
                 }
             }, saveContent: {
-                Button(action: save) {
-                    Label("Save", systemImage: "checkmark")
-                        .labelStyle(.iconOnly)
-                }
+                ConfirmationButton("Save", action: save)
             })
             .fileImporter(isPresented: $globalFileImporterShim.isPresented, allowedContentTypes: globalFileImporterShim.allowedContentTypes, onCompletion: globalFileImporterShim.onCompletion)
         }

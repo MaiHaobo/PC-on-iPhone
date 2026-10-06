@@ -61,7 +61,7 @@ fileprivate struct WizardToolbar: ViewModifier {
                             .labelStyle(.iconOnly)
                     }
                 } else if wizardState.currentPage == .summary {
-                    Button(action: {
+                    ConfirmationButton("Save", action: {
                         onDismiss()
                         data.busyWorkAsync {
                             let config = try await wizardState.generateConfig()
@@ -79,10 +79,7 @@ fileprivate struct WizardToolbar: ViewModifier {
                                 await data.showSettingsForCurrentVM()
                             }
                         }
-                    }) {
-                        Label("Save", systemImage: "checkmark")
-                            .labelStyle(.iconOnly)
-                    }
+                    })
                 }
             }
         }

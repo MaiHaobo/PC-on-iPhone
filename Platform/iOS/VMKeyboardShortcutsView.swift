@@ -107,15 +107,13 @@ private struct NewKeyboardShortcutView: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 EditToggleButton()
-                Button {
+                ConfirmationButton("Save", action: {
                     if !newShortcut.isEmpty {
                         keyboardShortcuts.append(newShortcut)
                     }
                     presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Label("Save", systemImage: "checkmark")
-                        .labelStyle(.iconOnly)
-                }.disabled(newShortcut.isEmpty)
+                })
+                .disabled(newShortcut.isEmpty)
             }
         }
         .onAppear {

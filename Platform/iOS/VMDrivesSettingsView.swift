@@ -111,10 +111,7 @@ private struct CreateDrive: View {
                         }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button(action: done) {
-                            Label("Done", systemImage: "checkmark")
-                                .labelStyle(.iconOnly)
-                        }
+                        ConfirmationButton("Done", action: done)
                     }
                 }
         }.navigationViewStyle(.stack)

@@ -81,12 +81,10 @@ struct QEMUArgumentEdit: View {
                             .labelStyle(.iconOnly)
                     }
                 }
-                Button {
+                ConfirmationButton("Save", action: {
                     closePopup(after: { onSave(argument) })
-                } label: {
-                    Label("Save", systemImage: "checkmark")
-                        .labelStyle(.iconOnly)
-                }.disabled(argument.string.isEmpty)
+                })
+                .disabled(argument.string.isEmpty)
             }
         }
     }
