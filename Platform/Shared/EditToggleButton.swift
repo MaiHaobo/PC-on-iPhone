@@ -21,29 +21,39 @@ import SwiftUI
 /// Toggles the enclosing list's edit mode through the `editMode` environment,
 /// exactly like the system button does, but renders an icon instead of a
 /// localised text title: `arrow.up.arrow.down.circle` while inactive (the
-/// mode is for reordering/deleting rows) and the app-wide blue-circle white
-/// checkmark (`ConfirmationIcon`) while active (tapping again finishes
+/// mode is for reordering/deleting rows) and the app-wide prominent checkmark
+/// (`ConfirmationButton`'s style) while active (tapping again finishes
 /// editing), matching the system Files app's selection-mode Done button.
+///
+/// The two states use different button styles, so they are built as separate
+/// buttons rather than one button with a conditional label: the system style
+/// modifiers apply per-button, not per-label.
 struct EditToggleButton: View {
     @Environment(\.editMode) private var editMode
 
     private var isActive: Bool { editMode?.wrappedValue == .active }
 
+    private func toggle() {
+        switch editMode?.wrappedValue {
+        case .active:
+            editMode?.wrappedValue = .inactive
+        default:
+            editMode?.wrappedValue = .active
+        }
+    }
+
     var body: some View {
-        Button {
-            switch editMode?.wrappedValue {
-            case .active:
-                editMode?.wrappedValue = .inactive
-            default:
-                editMode?.wrappedValue = .active
-            }
-        } label: {
-            if isActive {
+        if isActive {
+            Button(action: toggle) {
                 ConfirmationIcon(systemName: "checkmark")
-            } else {
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityLabel(Text("Done"))
+        } else {
+            Button(action: toggle) {
                 Image(systemName: "arrow.up.arrow.down.circle")
             }
+            .accessibilityLabel(Text("Edit"))
         }
-        .accessibilityLabel(Text(isActive ? "Done" : "Edit"))
     }
 }

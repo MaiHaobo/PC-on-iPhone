@@ -18,64 +18,73 @@ import SwiftUI
 
 /// The app-wide style for "confirm" buttons in navigation bars.
 ///
-/// A bare `checkmark` glyph is hard to read at toolbar size and gives no
-/// affordance that it is tappable. Every confirm button therefore draws the
-/// same treatment the system Files app uses in selection mode: a blue filled
-/// circle with a white glyph on top. Keeping it in one place means the
-/// Save/Done buttons across the app (settings, drives, keyboard shortcuts,
-/// wizard) can never drift apart.
+/// Confirmation actions used to draw a hand-rolled blue shape behind the
+/// glyph, which meant their metrics (corner radius, glyph weight, hit area)
+/// had to be maintained by hand and drifted from what the system does. They
+/// now use the native `borderedProminent` button style instead: SwiftUI
+/// supplies the blue fill, the white foreground, the corner rounding and a
+/// 44pt-class hit target, and the result adapts automatically to platform,
+/// Dynamic Type and accessibility settings.
 ///
 /// Usage:
 /// ```swift
-/// Button(action: save) {
-///     ConfirmationIcon()          // blue circle + white checkmark
-/// }
+/// ConfirmationButton("Save") { save() }          // prominent blue, white checkmark
+/// ```
+///
+/// The `ConfirmationIcon` shim is kept for call sites that need the bare
+/// glyph rendered inside their own `Button` (for example when the button must
+/// carry a `disabled(_:)` modifier):
+/// ```swift
+/// Button(action: save) { ConfirmationIcon() }
+///     .buttonStyle(.borderedProminent)
 /// ```
 struct ConfirmationIcon: View {
-    /// Glyph drawn in white on top of the blue fill.
+    /// Glyph drawn on top of the prominent fill. Rendered in the style's
+    /// foreground colour (white), so no explicit colour is applied here.
     var systemName: String = "checkmark"
-    /// Diameter of the circle.
-    var size: CGFloat = 28
-    /// Fill colour. Confirmation actions are blue throughout the app.
-    var color: Color = .accentColor
+    /// Symbol scale relative to the button's (or label's) text size.
+    var imageScale: Image.Scale = .medium
+    /// Additional horizontal padding for callers that want a wider capsule.
+    var horizontalPadding: CGFloat = 4
+    /// Additional vertical padding for callers that want a taller capsule.
+    var verticalPadding: CGFloat = 4
 
     var body: some View {
-        ZStack {
-            Circle()
-                .fill(color)
-                .frame(width: size, height: size)
-            Image(systemName: systemName)
-                .font(.system(size: size * 0.5, weight: .bold))
-                .foregroundColor(.white)
-        }
+        Image(systemName: systemName)
+            .imageScale(imageScale)
+            .fontWeight(.semibold)
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
     }
 }
 
 /// A navigation-bar button that matches `ConfirmationIcon`.
 ///
-/// Wraps the icon in a plain `Button` and adds the localised text as the
-/// accessibility label, so VoiceOver keeps announcing "Save"/"Done" even
-/// though the visible title is gone.
+/// Uses the native prominent button style so the blue fill and white glyph
+/// come from SwiftUI rather than from custom drawing, and exposes the
+/// localised text as the accessibility label so VoiceOver keeps announcing
+/// "Save"/"Done" even though the visible title is gone.
 struct ConfirmationButton: View {
     let title: LocalizedStringKey
     let systemName: String
-    let size: CGFloat
+    let imageScale: Image.Scale
     let action: () -> Void
 
     init(_ title: LocalizedStringKey,
          systemName: String = "checkmark",
-         size: CGFloat = 28,
+         imageScale: Image.Scale = .medium,
          action: @escaping () -> Void) {
         self.title = title
         self.systemName = systemName
-        self.size = size
+        self.imageScale = imageScale
         self.action = action
     }
 
     var body: some View {
         Button(action: action) {
-            ConfirmationIcon(systemName: systemName, size: size)
+            ConfirmationIcon(systemName: systemName, imageScale: imageScale)
         }
+        .buttonStyle(.borderedProminent)
         .accessibilityLabel(Text(title))
     }
 }
