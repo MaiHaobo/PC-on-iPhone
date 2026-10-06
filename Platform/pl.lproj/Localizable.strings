@@ -1392,3 +1392,6 @@
 "MoltenVK" = "MoltenVK";
 "Options" = "Opcje";
 "Vulkan Driver" = "Sterownik Vulkan";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Update Interface" = "Zaktualizuj interfejs";

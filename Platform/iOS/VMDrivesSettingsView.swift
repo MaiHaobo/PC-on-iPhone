@@ -38,12 +38,12 @@ struct VMDrivesSettingsView: View {
         Button {
             isImportDriveShown.toggle()
         } label: {
-            Text("Import Drive…")
+            Label("Import Drive…", systemImage: "square.and.arrow.down")
         }
         Button {
             isCreateDriveShown.toggle()
         } label: {
-            Text("New Drive…")
+            Label("New Drive…", systemImage: "plus")
         }
         .sheet(isPresented: $isCreateDriveShown) {
             CreateDrive(newDrive: UTMQemuConfigurationDrive(forArchitecture: config.system.architecture, target: config.system.target), onDismiss: newDrive)
@@ -105,10 +105,16 @@ private struct CreateDrive: View {
             VMConfigDriveCreateView(config: $newDrive)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel", action: cancel)
+                        Button(action: cancel) {
+                            Label("Cancel", systemImage: "xmark")
+                                .labelStyle(.iconOnly)
+                        }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done", action: done)
+                        Button(action: done) {
+                            Label("Done", systemImage: "checkmark")
+                                .labelStyle(.iconOnly)
+                        }
                     }
                 }
         }.navigationViewStyle(.stack)

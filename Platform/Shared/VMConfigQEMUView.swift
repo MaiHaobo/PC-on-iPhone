@@ -49,8 +49,10 @@ struct VMConfigQEMUView: View {
                     Toggle(isOn: $config.qemu.hasDebugLog, label: {
                         Text("Debug Logging")
                     })
-                    Button("Export Debug Log") {
+                    Button {
                         showExportLog.toggle()
+                    } label: {
+                        Label("Export Debug Log", systemImage: "square.and.arrow.up")
                     }.modifier(VMShareItemModifier(isPresented: $showExportLog, shareItem: exportDebugLog()))
                     .disabled(!logExists)
                 }

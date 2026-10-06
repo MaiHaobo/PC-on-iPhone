@@ -65,8 +65,10 @@ struct VMConfigNetworkView: View {
                 
                 HStack {
                     DefaultTextField("MAC Address", text: $config.macAddress, prompt: "00:00:00:00:00:00")
-                    Button("Random") {
+                    Button {
                         config.macAddress = UTMQemuConfigurationNetwork.randomMacAddress()
+                    } label: {
+                        Label("Random", systemImage: "dice")
                     }
                 }
 

@@ -34,15 +34,20 @@ struct VMKeyboardShortcutsView: View {
                 }.onMove { indexSet, offset in
                     keyboardShortcuts.move(fromOffsets: indexSet, toOffset: offset)
                 }
-                NavigationLink("Add…") {
+                NavigationLink {
                     NewKeyboardShortcutView(keyboardShortcuts: $keyboardShortcuts)
+                } label: {
+                    Label("Add…", systemImage: "plus.circle")
                 }
             }.navigationTitle("Keyboard Shortcut")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     EditButton()
-                    Button("Close") {
+                    Button {
                         presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Label("Close", systemImage: "xmark")
+                            .labelStyle(.iconOnly)
                     }
                 }
             }
@@ -82,22 +87,27 @@ private struct NewKeyboardShortcutView: View {
                         }
                     }
                 }.pickerStyle(.wheel)
-                Button("Add") {
+                Button {
                     if let key = newKey {
                         newShortcut.append(key)
                     }
                     newKey = nil
+                } label: {
+                    Label("Add", systemImage: "plus.circle")
                 }.disabled(newKey == nil)
             }
         }.navigationTitle("New Keyboard Shortcut")
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 EditButton()
-                Button("Save") {
+                Button {
                     if !newShortcut.isEmpty {
                         keyboardShortcuts.append(newShortcut)
                     }
                     presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Label("Save", systemImage: "checkmark")
+                        .labelStyle(.iconOnly)
                 }.disabled(newShortcut.isEmpty)
             }
         }

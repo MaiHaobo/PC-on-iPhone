@@ -38,13 +38,17 @@ struct FileBrowseField: View {
                 .truncationMode(.head)
                 .disabled(true)
             if hasClearButton {
-                Button("Clear") {
+                Button {
                     url = nil
+                } label: {
+                    Label("Clear", systemImage: "xmark.circle")
                 }
             }
-            Button("Browse…") {
+            Button {
                 onBrowse()
                 isFileImporterPresented.toggle()
+            } label: {
+                Label("Browse…", systemImage: "folder")
             }
         }
         .accessibilityElement(children: .contain)
@@ -62,14 +66,14 @@ struct FileBrowseField: View {
             Button {
                 url = nil
             } label: {
-                Text("Clear")
+                Label("Clear", systemImage: "xmark.circle")
             }
         }
         Button {
             onBrowse()
             isFileImporterPresented.toggle()
         } label: {
-            Text("Browse…")
+            Label("Browse…", systemImage: "folder")
         }
         #endif
     }

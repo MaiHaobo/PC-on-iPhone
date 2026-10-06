@@ -2293,3 +2293,7 @@
 "Right" = "يمين";
 "Up" = "أعلى";
 "Vulkan Driver" = "برنامج تشغيل Vulkan";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Import Drive…" = "استيراد قرص…";
+"New Drive…" = "قرص جديد…";

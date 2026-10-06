@@ -1216,3 +1216,13 @@
 "Settings" = "Einstellungen";
 "Version" = "Version";
 "Vulkan Driver" = "Vulkan-Treiber";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Done" = "Erledigt";
+"Continue" = "Weiter";
+"Add" = "Hinzufügen";
+"Random" = "Zufällig";
+"Import Drive…" = "Laufwerk importieren…";
+"New Drive…" = "Neues Laufwerk…";
+"Export Debug Log" = "Debug-Protokoll exportieren";
+"Update Interface" = "Schnittstelle aktualisieren";

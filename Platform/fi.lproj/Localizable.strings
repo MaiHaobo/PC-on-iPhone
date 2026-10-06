@@ -1536,3 +1536,8 @@
 "Up" = "Ylös";
 "Version" = "Versio";
 "Vulkan Driver" = "Vulkan-ohjain";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Add" = "Lisää";
+"Add…" = "Lisää…";
+"Update Interface" = "Päivitä väylä";

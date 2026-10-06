@@ -1977,3 +1977,6 @@
 "Up" = "Вверх";
 "Version" = "Версия";
 "Vulkan Driver" = "Драйвер Vulkan";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Add" = "Добавить";

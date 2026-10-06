@@ -2203,3 +2203,6 @@
 "Up" = "Su";
 "Version" = "Versione";
 "Vulkan Driver" = "Driver Vulkan";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Add" = "Aggiungi";

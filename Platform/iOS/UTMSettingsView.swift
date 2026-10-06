@@ -140,7 +140,10 @@ private struct SettingsSidebar: View {
         .toolbar {
             if isPresentedAsSheet {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close", action: onClose)
+                    Button(action: onClose) {
+                        Label("Close", systemImage: "xmark")
+                            .labelStyle(.iconOnly)
+                    }
                 }
             }
         }
@@ -167,7 +170,10 @@ private struct SettingsSidebarLegacy: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if isPresentedAsSheet {
-                    Button("Close", action: onClose)
+                    Button(action: onClose) {
+                        Label("Close", systemImage: "xmark")
+                            .labelStyle(.iconOnly)
+                    }
                 }
             }
         }

@@ -36,8 +36,10 @@ struct VMConfigQEMUArgumentsView: View {
                 }.onMove { offsets, destination in
                     config.qemu.additionalArguments.move(fromOffsets: offsets, toOffset: destination)
                 }
-                NavigationLink("New") {
+                NavigationLink {
                     QEMUArgumentEdit(onSave: { config.qemu.additionalArguments.append($0) })
+                } label: {
+                    Label("New", systemImage: "plus")
                 }
             }
             VMConfigQEMUCommandLineView(config: config)
@@ -68,12 +70,18 @@ struct QEMUArgumentEdit: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 if let onDelete = onDelete {
-                    Button("Delete", role: .destructive) {
+                    Button(role: .destructive) {
                         closePopup(after: onDelete)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                            .labelStyle(.iconOnly)
                     }
                 }
-                Button("Save") {
+                Button {
                     closePopup(after: { onSave(argument) })
+                } label: {
+                    Label("Save", systemImage: "checkmark")
+                        .labelStyle(.iconOnly)
                 }.disabled(argument.string.isEmpty)
             }
         }

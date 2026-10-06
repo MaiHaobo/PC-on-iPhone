@@ -2032,3 +2032,7 @@
 "Renderer Backend" = "Backend de renderizado";
 "Version" = "Versión";
 "Vulkan Driver" = "Controlador Vulkan";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Add" = "Agregar";
+"Update Interface" = "Actualizar interfaz";

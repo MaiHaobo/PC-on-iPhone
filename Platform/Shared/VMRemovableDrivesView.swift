@@ -75,7 +75,9 @@ struct VMRemovableDrivesView: View {
                             SharedPath(path: qemuVM.sharedDirectoryURL?.path)
                         }.fixedSize()
                     } else {
-                        Button("Browse…", action: { shareDirectoryFileImportPresented.toggle() })
+                        Button(action: { shareDirectoryFileImportPresented.toggle() }) {
+                            Label("Browse…", systemImage: "folder")
+                        }
                     }
                 }.fileImporter(isPresented: $shareDirectoryFileImportPresented, allowedContentTypes: [Self.shareDirectoryUTType], onCompletion: selectShareDirectory)
                     .disabled(mode == .virtfs && vm.state != .stopped)

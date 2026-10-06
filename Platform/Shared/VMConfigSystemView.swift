@@ -242,9 +242,9 @@ struct CPUFlagsOptions: View {
                     showAllFlags.toggle()
                 } label: {
                     if (showAllFlags) {
-                        Text("Hide Unused…")
+                        Label("Hide Unused…", systemImage: "eye.slash")
                     } else {
-                        Text("Show All…")
+                        Label("Show All…", systemImage: "eye")
                     }
                 }
 
