@@ -48,9 +48,7 @@ fileprivate struct WizardToolbar: ViewModifier {
         content.toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 if wizardState.currentPage == .start {
-                    Button {
-                        onDismiss()
-                    } label: {
+                    Button(action: onDismiss) {
                         Label("Cancel", systemImage: "xmark")
                             .labelStyle(.iconOnly)
                     }
@@ -58,14 +56,12 @@ fileprivate struct WizardToolbar: ViewModifier {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 if wizardState.hasNextButton {
-                    Button {
-                        wizardState.next()
-                    } label: {
+                    Button(action: { wizardState.next() }) {
                         Label("Continue", systemImage: "chevron.right")
                             .labelStyle(.iconOnly)
                     }
                 } else if wizardState.currentPage == .summary {
-                    Button {
+                    Button(action: {
                         onDismiss()
                         data.busyWorkAsync {
                             let config = try await wizardState.generateConfig()
@@ -83,6 +79,9 @@ fileprivate struct WizardToolbar: ViewModifier {
                                 await data.showSettingsForCurrentVM()
                             }
                         }
+                    }) {
+                        Label("Save", systemImage: "checkmark")
+                            .labelStyle(.iconOnly)
                     }
                 }
             }

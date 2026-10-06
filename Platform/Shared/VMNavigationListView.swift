@@ -210,9 +210,7 @@ private struct VMListModifier: ViewModifier {
             #if !os(visionOS) && !WITH_REMOTE
             ToolbarItem(placement: .navigationBarTrailing) {
                 if !isInTabBar {
-                    Button {
-                        settingsPresented.toggle()
-                    } label: {
+                    Button(action: { settingsPresented.toggle() }) {
                         Label("Settings", systemImage: "gearshape")
                             .labelStyle(.iconOnly)
                     }
