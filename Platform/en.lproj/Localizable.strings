@@ -21,6 +21,12 @@
 /* Clear cache (Settings) */
 "Cancel" = "Cancel";
 
+/* Edit toggle / Done (edit mode) */
+"Edit" = "Edit";
+
+/* Edit toggle / Done (edit mode) */
+"Done" = "Done";
+
 /* Cache settings */
 "Cache Usage" = "Cache Usage";
 

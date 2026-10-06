@@ -19,12 +19,15 @@ import SwiftUI
 /// Icon-only replacement for `EditButton`.
 ///
 /// Toggles the enclosing list's edit mode through the `editMode` environment,
-/// exactly like the system button does, but renders an SF Symbol instead of a
-/// localised text title: `arrow.up.arrow.down.circle` while inactive (the mode
-/// is for reordering/deleting rows) and `checkmark.circle` while active
-/// (tapping again finishes editing).
+/// exactly like the system button does, but renders an icon instead of a
+/// localised text title: `arrow.up.arrow.down.circle` while inactive (the
+/// mode is for reordering/deleting rows) and the app-wide blue-circle white
+/// checkmark (`ConfirmationIcon`) while active (tapping again finishes
+/// editing), matching the system Files app's selection-mode Done button.
 struct EditToggleButton: View {
     @Environment(\.editMode) private var editMode
+
+    private var isActive: Bool { editMode?.wrappedValue == .active }
 
     var body: some View {
         Button {
@@ -35,10 +38,12 @@ struct EditToggleButton: View {
                 editMode?.wrappedValue = .active
             }
         } label: {
-            Image(systemName: editMode?.wrappedValue == .active
-                  ? "checkmark.circle"
-                  : "arrow.up.arrow.down.circle")
+            if isActive {
+                ConfirmationIcon(systemName: "checkmark")
+            } else {
+                Image(systemName: "arrow.up.arrow.down.circle")
+            }
         }
-        .accessibilityLabel(Text("Edit"))
+        .accessibilityLabel(Text(isActive ? "Done" : "Edit"))
     }
 }

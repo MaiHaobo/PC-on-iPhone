@@ -20,32 +20,32 @@ import SwiftUI
 ///
 /// A bare `checkmark` glyph is hard to read at toolbar size and gives no
 /// affordance that it is tappable. Every confirm button therefore draws the
-/// same treatment the settings rows already use: a blue filled rounded
-/// rectangle with a white glyph on top. Keeping it in one place means the
+/// same treatment the system Files app uses in selection mode: a blue filled
+/// circle with a white glyph on top. Keeping it in one place means the
 /// Save/Done buttons across the app (settings, drives, keyboard shortcuts,
 /// wizard) can never drift apart.
 ///
 /// Usage:
 /// ```swift
 /// Button(action: save) {
-///     ConfirmationIcon()          // blue rounded square + white checkmark
+///     ConfirmationIcon()          // blue circle + white checkmark
 /// }
 /// ```
 struct ConfirmationIcon: View {
     /// Glyph drawn in white on top of the blue fill.
     var systemName: String = "checkmark"
-    /// Side length of the rounded square.
+    /// Diameter of the circle.
     var size: CGFloat = 28
     /// Fill colour. Confirmation actions are blue throughout the app.
     var color: Color = .accentColor
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 7, style: .circular)
+            Circle()
                 .fill(color)
                 .frame(width: size, height: size)
             Image(systemName: systemName)
-                .font(.system(size: size * 0.56, weight: .semibold))
+                .font(.system(size: size * 0.5, weight: .bold))
                 .foregroundColor(.white)
         }
     }
