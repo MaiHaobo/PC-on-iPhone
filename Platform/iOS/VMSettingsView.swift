@@ -27,7 +27,10 @@ struct VMSettingsView: View {
     
     @EnvironmentObject private var data: UTMData
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-    
+    /// Backs `EditToggleButton`: injected into the environment so the toggle
+    /// works even where SwiftUI does not provide a writable editMode binding.
+    @State private var editMode: EditMode = .inactive
+
     var body: some View {
         NavigationView {
             Form {
@@ -78,18 +81,22 @@ struct VMSettingsView: View {
             .settingsNavigation(addDeviceContent: {
                 VMSettingsAddDeviceMenuView(config: config, isCreateDriveShown: $devicesState.isCreateDriveShown, isImportDriveShown: $devicesState.isImportDriveShown)
             }, editContent: {
-                EditButton()
+                EditToggleButton()
             }, cancelContent: {
                 Button(action: cancel) {
-                    Text("Cancel")
+                    Label("Cancel", systemImage: "xmark")
+                        .labelStyle(.iconOnly)
                 }
             }, saveContent: {
                 Button(action: save) {
-                    Text("Save")
+                    Label("Save", systemImage: "checkmark")
+                        .labelStyle(.iconOnly)
                 }
             })
             .fileImporter(isPresented: $globalFileImporterShim.isPresented, allowedContentTypes: globalFileImporterShim.allowedContentTypes, onCompletion: globalFileImporterShim.onCompletion)
-        }.environmentObject(globalFileImporterShim)
+        }
+        .environment(\.editMode, $editMode)
+        .environmentObject(globalFileImporterShim)
         .disabled(data.busy)
         .overlay(BusyOverlay())
     }

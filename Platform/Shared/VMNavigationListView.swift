@@ -143,6 +143,9 @@ private struct VMListModifier: ViewModifier {
     @EnvironmentObject private var data: UTMData
     @State private var settingsPresented = false
     @State private var sheetPresented = false
+    /// Backs `EditToggleButton`: injected into the environment so the toggle
+    /// works even where SwiftUI does not provide a writable editMode binding.
+    @State private var editMode: EditMode = .inactive
     @Environment(\.isInTabBar) private var isInTabBar
 
     private let _createTip: Any?
@@ -165,6 +168,7 @@ private struct VMListModifier: ViewModifier {
         #if os(macOS)
         .frame(minWidth: 250, idealWidth: 350)
         #endif
+        .environment(\.editMode, $editMode)
         .listStyle(.sidebar)
         .navigationTitle(productName)
         #if os(macOS)
@@ -218,7 +222,7 @@ private struct VMListModifier: ViewModifier {
             }
             #endif
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
+                EditToggleButton()
             }
             #endif
         }

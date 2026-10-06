@@ -19,6 +19,9 @@ import SwiftUI
 struct VMKeyboardShortcutsView: View {
     let onShortcut: ([QEMUKeyCode]) -> Void
     @Environment(\.presentationMode) var presentationMode
+    /// Backs `EditToggleButton`: injected into the environment so the toggle
+    /// works even where SwiftUI does not provide a writable editMode binding.
+    @State private var editMode: EditMode = .inactive
     @State private var keyboardShortcuts: [[QEMUKeyCode]] = []
 
     var body: some View {
@@ -42,7 +45,7 @@ struct VMKeyboardShortcutsView: View {
             }.navigationTitle("Keyboard Shortcut")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    EditButton()
+                    EditToggleButton()
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
@@ -52,6 +55,7 @@ struct VMKeyboardShortcutsView: View {
                 }
             }
         }
+        .environment(\.editMode, $editMode)
         .onAppear {
             keyboardShortcuts = UTMKeyboardShortcuts.shared.loadKeyboardShortcuts()
         }
@@ -63,6 +67,9 @@ struct VMKeyboardShortcutsView: View {
 
 private struct NewKeyboardShortcutView: View {
     @Environment(\.presentationMode) var presentationMode
+    /// Backs `EditToggleButton`: injected into the environment so the toggle
+    /// works even where SwiftUI does not provide a writable editMode binding.
+    @State private var editMode: EditMode = .inactive
     @Binding var keyboardShortcuts: [[QEMUKeyCode]]
     @State private var newShortcut: [QEMUKeyCode] = []
     @State private var newKey: QEMUKeyCode?
@@ -99,7 +106,7 @@ private struct NewKeyboardShortcutView: View {
         }.navigationTitle("New Keyboard Shortcut")
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-                EditButton()
+                EditToggleButton()
                 Button {
                     if !newShortcut.isEmpty {
                         keyboardShortcuts.append(newShortcut)
@@ -115,6 +122,7 @@ private struct NewKeyboardShortcutView: View {
             newShortcut = []
             newKey = nil
         }
+        .environment(\.editMode, $editMode)
     }
 }
 

@@ -1226,3 +1226,6 @@
 "New Drive…" = "Neues Laufwerk…";
 "Export Debug Log" = "Debug-Protokoll exportieren";
 "Update Interface" = "Schnittstelle aktualisieren";
+
+/* Button labels — added with the SF Symbol button conversion */
+"Edit" = "Bearbeiten";

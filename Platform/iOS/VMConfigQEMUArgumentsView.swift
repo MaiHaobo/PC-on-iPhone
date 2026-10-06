@@ -18,7 +18,10 @@ import SwiftUI
 
 struct VMConfigQEMUArgumentsView: View {
     @ObservedObject var config: UTMQemuConfiguration
-    
+    /// Backs `EditToggleButton`: injected into the environment so the toggle
+    /// works even where SwiftUI does not provide a writable editMode binding.
+    @State private var editMode: EditMode = .inactive
+
     var body: some View {
         Form {
             Section(header: Text("Custom Arguments")) {
@@ -45,9 +48,10 @@ struct VMConfigQEMUArgumentsView: View {
             VMConfigQEMUCommandLineView(config: config)
         }.toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
+                EditToggleButton()
             }
         }
+        .environment(\.editMode, $editMode)
     }
 }
 
