@@ -23,32 +23,21 @@ struct VMWizardOSMacView: View {
 
     var body: some View {
         VMWizardContent("macOS", page: .macOSBoot) {
-            WizardCardGroup("Import IPSW",
-                            footer: "To install macOS, you need to download a recovery IPSW. If you do not select an existing IPSW, the latest macOS IPSW will be downloaded from Apple.") {
+            Section {
                 #if arch(arm64)
                 if let selected = wizardState.macRecoveryIpswURL {
-                    WizardRow("Selected",
-                              systemImage: "doc") {
-                        Text(selected.lastPathComponent)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.trailing)
-                            .lineLimit(2)
-                    }
-                    WizardRowDivider()
+                    Text(selected.lastPathComponent)
                 }
                 FileBrowseField(url: $wizardState.macRecoveryIpswURL,
                                 isFileImporterPresented: $isFileImporterPresented)
                 #endif
                 if wizardState.isBusy {
-                    WizardRowDivider()
-                    HStack {
-                        Spacer()
-                        Spinner(size: .large)
-                        Spacer()
-                    }
-                    .padding(.vertical, 14)
+                    Spinner(size: .large)
                 }
+            } header: {
+                Text("Import IPSW")
+            } footer: {
+                Text("To install macOS, you need to download a recovery IPSW. If you do not select an existing IPSW, the latest macOS IPSW will be downloaded from Apple.")
             }
 
             HStack(spacing: 8) {
@@ -61,17 +50,10 @@ struct VMWizardOSMacView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 22)
             .background(
-                RoundedRectangle(cornerRadius: WizardMetrics.cornerRadius,
-                                 style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [5, 4]))
                     .foregroundColor(Color.secondary.opacity(0.4))
             )
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue", systemImage: "chevron.right",
-                                isBusy: wizardState.isBusy || wizardState.isPendingIpswDownload) {
-                wizardState.next()
-            }
         }
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.ipsw], onCompletion: processIpsw)
         .onDrop(of: [.fileURL], delegate: self)

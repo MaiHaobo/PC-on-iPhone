@@ -25,11 +25,6 @@ struct VMWizardView: View {
             WizardNavigationView(wizardState: wizardState) {
                 presentationMode.wrappedValue.dismiss()
             }
-            // The summary page posts this once the VM exists; the sheet owns
-            // its own dismissal, so the page does not need a binding to it.
-            .onReceive(NSNotification.CloseVirtualMachineWizard) { _ in
-                presentationMode.wrappedValue.dismiss()
-            }
         } else {
             NavigationView {
                 WizardWrapper(page: .start, wizardState: wizardState) {
@@ -44,24 +39,60 @@ struct VMWizardView: View {
     }
 }
 
-/// Only the leading Cancel item lives in the navigation bar now. The primary
-/// action (Continue / Save) is pinned to the bottom of each page instead, which
-/// is where the system's own setup assistants put it and where it is reachable
-/// with a thumb. Removing it from the bar also stops the two affordances from
-/// competing for attention.
+/// The wizard's navigation bar, in the shape the original UTM uses: plain
+/// text items ("Back" / "Continue") on the trailing edge, and the system's
+/// own prominent blue checkmark for the final "Save". Nothing here is drawn
+/// by hand, so on iOS 26 the bar keeps the standard liquid glass material and
+/// the two buttons pick up the platform's own metrics and states.
 fileprivate struct WizardToolbar: ViewModifier {
     @ObservedObject var wizardState: VMWizardState
     let onDismiss: () -> Void
+    @EnvironmentObject private var data: UTMData
 
     func body(content: Content) -> some View {
         content.toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 if wizardState.currentPage == .start {
-                    Button(action: onDismiss) {
-                        Label("Cancel", systemImage: "xmark")
-                            .labelStyle(.iconOnly)
+                    Button("Cancel") {
+                        onDismiss()
                     }
                 }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if wizardState.hasNextButton {
+                    Button("Continue") {
+                        wizardState.next()
+                    }
+                } else if wizardState.currentPage == .summary {
+                    ConfirmationButton("Save", action: save)
+                }
+            }
+        }
+    }
+
+    /// Builds the VM from the wizard state and dismisses the sheet. Lives here
+    /// because the toolbar is what owns the Save button; the notification lets
+    /// the sheet close itself without a binding back into the presenter.
+    private func save() {
+        data.busyWorkAsync {
+            let config = try await wizardState.generateConfig()
+            if let qemuConfig = config as? UTMQemuConfiguration {
+                let vm = try await data.create(config: qemuConfig)
+                await MainActor.run {
+                    if wizardState.isGuestToolsInstallRequested {
+                        NotificationCenter.default.post(name: NSNotification.InstallGuestTools,
+                                                        object: vm.wrapped!)
+                    }
+                }
+            } else {
+                fatalError("Invalid configuration type.")
+            }
+            if await wizardState.isOpenSettingsAfterCreation {
+                await data.showSettingsForCurrentVM()
+            }
+            await MainActor.run {
+                NotificationCenter.default.post(name: NSNotification.CloseVirtualMachineWizard,
+                                                object: nil)
             }
         }
     }
@@ -74,7 +105,7 @@ fileprivate struct WizardWrapper: View {
     @ObservedObject var wizardState: VMWizardState
     @State private var nextPage: VMWizardPage?
     let onDismiss: () -> Void
-    
+
     var body: some View {
         VStack {
             WizardViewWrapper(page: page, wizardState: wizardState)

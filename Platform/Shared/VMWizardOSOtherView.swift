@@ -26,20 +26,16 @@ struct VMWizardOSOtherView: View {
 
     var body: some View {
         VMWizardContent("Other", page: .otherBoot) {
-            WizardCardGroup("Boot Device") {
-                WizardRow("Boot Device",
-                          subtitle: "Where the guest boots from",
-                          systemImage: "opticaldisc") {
-                    Picker("Boot Device", selection: $wizardState.bootDevice) {
-                        Text("None").tag(VMBootDevice.none)
-                        Text("CD/DVD Image").tag(VMBootDevice.cd)
-                        if wizardState.legacyHardware {
-                            Text("Floppy Image").tag(VMBootDevice.floppy)
-                        }
-                        Text("Drive Image").tag(VMBootDevice.drive)
+            Section {
+                Picker("Boot Device", selection: $wizardState.bootDevice) {
+                    Text("None").tag(VMBootDevice.none)
+                    Text("CD/DVD Image").tag(VMBootDevice.cd)
+                    if wizardState.legacyHardware {
+                        Text("Floppy Image").tag(VMBootDevice.floppy)
                     }
-                    .labelsHidden()
+                    Text("Drive Image").tag(VMBootDevice.drive)
                 }
+                .pickerStyle(.inline)
                 .onAppear {
                     if !wizardState.legacyHardware && wizardState.bootDevice == .floppy {
                         wizardState.bootDevice = .none
@@ -47,47 +43,39 @@ struct VMWizardOSOtherView: View {
                         wizardState.systemBootUefi = false
                     }
                 }
+            } header: {
+                Text("Boot Device")
             }
 
             if wizardState.bootDevice != .none {
-                WizardCardGroup(imageSectionTitle) {
+                Section {
                     FileBrowseField(url: $wizardState.bootImageURL,
                                     isFileImporterPresented: $isFileImporterPresented,
                                     hasClearButton: false)
                     if wizardState.isBusy {
-                        WizardRowDivider()
-                        HStack {
-                            Spacer()
-                            Spinner(size: .large)
-                            Spacer()
-                        }
-                        .padding(.vertical, 14)
+                        Spinner(size: .large)
                     }
+                } header: {
+                    Text(imageSectionTitle)
                 }
             }
 
             if !wizardState.legacyHardware {
-                WizardCardGroup("Options",
-                                footer: supportsUefi
-                                ? nil
-                                : "UEFI boot is not available for the selected architecture.") {
-                    WizardToggleRow("UEFI Boot",
-                                    subtitle: "Boot using UEFI firmware",
-                                    systemImage: "power",
-                                    isOn: $wizardState.systemBootUefi)
+                Section {
+                    Toggle("UEFI Boot", isOn: $wizardState.systemBootUefi)
                         .disabled(!supportsUefi)
                         .onAppear {
                             if !supportsUefi {
                                 wizardState.systemBootUefi = false
                             }
                         }
+                } header: {
+                    Text("Options")
+                } footer: {
+                    if !supportsUefi {
+                        Text("UEFI boot is not available for the selected architecture.")
+                    }
                 }
-            }
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue", systemImage: "chevron.right",
-                                isBusy: wizardState.isBusy) {
-                wizardState.next()
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented,

@@ -22,24 +22,21 @@ struct VMWizardSharingView: View {
 
     var body: some View {
         VMWizardContent("Shared Directory", page: .sharing) {
-            WizardCardGroup("Shared Directory Path",
-                            footer: "Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details.") {
+            Section {
                 FileBrowseField(url: $wizardState.sharingDirectoryURL,
                                 isFileImporterPresented: $isFileImporterPresented)
 
                 if wizardState.sharingDirectoryURL != nil && !wizardState.useAppleVirtualization {
-                    WizardRowDivider()
-                    WizardToggleRow("Share is read only",
-                                    subtitle: "The guest cannot modify files in this directory",
-                                    systemImage: "lock",
-                                    isOn: $wizardState.sharingReadOnly)
+                    Toggle("Share is read only", isOn: $wizardState.sharingReadOnly)
                 }
-            }
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue", systemImage: "chevron.right",
-                                isBusy: wizardState.isBusy) {
-                wizardState.next()
+
+                if wizardState.isBusy {
+                    Spinner(size: .large)
+                }
+            } header: {
+                Text("Shared Directory Path")
+            } footer: {
+                Text("Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details.")
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented,

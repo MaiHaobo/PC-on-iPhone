@@ -22,31 +22,25 @@ struct VMWizardDrivesView: View {
     /// Quick-pick sizes, so the common choices do not require typing a number.
     private let presets: [Int] = [8, 16, 32, 64, 128, 256]
 
-    private var storageDescription: String {
-        let bytes = Int64(wizardState.storageSizeGib) * Int64(wizardState.bytesInGib)
-        return ByteCountFormatter.string(fromByteCount: bytes, countStyle: .binary)
-    }
-
     var body: some View {
         VMWizardContent("Storage", page: .drives) {
-            WizardCardGroup("Size",
-                            footer: "Specify the size of the drive where data will be stored into. The disk image expands as it fills, so the full size is not used immediately.") {
-                WizardRow("Disk Size",
-                          subtitle: storageDescription,
-                          systemImage: "internaldrive") {
-                    HStack(spacing: 6) {
-                        NumberTextField("", number: $wizardState.storageSizeGib)
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 64)
-                            .multilineTextAlignment(.trailing)
-                        Text("GiB")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
+            Section {
+                HStack {
+                    Text("Specify the size of the drive where data will be stored into.")
+                    Spacer()
+                    NumberTextField("", number: $wizardState.storageSizeGib)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 50)
+                        .multilineTextAlignment(.trailing)
+                    Text("GiB")
                 }
+            } header: {
+                Text("Size")
+            } footer: {
+                Text("The disk image expands as it fills, so the full size is not used immediately.")
             }
 
-            WizardCardGroup("Common Sizes") {
+            Section {
                 // A stock segmented control rather than a grid of hand-drawn
                 // chips: the system already renders this affordance, and using
                 // it keeps the wizard visually identical to Settings.
@@ -57,14 +51,8 @@ struct VMWizardDrivesView: View {
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                .padding(.horizontal, WizardMetrics.rowInset)
-                .padding(.vertical, 12)
-            }
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue", systemImage: "chevron.right",
-                                isBusy: wizardState.isBusy) {
-                wizardState.next()
+            } header: {
+                Text("Common Sizes")
             }
         }
     }

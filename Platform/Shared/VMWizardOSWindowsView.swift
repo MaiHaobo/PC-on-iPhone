@@ -23,12 +23,8 @@ struct VMWizardOSWindowsView: View {
     var body: some View {
         VMWizardContent("Windows", page: .windowsBoot) {
             #if !WITH_QEMU_TCI
-            WizardCardGroup("Image File Type",
-                            footer: "Modern Windows requires UEFI and a TPM, which the wizard enables for you.") {
-                WizardToggleRow("Install Windows 10 or higher",
-                                subtitle: "Turn off for Windows 7 and earlier",
-                                systemImage: "square.grid.2x2",
-                                isOn: $wizardState.isWindows10OrHigher)
+            Section {
+                Toggle("Install Windows 10 or higher", isOn: $wizardState.isWindows10OrHigher)
                     .onChange(of: wizardState.isWindows10OrHigher) { newValue in
                         if newValue {
                             wizardState.systemBootUefi = true
@@ -43,35 +39,33 @@ struct VMWizardOSWindowsView: View {
                     .disabled(wizardState.legacyHardware)
 
                 if wizardState.isWindows10OrHigher {
-                    WizardRowDivider()
-                    linkRow("Windows Install Guide",
-                            systemImage: "book",
-                            destination: "https://docs.getutm.app/guides/windows/")
                     #if os(macOS)
-                    WizardRowDivider()
                     crystalFetchRow
                     #endif
+                    Link(destination: URL(string: "https://docs.getutm.app/guides/windows/")!) {
+                        Label("Windows Install Guide", systemImage: "link")
+                    }
+                    .buttonStyle(.borderless)
                 }
+            } header: {
+                Text("Image File Type")
+            } footer: {
+                Text("Modern Windows requires UEFI and a TPM, which the wizard enables for you.")
             }
             #endif
 
-            WizardCardGroup(imageSectionTitle) {
+            Section {
                 if wizardState.legacyHardware {
-                    WizardRow("Boot Device",
-                              subtitle: "Where the guest boots from",
-                              systemImage: "opticaldisc") {
-                        Picker("Boot Device", selection: $wizardState.bootDevice) {
-                            Text("CD/DVD Image").tag(VMBootDevice.cd)
-                            Text("Floppy Image").tag(VMBootDevice.floppy)
-                        }
-                        .labelsHidden()
+                    Picker("Boot Device", selection: $wizardState.bootDevice) {
+                        Text("CD/DVD Image").tag(VMBootDevice.cd)
+                        Text("Floppy Image").tag(VMBootDevice.floppy)
                     }
+                    .pickerStyle(.inline)
                     .onAppear {
                         if !wizardState.legacyHardware && wizardState.bootDevice == .floppy {
                             wizardState.bootDevice = .cd
                         }
                     }
-                    WizardRowDivider()
                 }
 
                 FileBrowseField(url: $wizardState.bootImageURL,
@@ -79,52 +73,38 @@ struct VMWizardOSWindowsView: View {
                                 hasClearButton: false)
 
                 if wizardState.isBusy {
-                    WizardRowDivider()
-                    HStack {
-                        Spacer()
-                        Spinner(size: .large)
-                        Spacer()
-                    }
-                    .padding(.vertical, 14)
+                    Spinner(size: .large)
                 }
+            } header: {
+                Text(imageSectionTitle)
             }
 
             if !wizardState.isWindows10OrHigher && !wizardState.legacyHardware {
-                WizardCardGroup("Boot Options",
-                                footer: "Some older systems do not support UEFI boot, such as Windows 7 and below.") {
-                    WizardToggleRow("UEFI Boot",
-                                    subtitle: "Required by most modern systems",
-                                    systemImage: "power",
-                                    isOn: $wizardState.systemBootUefi)
+                Section {
+                    Toggle("UEFI Boot", isOn: $wizardState.systemBootUefi)
                         .onChange(of: wizardState.systemBootUefi) { newValue in
                             if !newValue {
                                 wizardState.systemBootTpm = false
                             }
                         }
-                    WizardRowDivider()
-                    WizardToggleRow("Secure Boot with TPM 2.0",
-                                    subtitle: "Requires UEFI boot",
-                                    systemImage: "lock.shield",
-                                    isOn: $wizardState.systemBootTpm)
+                    Toggle("Secure Boot with TPM 2.0", isOn: $wizardState.systemBootTpm)
                         .disabled(!wizardState.systemBootUefi)
+                } header: {
+                    Text("Boot Options")
+                } footer: {
+                    Text("Some older systems do not support UEFI boot, such as Windows 7 and below.")
                 }
             }
 
             // Disabled for non-Windows 10 installs due to autounattend version
             if wizardState.isWindows10OrHigher {
-                WizardCardGroup("Guest Support",
-                                footer: "Download and mount the guest support package for Windows. This is required for some features including dynamic resolution and clipboard sharing.") {
-                    WizardToggleRow("Install drivers and SPICE tools",
-                                    subtitle: "Recommended for the best experience",
-                                    systemImage: "wrench.adjustable",
-                                    isOn: $wizardState.isGuestToolsInstallRequested)
+                Section {
+                    Toggle("Install drivers and SPICE tools", isOn: $wizardState.isGuestToolsInstallRequested)
+                } header: {
+                    Text("Guest Support")
+                } footer: {
+                    Text("Download and mount the guest support package for Windows. This is required for some features including dynamic resolution and clipboard sharing.")
                 }
-            }
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue", systemImage: "chevron.right",
-                                isBusy: wizardState.isBusy) {
-                wizardState.next()
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented,
@@ -152,31 +132,6 @@ struct VMWizardOSWindowsView: View {
         }
     }
 
-    @ViewBuilder
-    private func linkRow(_ title: LocalizedStringKey,
-                         systemImage: String,
-                         destination: String) -> some View {
-        Link(destination: URL(string: destination)!) {
-            HStack(spacing: 12) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 17))
-                    .foregroundColor(.accentColor)
-                    .frame(width: 26)
-                Text(title)
-                    .font(.subheadline)
-                    .foregroundColor(.accentColor)
-                Spacer(minLength: 8)
-                Image(systemName: "arrow.up.right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 14)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
     #if os(macOS)
     private var crystalFetchRow: some View {
         Button {
@@ -191,24 +146,9 @@ struct VMWizardOSWindowsView: View {
                 NSWorkspace.shared.open(downloadCrystalFetch)
             }
         } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "arrow.down.circle")
-                    .font(.system(size: 17))
-                    .foregroundColor(.accentColor)
-                    .frame(width: 26)
-                Text("Fetch latest Windows installer…")
-                    .font(.subheadline)
-                    .foregroundColor(.accentColor)
-                Spacer(minLength: 8)
-                Image(systemName: "arrow.up.right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 14)
-            .contentShape(Rectangle())
+            Label("Fetch latest Windows installer…", systemImage: "link")
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.link)
     }
     #endif
 

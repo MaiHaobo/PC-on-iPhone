@@ -56,91 +56,61 @@ struct VMWizardSummaryView: View {
 
     var body: some View {
         VMWizardContent("Summary", page: .summary) {
-            WizardCardGroup("Information") {
-                WizardRow("Name",
-                          subtitle: "Shown in the sidebar",
-                          systemImage: "textformat") {
-                    TextField("Name", text: $wizardState.name.bound)
-                        .multilineTextAlignment(.trailing)
-                        .lineLimit(1)
-                }
+            Section {
+                summaryValue("Name", value: wizardState.name?.value ?? "")
                 #if os(macOS)
-                WizardRowDivider()
-                WizardToggleRow("Open VM Settings",
-                                subtitle: "Open the settings panel after creation",
-                                systemImage: "gearshape",
-                                isOn: $wizardState.isOpenSettingsAfterCreation)
+                Toggle("Open VM Settings", isOn: $wizardState.isOpenSettingsAfterCreation)
                     .disabled(wizardState.isPendingIPSWDownload)
                 #endif
+            } header: {
+                Text("Information")
             }
 
-            WizardCardGroup("System") {
+            Section {
                 summaryValue("Engine",
-                             systemImage: "cpu",
                              value: wizardState.useAppleVirtualization
                              ? NSLocalizedString("Apple Virtualization", comment: "VMWizardSummaryView")
                              : "QEMU")
-                WizardRowDivider()
                 summaryValue("Operating System",
-                             systemImage: "desktopcomputer",
                              value: wizardState.operatingSystem.name.localizedString)
                 if !wizardState.useAppleVirtualization {
-                    WizardRowDivider()
-                    summaryValue("Architecture",
-                                 systemImage: "square.stack.3d.up",
-                                 value: wizardState.systemArchitecture.prettyValue)
-                    WizardRowDivider()
-                    summaryValue("System",
-                                 systemImage: "pc",
-                                 value: wizardState.systemTarget.prettyValue)
+                    summaryValue("Architecture", value: wizardState.systemArchitecture.prettyValue)
+                    summaryValue("System", value: wizardState.systemTarget.prettyValue)
                 }
-                WizardRowDivider()
-                summaryValue("RAM",
-                             systemImage: "memorychip",
-                             value: memoryDescription)
-                WizardRowDivider()
-                summaryValue("CPU",
-                             systemImage: "cpu",
-                             value: coreDescription)
-                WizardRowDivider()
-                summaryValue("Storage",
-                             systemImage: "internaldrive",
-                             value: storageDescription)
+                summaryValue("RAM", value: memoryDescription)
+                summaryValue("CPU", value: coreDescription)
+                summaryValue("Storage", value: storageDescription)
+            } header: {
+                Text("System")
             }
 
             if hasBootDetails {
-                WizardCardGroup("Boot") {
+                Section {
                     bootRows
+                } header: {
+                    Text("Boot")
                 }
             }
 
-            WizardCardGroup("Sharing") {
+            Section {
                 summaryValue("Share Directory",
-                             systemImage: "folder",
                              value: wizardState.sharingDirectoryURL != nil
                              ? NSLocalizedString("Enabled", comment: "VMWizardSummaryView")
                              : NSLocalizedString("Disabled", comment: "VMWizardSummaryView"))
                 if let sharingPath = wizardState.sharingDirectoryURL?.path {
-                    WizardRowDivider()
-                    summaryValue("Directory",
-                                 systemImage: "folder.badge.gearshape",
-                                 value: sharingPath)
+                    summaryValue("Directory", value: sharingPath)
                     if !wizardState.useAppleVirtualization {
-                        WizardRowDivider()
                         summaryValue("Read Only",
-                                     systemImage: "lock",
                                      value: wizardState.sharingReadOnly
                                      ? NSLocalizedString("Yes", comment: "VMWizardSummaryView")
                                      : NSLocalizedString("No", comment: "VMWizardSummaryView"))
                     }
                 }
+            } header: {
+                Text("Sharing")
             }
         }
-        .wizardBottomAction {
-            WizardPrimaryButton("Save", isBusy: wizardState.isBusy) {
-                save()
-            }
-        }
+        .textFieldStyle(.automatic)
         .onAppear {
             if wizardState.name == nil {
                 let os = wizardState.operatingSystem
@@ -151,34 +121,6 @@ struct VMWizardSummaryView: View {
                 }
             }
             wizardState.confusedUserCheck()
-        }
-    }
-
-    /// Creates the VM from the collected settings. This used to live in the
-    /// navigation bar; it moved here so the sheet that owns the wizard state
-    /// also owns the action that finishes it, instead of reaching back through
-    /// a toolbar modifier to dismiss and mutate shared data.
-    private func save() {
-        data.busyWorkAsync {
-            let config = try await wizardState.generateConfig()
-            if let qemuConfig = config as? UTMQemuConfiguration {
-                let vm = try await data.create(config: qemuConfig)
-                await MainActor.run {
-                    if wizardState.isGuestToolsInstallRequested {
-                        NotificationCenter.default.post(name: NSNotification.InstallGuestTools,
-                                                        object: vm.wrapped!)
-                    }
-                }
-            } else {
-                fatalError("Invalid configuration type.")
-            }
-            if await wizardState.isOpenSettingsAfterCreation {
-                await data.showSettingsForCurrentVM()
-            }
-            await MainActor.run {
-                NotificationCenter.default.post(name: NSNotification.CloseVirtualMachineWizard,
-                                                object: nil)
-            }
         }
     }
 
@@ -206,65 +148,40 @@ struct VMWizardSummaryView: View {
     @ViewBuilder
     private var bootRows: some View {
         if let bootImageURL = wizardState.bootImageURL {
-            summaryValue("Boot Image",
-                         systemImage: "opticaldisc",
-                         value: bootImageURL.path)
+            summaryValue("Boot Image", value: bootImageURL.path)
         }
         if wizardState.operatingSystem == .macOS {
             #if os(macOS) && arch(arm64)
-            if wizardState.bootImageURL != nil {
-                WizardRowDivider()
-            }
-            summaryValue("IPSW",
-                         systemImage: "arrow.down.circle",
-                         value: wizardState.macRecoveryIpswURL?.path ?? "")
+            summaryValue("IPSW", value: wizardState.macRecoveryIpswURL?.path ?? "")
             #endif
         } else if wizardState.operatingSystem == .Linux && wizardState.bootDevice == .kernel {
-            if wizardState.bootImageURL != nil {
-                WizardRowDivider()
-            }
             if let kernel = wizardState.linuxKernelURL?.path {
-                summaryValue("Kernel", systemImage: "terminal", value: kernel)
+                summaryValue("Kernel", value: kernel)
             }
             if let ramdisk = wizardState.linuxInitialRamdiskURL?.path {
-                WizardRowDivider()
-                summaryValue("Initial Ramdisk", systemImage: "memorychip", value: ramdisk)
+                summaryValue("Initial Ramdisk", value: ramdisk)
             }
             if let root = wizardState.linuxRootImageURL?.path {
-                WizardRowDivider()
-                summaryValue("Root Image", systemImage: "internaldrive", value: root)
+                summaryValue("Root Image", value: root)
             }
             if !wizardState.linuxBootArguments.isEmpty {
-                WizardRowDivider()
-                summaryValue("Boot Arguments", systemImage: "text.alignleft",
-                             value: wizardState.linuxBootArguments)
+                summaryValue("Boot Arguments", value: wizardState.linuxBootArguments)
             }
         }
     }
 
-    /// A read-only row: label on the left, emphasised value on the right.
-    /// Long values (paths, arguments) wrap rather than truncate.
+    /// A read-only row: label on the left, value on the right, in a shape the
+    /// native `List` renders for us. Long values (paths, arguments) wrap
+    /// rather than truncate.
     @ViewBuilder
     private func summaryValue(_ title: LocalizedStringKey,
-                              systemImage: String,
                               value: String) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.system(size: 17))
-                .foregroundColor(.accentColor)
-                .frame(width: 26)
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.primary)
-            Spacer(minLength: 12)
+        LabeledContent(title) {
             Text(value)
-                .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.trailing)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 14)
     }
 }
 
@@ -273,5 +190,6 @@ struct VMWizardSummaryView_Previews: PreviewProvider {
 
     static var previews: some View {
         VMWizardSummaryView(wizardState: wizardState)
+            .environmentObject(UTMData())
     }
 }

@@ -23,58 +23,60 @@ struct VMWizardStartViewTCI: View {
 
     var body: some View {
         VMWizardContent("Start", page: .start) {
-            WizardCardGroup("Custom") {
-                WizardCard(
-                    title: "New Machine",
-                    subtitle: "Create a new emulated machine from scratch."
-                ) {
+            Section {
+                Button {
                     wizardState.useVirtualization = false
                     wizardState.next()
-                } icon: {
-                    Image(systemName: "pc")
-                        .font(.system(size: 26))
-                        .foregroundColor(.accentColor)
+                } label: {
+                    HStack {
+                        Image(systemName: "pc")
+                            .font(.title)
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("New Machine")
+                                .font(.title)
+                            Text("Create a new emulated machine from scratch.")
+                                .font(.caption)
+                        }
+                        Spacer()
+                    }
+                    .padding()
                 }
+                .buttonStyle(.inList)
+            } header: {
+                Text("Custom")
             }
 
-            WizardCardGroup("Existing") {
-                WizardCard(title: "Open…") {
-                    NotificationCenter.default.post(name: NSNotification.OpenVirtualMachine,
-                                                    object: nil)
-                } icon: {
-                    Image(systemName: "folder")
-                        .font(.system(size: 24))
-                        .foregroundColor(.accentColor)
-                }
-
-                WizardRowDivider()
-
-                Link(destination: URL(string: "https://mac.getutm.app/gallery/")!) {
-                    HStack(alignment: .top, spacing: 12) {
-                        Image(systemName: "arrow.down.circle")
-                            .font(.system(size: 24))
-                            .foregroundColor(.accentColor)
-                            .frame(width: 34, height: 34)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Download prebuilt from UTM Gallery…")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                        }
-                        Spacer(minLength: 0)
-                        Image(systemName: "arrow.up.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+            Section {
+                Button {
+                    NotificationCenter.default.post(name: NSNotification.OpenVirtualMachine, object: nil)
+                } label: {
+                    Label {
+                        Text("Open…")
+                    } icon: {
+                        Image(systemName: "doc")
                     }
-                    .padding(14)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
+                #if os(macOS)
+                .buttonStyle(.link)
+                #endif
+                Link(destination: URL(string: "https://mac.getutm.app/gallery/")!) {
+                    Label {
+                        Text("Download prebuilt from UTM Gallery…")
+                    } icon: {
+                        Image(systemName: "arrow.down.doc")
+                    }
+                }
+            } header: {
+                Text("Existing")
             }
         }
     }
 }
 
-#Preview {
-    VMWizardStartViewTCI(wizardState: VMWizardState())
+struct VMWizardStartViewTCI_Previews: PreviewProvider {
+    @StateObject static var wizardState = VMWizardState()
+
+    static var previews: some View {
+        VMWizardStartViewTCI(wizardState: wizardState)
+    }
 }

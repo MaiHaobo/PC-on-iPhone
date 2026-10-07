@@ -195,6 +195,12 @@ struct AlertMessage: Identifiable {
             return true
         }
     }
+
+    /// Whether the navigation bar should offer a step back. Hidden on the
+    /// first page (there is nowhere to go) and while a task is running.
+    var hasBackButton: Bool {
+        currentPage != .start
+    }
     
     #if os(macOS) && arch(arm64)
     var isPendingIPSWDownload: Bool {
