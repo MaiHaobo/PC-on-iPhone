@@ -76,13 +76,17 @@ struct VMWizardContent<Content>: View where Content: View {
 /// so that pages which have no action (the entry page, the boot pages) keep the
 /// exact same call site as the ones that do.
 struct WizardBottomAction<BarContent: View>: ViewModifier {
-    @ViewBuilder let content: () -> BarContent
+    let barContent: BarContent
+
+    init(@ViewBuilder content: () -> BarContent) {
+        self.barContent = content()
+    }
 
     func body(content original: Content) -> some View {
         original.safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
                 Divider()
-                content()
+                barContent
                     .padding(.horizontal, WizardMetrics.cardInset)
                     .padding(.top, 12)
                     .padding(.bottom, 12)
@@ -142,21 +146,23 @@ struct WizardPrimaryButton: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        VMWizardContent("Test", page: .hardware) {
-            WizardCardGroup("Section") {
-                WizardRow("Memory", systemImage: "memorychip") {
-                    Text("2 GB").foregroundColor(.secondary)
-                }
-                WizardRowDivider()
-                WizardRow("CPU Cores", systemImage: "cpu") {
-                    Text("4").foregroundColor(.secondary)
+struct VMWizardContent_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            VMWizardContent("Test", page: .hardware) {
+                WizardCardGroup("Section") {
+                    WizardRow("Memory", systemImage: "memorychip") {
+                        Text("2 GB").foregroundColor(.secondary)
+                    }
+                    WizardRowDivider()
+                    WizardRow("CPU Cores", systemImage: "cpu") {
+                        Text("4").foregroundColor(.secondary)
+                    }
                 }
             }
-        }
-        .wizardBottomAction {
-            WizardPrimaryButton("Continue") {}
+            .wizardBottomAction {
+                WizardPrimaryButton("Continue") {}
+            }
         }
     }
 }
