@@ -57,7 +57,7 @@ struct VMWizardSummaryView: View {
     var body: some View {
         VMWizardContent("Summary", page: .summary) {
             Section {
-                summaryValue("Name", value: wizardState.name?.value ?? "")
+                summaryValue("Name", value: wizardState.name ?? "")
                 #if os(macOS)
                 Toggle("Open VM Settings", isOn: $wizardState.isOpenSettingsAfterCreation)
                     .disabled(wizardState.isPendingIPSWDownload)
@@ -170,13 +170,18 @@ struct VMWizardSummaryView: View {
         }
     }
 
-    /// A read-only row: label on the left, value on the right, in a shape the
-    /// native `List` renders for us. Long values (paths, arguments) wrap
-    /// rather than truncate.
+    /// A read-only row: label on the left, value on the right, matching the
+    /// shape a stock `List` row gets for free. Long values (paths, arguments)
+    /// wrap rather than truncate.
+    ///
+    /// `LabeledContent` would be the natural choice but it is iOS 16+, and the
+    /// SE build compiles this file for iOS 15, so the row is spelled out.
     @ViewBuilder
     private func summaryValue(_ title: LocalizedStringKey,
                               value: String) -> some View {
-        LabeledContent(title) {
+        HStack(alignment: .firstTextBaseline) {
+            Text(title)
+            Spacer(minLength: 12)
             Text(value)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.trailing)
