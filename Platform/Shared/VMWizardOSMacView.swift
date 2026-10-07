@@ -22,28 +22,50 @@ struct VMWizardOSMacView: View {
     @State private var isFileImporterPresented = false
 
     var body: some View {
-        VMWizardContent("macOS") {
-            Section {
-                Text("To install macOS, you need to download a recovery IPSW. If you do not select an existing IPSW, the latest macOS IPSW will be downloaded from Apple.")
-                Spacer()
-
-                Text("Drag and drop IPSW file here").foregroundColor(.secondary)
-                Spacer()
-
+        VMWizardContent("macOS", page: .macOSBoot) {
+            WizardCardGroup("Import IPSW",
+                            footer: "To install macOS, you need to download a recovery IPSW. If you do not select an existing IPSW, the latest macOS IPSW will be downloaded from Apple.") {
                 #if arch(arm64)
                 if let selected = wizardState.macRecoveryIpswURL {
-                    Text(selected.lastPathComponent)
-                        .font(.caption)
+                    WizardRow("Selected",
+                              subtitle: nil,
+                              systemImage: "doc") {
+                        Text(selected.lastPathComponent)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.trailing)
+                            .lineLimit(2)
+                    }
+                    WizardRowDivider()
                 }
-                FileBrowseField(url: $wizardState.macRecoveryIpswURL, isFileImporterPresented: $isFileImporterPresented)
+                FileBrowseField(url: $wizardState.macRecoveryIpswURL,
+                                isFileImporterPresented: $isFileImporterPresented)
                 #endif
                 if wizardState.isBusy {
-                    Spinner(size: .large)
+                    WizardRowDivider()
+                    HStack {
+                        Spacer()
+                        Spinner(size: .large)
+                        Spacer()
+                    }
+                    .padding(.vertical, 14)
                 }
-                Spacer()
-            } header: {
-                Text("Import IPSW")
             }
+
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.down.doc")
+                    .foregroundColor(.secondary)
+                Text("Drag and drop IPSW file here")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 22)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
+                    .foregroundColor(Color.wizardCardBorder)
+            )
         }
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.ipsw], onCompletion: processIpsw)
         .onDrop(of: [.fileURL], delegate: self)

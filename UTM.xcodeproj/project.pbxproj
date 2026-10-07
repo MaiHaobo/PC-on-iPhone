@@ -111,12 +111,15 @@
 		8432329028C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */; };
 		CE50B71F00000000000000A2 /* EditToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000A1 /* EditToggleButton.swift */; };
 		CE50B71F00000000000000B2 /* ConfirmationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000B1 /* ConfirmationIcon.swift */; };
+		CE50B71F00000000000000C2 /* WizardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000C1 /* WizardComponents.swift */; };
 		8432329128C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */; };
 		CE50B71F00000000000000A3 /* EditToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000A1 /* EditToggleButton.swift */; };
 		CE50B71F00000000000000B3 /* ConfirmationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000B1 /* ConfirmationIcon.swift */; };
+		CE50B71F00000000000000C3 /* WizardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000C1 /* WizardComponents.swift */; };
 		8432329228C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */; };
 		CE50B71F00000000000000A4 /* EditToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000A1 /* EditToggleButton.swift */; };
 		CE50B71F00000000000000B4 /* ConfirmationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000B1 /* ConfirmationIcon.swift */; };
+		CE50B71F00000000000000C4 /* WizardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000C1 /* WizardComponents.swift */; };
 		8432329428C2ED9000CFBC97 /* FileBrowseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432329328C2ED9000CFBC97 /* FileBrowseField.swift */; };
 		8432329528C2ED9000CFBC97 /* FileBrowseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432329328C2ED9000CFBC97 /* FileBrowseField.swift */; };
 		8432329628C2ED9000CFBC97 /* FileBrowseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432329328C2ED9000CFBC97 /* FileBrowseField.swift */; };
@@ -1200,6 +1203,7 @@
 		CEF7F61A2AEEDCC400E34952 /* VMNavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */; };
 		CE50B71F00000000000000A5 /* EditToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000A1 /* EditToggleButton.swift */; };
 		CE50B71F00000000000000B5 /* ConfirmationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000B1 /* ConfirmationIcon.swift */; };
+		CE50B71F00000000000000C5 /* WizardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B71F00000000000000C1 /* WizardComponents.swift */; };
 		CEF7F61B2AEEDCC400E34952 /* UTMSingleWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E58CD28937FED00137A20 /* UTMSingleWindowView.swift */; };
 		CEF7F61C2AEEDCC400E34952 /* UTMLegacyQemuConfiguration+Sharing.m in Sources */ = {isa = PBXBuildFile; fileRef = CE059DC4243BFA3200338317 /* UTMLegacyQemuConfiguration+Sharing.m */; };
 		CEF7F61D2AEEDCC400E34952 /* SizeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C505AB28C588EC007CE8FF /* SizeTextField.swift */; };
@@ -1856,6 +1860,7 @@
 		8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMNavigationListView.swift; sourceTree = "<group>"; };
 		CE50B71F00000000000000A1 /* EditToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditToggleButton.swift; sourceTree = "<group>"; };
 		CE50B71F00000000000000B1 /* ConfirmationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationIcon.swift; sourceTree = "<group>"; };
+		CE50B71F00000000000000C1 /* WizardComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardComponents.swift; sourceTree = "<group>"; };
 		8432329328C2ED9000CFBC97 /* FileBrowseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBrowseField.swift; sourceTree = "<group>"; };
 		8432329728C3017F00CFBC97 /* GlobalFileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFileImporter.swift; sourceTree = "<group>"; };
 		843232B628C4816100CFBC97 /* UTMDownloadSupportToolsTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMDownloadSupportToolsTask.swift; sourceTree = "<group>"; };
@@ -3286,6 +3291,7 @@
 				8432328F28C2CDAD00CFBC97 /* VMNavigationListView.swift */,
 				CE50B71F00000000000000A1 /* EditToggleButton.swift */,
 				CE50B71F00000000000000B1 /* ConfirmationIcon.swift */,
+				CE50B71F00000000000000C1 /* WizardComponents.swift */,
 				CE2D954224AD4F980059923A /* VMPlaceholderView.swift */,
 				CE2D954524AD4F980059923A /* VMRemovableDrivesView.swift */,
 				B5BB911D9C7D6564198DAC87 /* VMSnapshotsView.swift */,
@@ -4191,6 +4197,7 @@
 				8432329028C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */,
 				CE50B71F00000000000000A2 /* EditToggleButton.swift in Sources */,
 				CE50B71F00000000000000B2 /* ConfirmationIcon.swift in Sources */,
+				CE50B71F00000000000000C2 /* WizardComponents.swift in Sources */,
 				841E58CE28937FED00137A20 /* UTMSingleWindowView.swift in Sources */,
 				CED779E52C78C82A00EB82AE /* UTMTips.swift in Sources */,
 				CE2D930B24AD46670059923A /* UTMLegacyQemuConfiguration+Sharing.m in Sources */,
@@ -4310,6 +4317,7 @@
 				8432329228C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */,
 				CE50B71F00000000000000A4 /* EditToggleButton.swift in Sources */,
 				CE50B71F00000000000000B4 /* ConfirmationIcon.swift in Sources */,
+				CE50B71F00000000000000C4 /* WizardComponents.swift in Sources */,
 				CE0B6CF324AD568400FE012D /* UTMLegacyQemuConfiguration.m in Sources */,
 				8401FDA8269D4A4100265F0D /* VMConfigAppleSharingView.swift in Sources */,
 				CE0B6CFC24AD568400FE012D /* UTMLegacyQemuConfigurationPortForward.m in Sources */,
@@ -4505,6 +4513,7 @@
 				8432329128C2CDAD00CFBC97 /* VMNavigationListView.swift in Sources */,
 				CE50B71F00000000000000A3 /* EditToggleButton.swift in Sources */,
 				CE50B71F00000000000000B3 /* ConfirmationIcon.swift in Sources */,
+				CE50B71F00000000000000C3 /* WizardComponents.swift in Sources */,
 				CEA45E61263519B5002FA97D /* VMConfigNetworkView.swift in Sources */,
 				84018698288B71BF0050AC51 /* BusyIndicator.swift in Sources */,
 				CEA45E63263519B5002FA97D /* UTMLegacyViewState.m in Sources */,
@@ -4791,6 +4800,7 @@
 				CEF7F61A2AEEDCC400E34952 /* VMNavigationListView.swift in Sources */,
 				CE50B71F00000000000000A5 /* EditToggleButton.swift in Sources */,
 				CE50B71F00000000000000B5 /* ConfirmationIcon.swift in Sources */,
+				CE50B71F00000000000000C5 /* WizardComponents.swift in Sources */,
 				CEF7F61B2AEEDCC400E34952 /* UTMSingleWindowView.swift in Sources */,
 				CEF7F61C2AEEDCC400E34952 /* UTMLegacyQemuConfiguration+Sharing.m in Sources */,
 				CEF7F61D2AEEDCC400E34952 /* SizeTextField.swift in Sources */,

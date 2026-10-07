@@ -19,12 +19,16 @@ import SwiftUI
 struct VMWizardOSWindowsView: View {
     @ObservedObject var wizardState: VMWizardState
     @State private var isFileImporterPresented: Bool = false
-    
+
     var body: some View {
-        VMWizardContent("Windows") {
+        VMWizardContent("Windows", page: .windowsBoot) {
             #if !WITH_QEMU_TCI
-            Section {
-                Toggle("Install Windows 10 or higher", isOn: $wizardState.isWindows10OrHigher)
+            WizardCardGroup("Image File Type",
+                            footer: "Modern Windows requires UEFI and a TPM, which the wizard enables for you.") {
+                WizardToggleRow("Install Windows 10 or higher",
+                                subtitle: "Turn off for Windows 7 and earlier",
+                                systemImage: "square.grid.2x2",
+                                isOn: $wizardState.isWindows10OrHigher)
                     .onChange(of: wizardState.isWindows10OrHigher) { newValue in
                         if newValue {
                             wizardState.systemBootUefi = true
@@ -39,78 +43,87 @@ struct VMWizardOSWindowsView: View {
                     .disabled(wizardState.legacyHardware)
 
                 if wizardState.isWindows10OrHigher {
+                    WizardRowDivider()
+                    linkRow("Windows Install Guide",
+                            systemImage: "book",
+                            destination: "https://docs.getutm.app/guides/windows/")
                     #if os(macOS)
-                    Button {
-                        let downloadCrystalFetch = URL(string: "https://mac.getutm.app/crystalfetch/")!
-                        if let crystalFetch = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "llc.turing.CrystalFetch") {
-                            NSWorkspace.shared.openApplication(at: crystalFetch, configuration: .init()) { _, error in
-                                if error != nil {
-                                    NSWorkspace.shared.open(downloadCrystalFetch)
-                                }
-                            }
-                        } else {
-                            NSWorkspace.shared.open(downloadCrystalFetch)
-                        }
-                    } label: {
-                        Label("Fetch latest Windows installer…", systemImage: "link")
-                    }.buttonStyle(.link)
+                    WizardRowDivider()
+                    crystalFetchRow
                     #endif
-                    Link(destination: URL(string: "https://docs.getutm.app/guides/windows/")!) {
-                        Label("Windows Install Guide", systemImage: "link")
-                    }.buttonStyle(.borderless)
                 }
-            } header: {
-                Text("Image File Type")
             }
             #endif
 
-            Section {
+            WizardCardGroup(imageSectionTitle) {
                 if wizardState.legacyHardware {
-                    Picker("Boot Device", selection: $wizardState.bootDevice) {
-                        Text("CD/DVD Image").tag(VMBootDevice.cd)
-                        Text("Floppy Image").tag(VMBootDevice.floppy)
-                    }.pickerStyle(.inline)
+                    WizardRow("Boot Device",
+                              subtitle: "Where the guest boots from",
+                              systemImage: "opticaldisc") {
+                        Picker("Boot Device", selection: $wizardState.bootDevice) {
+                            Text("CD/DVD Image").tag(VMBootDevice.cd)
+                            Text("Floppy Image").tag(VMBootDevice.floppy)
+                        }
+                        .labelsHidden()
+                    }
                     .onAppear {
                         if !wizardState.legacyHardware && wizardState.bootDevice == .floppy {
                             wizardState.bootDevice = .cd
                         }
                     }
+                    WizardRowDivider()
                 }
 
-                FileBrowseField(url: $wizardState.bootImageURL, isFileImporterPresented: $isFileImporterPresented, hasClearButton: false)
-                
+                FileBrowseField(url: $wizardState.bootImageURL,
+                                isFileImporterPresented: $isFileImporterPresented,
+                                hasClearButton: false)
+
                 if wizardState.isBusy {
-                    Spinner(size: .large)
-                }
-            } header: {
-                if wizardState.bootDevice == .cd {
-                    Text("Boot ISO Image")
-                } else {
-                    Text("Boot IMG Image")
+                    WizardRowDivider()
+                    HStack {
+                        Spacer()
+                        Spinner(size: .large)
+                        Spacer()
+                    }
+                    .padding(.vertical, 14)
                 }
             }
-            
+
             if !wizardState.isWindows10OrHigher && !wizardState.legacyHardware {
-                DetailedSection("", description: "Some older systems do not support UEFI boot, such as Windows 7 and below.") {
-                    Toggle("UEFI Boot", isOn: $wizardState.systemBootUefi)
+                WizardCardGroup("Boot Options",
+                                footer: "Some older systems do not support UEFI boot, such as Windows 7 and below.") {
+                    WizardToggleRow("UEFI Boot",
+                                    subtitle: "Required by most modern systems",
+                                    systemImage: "power",
+                                    isOn: $wizardState.systemBootUefi)
                         .onChange(of: wizardState.systemBootUefi) { newValue in
                             if !newValue {
                                 wizardState.systemBootTpm = false
                             }
                         }
-                    Toggle("Secure Boot with TPM 2.0", isOn: $wizardState.systemBootTpm)
+                    WizardRowDivider()
+                    WizardToggleRow("Secure Boot with TPM 2.0",
+                                    subtitle: "Requires UEFI boot",
+                                    systemImage: "lock.shield",
+                                    isOn: $wizardState.systemBootTpm)
                         .disabled(!wizardState.systemBootUefi)
                 }
             }
-            
+
             // Disabled for non-Windows 10 installs due to autounattend version
             if wizardState.isWindows10OrHigher {
-                DetailedSection("", description: "Download and mount the guest support package for Windows. This is required for some features including dynamic resolution and clipboard sharing.") {
-                    Toggle("Install drivers and SPICE tools", isOn: $wizardState.isGuestToolsInstallRequested)
+                WizardCardGroup("Guest Support",
+                                footer: "Download and mount the guest support package for Windows. This is required for some features including dynamic resolution and clipboard sharing.") {
+                    WizardToggleRow("Install drivers and SPICE tools",
+                                    subtitle: "Recommended for the best experience",
+                                    systemImage: "wrench.adjustable",
+                                    isOn: $wizardState.isGuestToolsInstallRequested)
                 }
             }
         }
-        .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.data], onCompletion: processImage)
+        .fileImporter(isPresented: $isFileImporterPresented,
+                      allowedContentTypes: [.data],
+                      onCompletion: processImage)
         .onAppear {
             wizardState.bootDevice = .cd
             #if WITH_QEMU_TCI
@@ -124,7 +137,75 @@ struct VMWizardOSWindowsView: View {
             }
         }
     }
-    
+
+    private var imageSectionTitle: LocalizedStringKey {
+        if wizardState.bootDevice == .cd {
+            return "Boot ISO Image"
+        } else {
+            return "Boot IMG Image"
+        }
+    }
+
+    @ViewBuilder
+    private func linkRow(_ title: LocalizedStringKey,
+                         systemImage: String,
+                         destination: String) -> some View {
+        Link(destination: URL(string: destination)!) {
+            HStack(spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 17))
+                    .foregroundColor(.accentColor)
+                    .frame(width: 26)
+                Text(title)
+                    .font(.subheadline)
+                    .foregroundColor(.accentColor)
+                Spacer(minLength: 8)
+                Image(systemName: "arrow.up.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, 14)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    #if os(macOS)
+    private var crystalFetchRow: some View {
+        Button {
+            let downloadCrystalFetch = URL(string: "https://mac.getutm.app/crystalfetch/")!
+            if let crystalFetch = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "llc.turing.CrystalFetch") {
+                NSWorkspace.shared.openApplication(at: crystalFetch, configuration: .init()) { _, error in
+                    if error != nil {
+                        NSWorkspace.shared.open(downloadCrystalFetch)
+                    }
+                }
+            } else {
+                NSWorkspace.shared.open(downloadCrystalFetch)
+            }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "arrow.down.circle")
+                    .font(.system(size: 17))
+                    .foregroundColor(.accentColor)
+                    .frame(width: 26)
+                Text("Fetch latest Windows installer…")
+                    .font(.subheadline)
+                    .foregroundColor(.accentColor)
+                Spacer(minLength: 8)
+                Image(systemName: "arrow.up.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, 14)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    #endif
+
     private func processImage(_ result: Result<URL, Error>) {
         wizardState.busyWorkAsync {
             let url = try result.get()
@@ -137,7 +218,7 @@ struct VMWizardOSWindowsView: View {
 
 struct VMWizardOSWindowsView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardOSWindowsView(wizardState: wizardState)
     }

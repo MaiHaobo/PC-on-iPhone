@@ -45,6 +45,27 @@ struct VMWizardHardwareView: View {
             }
         }
 
+        /// Short form used in the collapsed summary row, so the chosen machine
+        /// is readable at a glance without the full descriptive title.
+        var displayTitle: String {
+            switch self {
+            case .quadra800: return "Macintosh Quadra 800"
+            case .powerMacG4: return "Power Macintosh G4"
+            case .i440FX: return "Intel i440FX PC"
+            case .q35: return "Intel ICH9 PC"
+            case .arm64Virt: return "ARM64 virtual machine"
+            case .riscv64Virt: return "RISC-V64 virtual machine"
+            }
+        }
+
+        var symbolName: String {
+            switch self {
+            case .quadra800, .powerMacG4: return "desktopcomputer"
+            case .i440FX, .q35: return "pc"
+            case .arm64Virt, .riscv64Virt: return "cpu"
+            }
+        }
+
         var architecture: QEMUArchitecture {
             switch self {
             case .quadra800: return .m68k
@@ -152,9 +173,11 @@ struct VMWizardHardwareView: View {
             }
         }
     }
+
     @ObservedObject var wizardState: VMWizardState
     @State private var isExpertMode: Bool = false
     @State private var selectedMachine: SupportedMachine?
+    @State private var isMachinePickerExpanded: Bool = false
 
     var minCores: Int {
         #if canImport(Virtualization)
@@ -163,7 +186,7 @@ struct VMWizardHardwareView: View {
         1
         #endif
     }
-    
+
     var maxCores: Int {
         #if canImport(Virtualization)
         VZVirtualMachineConfiguration.maximumAllowedCPUCount
@@ -171,7 +194,7 @@ struct VMWizardHardwareView: View {
         Int(sysctlIntRead("hw.ncpu"))
         #endif
     }
-    
+
     var minMemoryMib: Int {
         #if canImport(Virtualization)
         Int(VZVirtualMachineConfiguration.minimumAllowedMemorySize / UInt64(wizardState.bytesInMib))
@@ -179,7 +202,7 @@ struct VMWizardHardwareView: View {
         8
         #endif
     }
-    
+
     var maxMemoryMib: Int {
         #if canImport(Virtualization)
         Int(VZVirtualMachineConfiguration.maximumAllowedMemorySize / UInt64(wizardState.bytesInMib))
@@ -187,108 +210,127 @@ struct VMWizardHardwareView: View {
         sysctlIntRead("hw.memsize")
         #endif
     }
-    
+
+    /// The machine list actually offered for the chosen OS.
+    private var supportedMachines: [SupportedMachine] {
+        SupportedMachine.allCases.filter { $0.isSupported(running: wizardState.operatingSystem) }
+    }
+
     var body: some View {
-        VMWizardContent("Hardware") {
+        VMWizardContent("Hardware", page: .hardware) {
             if !wizardState.useVirtualization {
-                Toggle("Expert Mode", isOn: $isExpertMode)
-                    .help("List all supported hardware. May require manual configuration to boot.")
-            }
-            if !wizardState.useVirtualization && isExpertMode {
-                Section {
-                    VMConfigConstantPicker(selection: $wizardState.systemArchitecture)
-                        .onChange(of: wizardState.systemArchitecture) { newValue in
-                            wizardState.systemTarget = newValue.targetType.default
-                        }
-                } header: {
-                    Text("Architecture")
+                WizardCardGroup(footer: isExpertMode
+                                ? "List all supported hardware. May require manual configuration to boot."
+                                : nil) {
+                    WizardToggleRow("Expert Mode",
+                                    subtitle: "Pick architecture and system manually",
+                                    systemImage: "wrench.and.screwdriver",
+                                    isOn: $isExpertMode)
                 }
-                
-                Section {
-                    VMConfigConstantPicker(selection: $wizardState.systemTarget, type: wizardState.systemArchitecture.targetType)
-                } header: {
-                    Text("System")
+            }
+
+            if !wizardState.useVirtualization && isExpertMode {
+                WizardCardGroup("Architecture") {
+                    WizardRow("Architecture",
+                              subtitle: "CPU architecture to emulate",
+                              systemImage: "cpu") {
+                        VMConfigConstantPicker(selection: $wizardState.systemArchitecture)
+                            .labelsHidden()
+                            .onChange(of: wizardState.systemArchitecture) { newValue in
+                                wizardState.systemTarget = newValue.targetType.default
+                            }
+                    }
                 }
 
+                WizardCardGroup("System") {
+                    WizardRow("System",
+                              subtitle: "Machine model presented to the guest",
+                              systemImage: "pc") {
+                        VMConfigConstantPicker(selection: $wizardState.systemTarget,
+                                               type: wizardState.systemArchitecture.targetType)
+                            .labelsHidden()
+                    }
+                }
             } else if !isExpertMode {
-                Picker("Machine", selection: $selectedMachine) {
-                    ForEach(SupportedMachine.allCases.filter({ $0.isSupported(running: wizardState.operatingSystem )})) { system in
-                        Text(system.title).tag(system)
-                    }
-                }.pickerStyle(.inline)
-                .onChange(of: selectedMachine) { newValue in
-                    guard let newValue = newValue else {
-                        return
-                    }
-                    wizardState.systemArchitecture = newValue.architecture
-                    wizardState.systemTarget = newValue.target
-                    wizardState.systemMemoryMib = newValue.defaultRam
-                    wizardState.systemCpuCount = newValue.maxSupportedCores
-                    wizardState.storageSizeGib = newValue.defaultStorageGiB
-                    wizardState.legacyHardware = newValue.isLegacyHardware
-                }
+                machineSection
             }
-            Section {
-                RAMSlider(systemMemory: $wizardState.systemMemoryMib) { _ in
-                    let selectedMax = selectedMachine?.maxRam ?? 0
-                    let validMax = selectedMax > 0 ? selectedMax : maxMemoryMib
-                    if wizardState.systemMemoryMib > validMax {
-                        wizardState.systemMemoryMib = validMax
-                    }
-                    let validMin = selectedMachine?.minRam ?? 0
-                    if wizardState.systemMemoryMib < validMin {
-                        wizardState.systemMemoryMib = validMin
+
+            WizardCardGroup("Memory",
+                            footer: "The guest sees this much RAM. More memory needs more free space on this device.") {
+                WizardRow("Memory",
+                          subtitle: ByteCountFormatter.string(
+                            fromByteCount: Int64(wizardState.systemMemoryMib * wizardState.bytesInMib),
+                            countStyle: .binary),
+                          systemImage: "memorychip") {
+                    RAMSlider(systemMemory: $wizardState.systemMemoryMib) { _ in
+                        let selectedMax = selectedMachine?.maxRam ?? 0
+                        let validMax = selectedMax > 0 ? selectedMax : maxMemoryMib
+                        if wizardState.systemMemoryMib > validMax {
+                            wizardState.systemMemoryMib = validMax
+                        }
+                        let validMin = selectedMachine?.minRam ?? 0
+                        if wizardState.systemMemoryMib < validMin {
+                            wizardState.systemMemoryMib = validMin
+                        }
                     }
                 }
-            } header: {
-                Text("Memory")
             }
 
             if isExpertMode || selectedMachine?.maxSupportedCores == 0 {
-                Section {
-                    HStack {
-                        Stepper(value: $wizardState.systemCpuCount, in: minCores...maxCores) {
-                            Text("CPU Cores")
+                WizardCardGroup("CPU",
+                                footer: "Leave at 0 to let the system choose a sensible default.") {
+                    WizardRow("CPU Cores",
+                              subtitle: "Number of virtual CPU cores",
+                              systemImage: "cpu") {
+                        HStack(spacing: 10) {
+                            NumberTextField("", number: $wizardState.systemCpuCount,
+                                            prompt: "Default",
+                                            onEditingChanged: { _ in
+                                guard wizardState.systemCpuCount != 0 else {
+                                    return
+                                }
+                                if wizardState.systemCpuCount < minCores {
+                                    wizardState.systemCpuCount = minCores
+                                } else if wizardState.systemCpuCount > maxCores {
+                                    wizardState.systemCpuCount = maxCores
+                                }
+                            })
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 64)
+                            .multilineTextAlignment(.trailing)
                         }
-                        NumberTextField("", number: $wizardState.systemCpuCount, prompt: "Default", onEditingChanged: { _ in
-                            guard wizardState.systemCpuCount != 0  else {
-                                return
-                            }
-                            if wizardState.systemCpuCount < minCores {
-                                wizardState.systemCpuCount = minCores
-                            } else if wizardState.systemCpuCount > maxCores {
-                                wizardState.systemCpuCount = maxCores
-                            }
-                        })
-                        .frame(width: 80)
-                        .multilineTextAlignment(.trailing)
                     }
-                } header: {
-                    Text("CPU")
                 }
             }
 
-            
-            
             if !wizardState.useAppleVirtualization && wizardState.operatingSystem == .Linux {
-                DetailedSection("Display Output", description: "There are known issues in some newer Linux drivers including black screen, broken compositing, and apps failing to render.") {
-                    Toggle("Enable display output", isOn: $wizardState.isDisplayEnabled)
+                WizardCardGroup("Display Output",
+                                footer: "There are known issues in some newer Linux drivers including black screen, broken compositing, and apps failing to render.") {
+                    WizardToggleRow("Enable display output",
+                                    subtitle: "Show a graphical console window",
+                                    systemImage: "display",
+                                    isOn: $wizardState.isDisplayEnabled)
                         .onChange(of: wizardState.isDisplayEnabled) { newValue in
                             if !newValue {
                                 wizardState.isGLEnabled = false
                             }
                         }
-                    Toggle("Enable hardware OpenGL acceleration", isOn: $wizardState.isGLEnabled)
+                    WizardRowDivider()
+                    WizardToggleRow("Enable hardware OpenGL acceleration",
+                                    subtitle: "Requires display output",
+                                    systemImage: "cube.transparent",
+                                    isOn: $wizardState.isGLEnabled)
                         .disabled(!wizardState.isDisplayEnabled)
                 }
             }
 
             if !wizardState.useVirtualization && isExpertMode {
-                Section {
-                    Toggle("Legacy Hardware", isOn: $wizardState.legacyHardware)
-                        .help("If checked, emulated devices with higher compatibility will be instantiated at the cost of performance.")
-                } header: {
-                    Text("Options")
+                WizardCardGroup("Options",
+                                footer: "If checked, emulated devices with higher compatibility will be instantiated at the cost of performance.") {
+                    WizardToggleRow("Legacy Hardware",
+                                    subtitle: "Prefer compatibility over speed",
+                                    systemImage: "clock.arrow.circlepath",
+                                    isOn: $wizardState.legacyHardware)
                 }
             }
         }
@@ -307,17 +349,86 @@ struct VMWizardHardwareView: View {
                 wizardState.systemTarget = wizardState.systemArchitecture.targetType.default
                 wizardState.legacyHardware = false
             } else if selectedMachine == nil {
-                selectedMachine = SupportedMachine.default(for: wizardState.operatingSystem)
-                wizardState.systemArchitecture = selectedMachine!.architecture
-                wizardState.systemTarget = selectedMachine!.target
-                wizardState.systemMemoryMib = selectedMachine!.defaultRam
-                wizardState.systemCpuCount = selectedMachine!.maxSupportedCores
-                wizardState.storageSizeGib = selectedMachine!.defaultStorageGiB
-                wizardState.legacyHardware = selectedMachine!.isLegacyHardware
+                let machine = SupportedMachine.default(for: wizardState.operatingSystem)
+                selectedMachine = machine
+                apply(machine)
             }
         }
     }
-    
+
+    /// The machine picker. Collapsed to a summary row by default and expanded
+    /// into a list of cards on tap, so the page stays short for the common case
+    /// of accepting the default machine.
+    @ViewBuilder
+    private var machineSection: some View {
+        WizardCardGroup("Machine",
+                        footer: isMachinePickerExpanded
+                        ? nil
+                        : "Tap to change the emulated machine model.") {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isMachinePickerExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: selectedMachine?.symbolName ?? "pc")
+                        .font(.system(size: 17))
+                        .foregroundColor(.accentColor)
+                        .frame(width: 26)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Machine")
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                        Text(selectedMachine?.displayTitle ?? "")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer(minLength: 8)
+                    Image(systemName: isMachinePickerExpanded
+                          ? "chevron.up" : "chevron.down")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.vertical, 10)
+                .padding(.horizontal, 14)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if isMachinePickerExpanded {
+                VStack(spacing: 8) {
+                    ForEach(supportedMachines) { machine in
+                        WizardCard(title: machine.title,
+                                   isSelected: selectedMachine == machine) {
+                            selectedMachine = machine
+                            apply(machine)
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isMachinePickerExpanded = false
+                            }
+                        } icon: {
+                            Image(systemName: machine.symbolName)
+                                .font(.system(size: 22))
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
+            }
+        }
+    }
+
+    /// Applies every setting that follows from a machine choice. Kept in one
+    /// place so the picker and the `onAppear` default cannot drift apart.
+    private func apply(_ machine: SupportedMachine) {
+        wizardState.systemArchitecture = machine.architecture
+        wizardState.systemTarget = machine.target
+        wizardState.systemMemoryMib = machine.defaultRam
+        wizardState.systemCpuCount = machine.maxSupportedCores
+        wizardState.storageSizeGib = machine.defaultStorageGiB
+        wizardState.legacyHardware = machine.isLegacyHardware
+    }
+
     private func sysctlIntRead(_ name: String) -> Int {
         var value: Int = 0
         var size = MemoryLayout<UInt64>.size
@@ -328,7 +439,7 @@ struct VMWizardHardwareView: View {
 
 struct VMWizardHardwareView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardHardwareView(wizardState: wizardState)
     }

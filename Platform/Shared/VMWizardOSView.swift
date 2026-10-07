@@ -16,107 +16,131 @@
 
 import SwiftUI
 
+/// Operating-system picker.
+///
+/// Each OS is a full-width card carrying its brand mark, name and a one-line
+/// hint about what it is for, instead of the previous 30pt thumbnail next to a
+/// plain title. The availability logic is unchanged: which entries appear still
+/// depends on the engine chosen on the previous page.
 struct VMWizardOSView: View {
     @ObservedObject var wizardState: VMWizardState
+
     var body: some View {
-        VMWizardContent("Operating System") {
-            Section {
+        VMWizardContent("Operating System", page: .operatingSystem) {
+            WizardCardGroup("Preconfigured") {
                 #if os(macOS) && arch(arm64)
                 if wizardState.useVirtualization {
-                    Button {
+                    osCard(
+                           title: "macOS 12+",
+                           subtitle: "Apple Virtualization, arm64",
+                           logo: "Logo-macOS") {
                         wizardState.operatingSystem = .macOS
                         wizardState.useAppleVirtualization = true
                         wizardState.isGuestToolsInstallRequested = false
                         wizardState.next()
-                    } label: {
-                        OperatingSystem(imageName: "Logo-macOS", name: "macOS 12+")
                     }
+                    WizardRowDivider()
                 }
                 #endif
+
                 if !wizardState.useVirtualization {
-                    Button {
+                    osCard(
+                           title: "Classic Mac OS",
+                           subtitle: "68K / PowerPC emulation",
+                           logo: "Logo-macOS") {
                         wizardState.operatingSystem = .ClassicMacOS
                         wizardState.useAppleVirtualization = false
                         wizardState.isGuestToolsInstallRequested = false
                         wizardState.next()
-                    } label: {
-                        OperatingSystem(imageName: "Logo-macOS", name: "Classic Mac OS")
                     }
+                    WizardRowDivider()
                 }
-                Button {
+
+                osCard(
+                       title: "Windows",
+                       subtitle: "Windows 10 / 11 and earlier",
+                       logo: "Logo-Windows") {
                     wizardState.operatingSystem = .Windows
                     wizardState.useAppleVirtualization = false
                     wizardState.isGuestToolsInstallRequested = true
                     wizardState.next()
-                } label: {
-                    OperatingSystem(imageName: "Logo-Windows", name: "Windows")
                 }
-                Button {
+
+                WizardRowDivider()
+
+                osCard(
+                       title: "Linux",
+                       subtitle: "Ubuntu, Debian and others",
+                       logo: "Logo-Linux") {
                     wizardState.operatingSystem = .Linux
                     wizardState.isGuestToolsInstallRequested = false
                     wizardState.next()
-                } label: {
-                    OperatingSystem(imageName: "Logo-Linux", name: "Linux")
                 }
-            } header: {
-                Text("Preconfigured")
             }
-            Section {
-                Button {
+
+            WizardCardGroup("Custom") {
+                WizardCard(title: "Other",
+                           subtitle: "Any other operating system, configured manually") {
                     wizardState.operatingSystem = .Other
                     wizardState.useAppleVirtualization = false
                     wizardState.isGuestToolsInstallRequested = false
                     wizardState.next()
-                } label: {
-                    HStack {
-                        Image(systemName: "gearshape")
-                            .resizable()
-                            .frame(width: 30.0, height: 30.0)
-                            .aspectRatio(contentMode: .fit)
-                        Text("Other")
-                            .font(.title)
-                    }
-                    .padding()
+                } icon: {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 24))
+                        .foregroundColor(.accentColor)
                 }
-            } header: {
-                Text("Custom")
             }
-
         }
-        .buttonStyle(.inList)
     }
-}
 
-struct OperatingSystem: View {
-    let imageName: String
-    let name: LocalizedStringKey
-    
-#if os(macOS)
-    private var icon: Image {
-        Image(nsImage: NSImage(named: imageName)!)
+    /// Builds an OS card backed by a bundled brand image, falling back to a
+    /// generic symbol when the asset is missing so the row never renders blank.
+    @ViewBuilder
+    private func osCard(title: LocalizedStringKey,
+                        subtitle: LocalizedStringKey,
+                        logo: String,
+                        action: @escaping () -> Void) -> some View {
+        WizardCard(title: title, subtitle: subtitle, action: action) {
+            brandImage(logo)
+        }
     }
-#else
-    private var icon: Image {
-        Image(uiImage: UIImage(named: imageName)!)
-    }
-#endif
-    
-    var body: some View {
-        HStack {
-            icon
+
+    /// The bundled brand mark for an OS, or a neutral symbol if it is absent.
+    @ViewBuilder
+    private func brandImage(_ name: String) -> some View {
+        #if os(macOS)
+        if let image = NSImage(named: name) {
+            Image(nsImage: image)
                 .resizable()
-                .frame(width: 30.0, height: 30.0)
                 .aspectRatio(contentMode: .fit)
-            Text(name)
-                .font(.title)
+                .frame(width: 34, height: 34)
+        } else {
+            fallbackIcon
         }
-        .padding()
+        #else
+        if let image = UIImage(named: name) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 34, height: 34)
+        } else {
+            fallbackIcon
+        }
+        #endif
+    }
+
+    private var fallbackIcon: some View {
+        Image(systemName: "desktopcomputer")
+            .font(.system(size: 24))
+            .foregroundColor(.accentColor)
+            .frame(width: 34, height: 34)
     }
 }
 
 struct VMWizardOSView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardOSView(wizardState: wizardState)
     }

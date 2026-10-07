@@ -21,9 +21,9 @@ struct VMWizardOSClassicMacView: View {
         case pmu
         case pmuAdb
         case cuda
-        
+
         var id: Self { self }
-        
+
         var title: LocalizedStringKey {
             switch self {
             case .pmu: return "PMU"
@@ -52,32 +52,40 @@ struct VMWizardOSClassicMacView: View {
     @State private var selectImage: SelectImage = .bootImage
 
     var body: some View {
-        VMWizardContent("Classic Mac OS") {
-            DetailedSection("Boot ISO Image") {
-                FileBrowseField(url: $wizardState.bootImageURL, isFileImporterPresented: $isFileImporterPresented, hasClearButton: false) {
+        VMWizardContent("Classic Mac OS", page: .classicMacOSBoot) {
+            WizardCardGroup("Boot ISO Image",
+                            footer: "Select the installation CD image for the version of Mac OS you want to run.") {
+                FileBrowseField(url: $wizardState.bootImageURL,
+                                isFileImporterPresented: $isFileImporterPresented,
+                                hasClearButton: false) {
                     selectImage = .bootImage
                 }
             }
-            
+
             if wizardState.systemTarget.rawValue == QEMUTarget_m68k.q800.rawValue {
-                DetailedSection("Quadra 800 ROM") {
-                    FileBrowseField(url: $wizardState.quadra800RomUrl, isFileImporterPresented: $isFileImporterPresented, hasClearButton: false) {
+                WizardCardGroup("Quadra 800 ROM",
+                                footer: "A ROM dump of the original Macintosh Quadra 800 is required to boot.") {
+                    FileBrowseField(url: $wizardState.quadra800RomUrl,
+                                    isFileImporterPresented: $isFileImporterPresented,
+                                    hasClearButton: false) {
                         selectImage = .bios
                     }
                 }
             }
-            
+
             if wizardState.systemArchitecture == .ppc || wizardState.systemArchitecture == .ppc64 {
-                DetailedSection("Advanced Options") {
-                    Picker("PMU", selection: $ppcVia) {
-                        ForEach(PpcVia.allCases) { item in
-                            Text(item.title).tag(item)
+                WizardCardGroup("Advanced Options",
+                                footer: "Different versions of Mac OS require different VIA option.") {
+                    WizardRow("PMU",
+                              subtitle: "VIA emulation mode",
+                              systemImage: "gearshape.2") {
+                        Picker("PMU", selection: $ppcVia) {
+                            ForEach(PpcVia.allCases) { item in
+                                Text(item.title).tag(item)
+                            }
                         }
+                        .labelsHidden()
                     }
-                    #if os(macOS)
-                    .pickerStyle(.inline)
-                    #endif
-                    .help("Different versions of Mac OS require different VIA option.")
                     .onChange(of: ppcVia) { newValue in
                         wizardState.machineProperties = newValue.machineProperties
                     }
@@ -86,9 +94,13 @@ struct VMWizardOSClassicMacView: View {
                     }
                 }
             }
-            
+
             if wizardState.isBusy {
-                Spinner(size: .large)
+                HStack {
+                    Spacer()
+                    Spinner(size: .large)
+                    Spacer()
+                }
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.data]) { result in

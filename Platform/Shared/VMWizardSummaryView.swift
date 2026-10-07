@@ -16,10 +16,17 @@
 
 import SwiftUI
 
+/// Final review page.
+///
+/// Previously every value was rendered as a disabled `TextField`, which made
+/// the summary a wall of greyed-out input boxes that looked editable but were
+/// not. Values are now plain read-only rows with a trailing emphasis value,
+/// and the one thing the user *can* change here — the name — is the only
+/// editable control on the page.
 struct VMWizardSummaryView: View {
     @ObservedObject var wizardState: VMWizardState
     @EnvironmentObject private var data: UTMData
-    
+
     var storageDescription: String {
         var size = Int64(wizardState.storageSizeGib * wizardState.bytesInGib)
         #if arch(arm64)
@@ -31,7 +38,7 @@ struct VMWizardSummaryView: View {
         #endif
         return ByteCountFormatter.string(fromByteCount: size, countStyle: .binary)
     }
-    
+
     var coreDescription: String {
         let cores = wizardState.systemCpuCount
         if cores == 0 {
@@ -40,51 +47,95 @@ struct VMWizardSummaryView: View {
             return String.localizedStringWithFormat(NSLocalizedString("%lld Cores", comment: "VMWizardSummaryView"), cores)
         }
     }
-    
+
+    private var memoryDescription: String {
+        ByteCountFormatter.string(
+            fromByteCount: Int64(wizardState.systemMemoryMib * wizardState.bytesInMib),
+            countStyle: .binary)
+    }
+
     var body: some View {
-        VStack {
-            #if os(macOS)
-            Text("Summary")
-                .font(.largeTitle)
-            ScrollView {
-                Form {
-                    info
-                    Divider()
-                    system
-                        .disabled(true)
-                    Divider()
-                    boot
-                        .disabled(true)
-                    Divider()
-                    sharing
-                        .disabled(true)
+        VMWizardContent("Summary", page: .summary) {
+            WizardCardGroup("Information") {
+                WizardRow("Name",
+                          subtitle: "Shown in the sidebar",
+                          systemImage: "textformat") {
+                    TextField("Name", text: $wizardState.name.bound)
+                        .multilineTextAlignment(.trailing)
+                        .lineLimit(1)
+                }
+                #if os(macOS)
+                WizardRowDivider()
+                WizardToggleRow("Open VM Settings",
+                                subtitle: "Open the settings panel after creation",
+                                systemImage: "gearshape",
+                                isOn: $wizardState.isOpenSettingsAfterCreation)
+                    .disabled(wizardState.isPendingIPSWDownload)
+                #endif
+            }
+
+            WizardCardGroup("System") {
+                summaryValue("Engine",
+                             systemImage: "cpu",
+                             value: wizardState.useAppleVirtualization
+                             ? NSLocalizedString("Apple Virtualization", comment: "VMWizardSummaryView")
+                             : "QEMU")
+                WizardRowDivider()
+                summaryValue("Operating System",
+                             systemImage: "desktopcomputer",
+                             value: wizardState.operatingSystem.name.localizedString)
+                if !wizardState.useAppleVirtualization {
+                    WizardRowDivider()
+                    summaryValue("Architecture",
+                                 systemImage: "square.stack.3d.up",
+                                 value: wizardState.systemArchitecture.prettyValue)
+                    WizardRowDivider()
+                    summaryValue("System",
+                                 systemImage: "pc",
+                                 value: wizardState.systemTarget.prettyValue)
+                }
+                WizardRowDivider()
+                summaryValue("RAM",
+                             systemImage: "memorychip",
+                             value: memoryDescription)
+                WizardRowDivider()
+                summaryValue("CPU",
+                             systemImage: "cpu",
+                             value: coreDescription)
+                WizardRowDivider()
+                summaryValue("Storage",
+                             systemImage: "internaldrive",
+                             value: storageDescription)
+            }
+
+            if hasBootDetails {
+                WizardCardGroup("Boot") {
+                    bootRows
                 }
             }
-            Spacer()
-            #else
-            Form {
-                Section(header: Text("Information")) {
-                    info
+
+            WizardCardGroup("Sharing") {
+                summaryValue("Share Directory",
+                             systemImage: "folder",
+                             value: wizardState.sharingDirectoryURL != nil
+                             ? NSLocalizedString("Enabled", comment: "VMWizardSummaryView")
+                             : NSLocalizedString("Disabled", comment: "VMWizardSummaryView"))
+                if let sharingPath = wizardState.sharingDirectoryURL?.path {
+                    WizardRowDivider()
+                    summaryValue("Directory",
+                                 systemImage: "folder.badge.gearshape",
+                                 value: sharingPath)
+                    if !wizardState.useAppleVirtualization {
+                        WizardRowDivider()
+                        summaryValue("Read Only",
+                                     systemImage: "lock",
+                                     value: wizardState.sharingReadOnly
+                                     ? NSLocalizedString("Yes", comment: "VMWizardSummaryView")
+                                     : NSLocalizedString("No", comment: "VMWizardSummaryView"))
+                    }
                 }
-                Section(header: Text("System")) {
-                    system
-                        .disabled(true)
-                }
-                Section(header: Text("Boot")) {
-                    boot
-                        .disabled(true)
-                }
-                Section(header: Text("Sharing")) {
-                    sharing
-                        .disabled(true)
-                }
-            }.textFieldStyle(.automatic)
-            #endif
+            }
         }
-        #if os(macOS)
-        .padding([.horizontal, .bottom])
-        #endif
-        .navigationTitle(Text("Summary"))
         .onAppear {
             if wizardState.name == nil {
                 let os = wizardState.operatingSystem
@@ -97,76 +148,96 @@ struct VMWizardSummaryView: View {
             wizardState.confusedUserCheck()
         }
     }
-    
-    var info: some View {
-        Group {
-            TextField("Name", text: $wizardState.name.bound)
-                .lineLimit(1)
-            #if os(macOS)
-            Toggle("Open VM Settings", isOn: $wizardState.isOpenSettingsAfterCreation)
-                .disabled(wizardState.isPendingIPSWDownload)
+
+    private var hasBootDetails: Bool {
+        if wizardState.bootImageURL != nil {
+            return true
+        }
+        switch wizardState.operatingSystem {
+        case .macOS:
+            #if os(macOS) && arch(arm64)
+            return true
+            #else
+            return false
             #endif
+        case .Linux:
+            return wizardState.linuxKernelURL != nil
+                || wizardState.linuxInitialRamdiskURL != nil
+                || wizardState.linuxRootImageURL != nil
+                || !wizardState.linuxBootArguments.isEmpty
+        default:
+            return false
         }
     }
-    
-    var system: some View {
-        Group {
-            TextField("Engine", text: .constant(NSLocalizedString(wizardState.useAppleVirtualization ? "Apple Virtualization" : "QEMU", comment: "VMWizardSummaryView")))
-            Toggle("Use Virtualization", isOn: $wizardState.useVirtualization)
-            Toggle("Legacy Hardware", isOn: $wizardState.legacyHardware)
-            if !wizardState.useAppleVirtualization {
-                TextField("Architecture", text: .constant(wizardState.systemArchitecture.prettyValue))
-                TextField("System", text: .constant(wizardState.systemTarget.prettyValue))
+
+    @ViewBuilder
+    private var bootRows: some View {
+        if let bootImageURL = wizardState.bootImageURL {
+            summaryValue("Boot Image",
+                         systemImage: "opticaldisc",
+                         value: bootImageURL.path)
+        }
+        if wizardState.operatingSystem == .macOS {
+            #if os(macOS) && arch(arm64)
+            if wizardState.bootImageURL != nil {
+                WizardRowDivider()
             }
-            TextField("RAM", text: .constant(ByteCountFormatter.string(fromByteCount: Int64(wizardState.systemMemoryMib * wizardState.bytesInMib), countStyle: .binary)))
-            TextField("CPU", text: .constant(coreDescription))
-            TextField("Storage", text: .constant(storageDescription))
-            if !wizardState.useAppleVirtualization && wizardState.operatingSystem == .Linux {
-                Toggle("Hardware OpenGL Acceleration", isOn: $wizardState.isGLEnabled)
+            summaryValue("IPSW",
+                         systemImage: "arrow.down.circle",
+                         value: wizardState.macRecoveryIpswURL?.path ?? "")
+            #endif
+        } else if wizardState.operatingSystem == .Linux && wizardState.bootDevice == .kernel {
+            if wizardState.bootImageURL != nil {
+                WizardRowDivider()
+            }
+            if let kernel = wizardState.linuxKernelURL?.path {
+                summaryValue("Kernel", systemImage: "terminal", value: kernel)
+            }
+            if let ramdisk = wizardState.linuxInitialRamdiskURL?.path {
+                WizardRowDivider()
+                summaryValue("Initial Ramdisk", systemImage: "memorychip", value: ramdisk)
+            }
+            if let root = wizardState.linuxRootImageURL?.path {
+                WizardRowDivider()
+                summaryValue("Root Image", systemImage: "internaldrive", value: root)
+            }
+            if !wizardState.linuxBootArguments.isEmpty {
+                WizardRowDivider()
+                summaryValue("Boot Arguments", systemImage: "text.alignleft",
+                             value: wizardState.linuxBootArguments)
             }
         }
     }
-    
-    var boot: some View {
-        Group {
-            TextField("Operating System", text: .constant(wizardState.operatingSystem.name.localizedString))
-            if let bootImageURL = wizardState.bootImageURL {
-                TextField("Boot Image", text: .constant(bootImageURL.path))
-            }
-            if wizardState.operatingSystem == .macOS {
-                #if os(macOS) && arch(arm64)
-                TextField("IPSW", text: .constant(wizardState.macRecoveryIpswURL?.path ?? ""))
-                #else
-                EmptyView()
-                #endif
-            } else if wizardState.operatingSystem == .Linux {
-                TextField("Kernel", text: .constant(wizardState.linuxKernelURL?.path ?? ""))
-                TextField("Initial Ramdisk", text: .constant(wizardState.linuxInitialRamdiskURL?.path ?? ""))
-                TextField("Root Image", text: .constant(wizardState.linuxRootImageURL?.path ?? ""))
-                TextField("Boot Arguments", text: $wizardState.linuxBootArguments)
-                #if arch(arm64)
-                if wizardState.useAppleVirtualization && wizardState.operatingSystem == .Linux {
-                    Toggle("Use Rosetta", isOn: $wizardState.linuxHasRosetta)
-                }
-                #endif
-            }
+
+    /// A read-only row: label on the left, emphasised value on the right.
+    /// Long values (paths, arguments) wrap rather than truncate.
+    @ViewBuilder
+    private func summaryValue(_ title: LocalizedStringKey,
+                              systemImage: String,
+                              value: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.system(size: 17))
+                .foregroundColor(.accentColor)
+                .frame(width: 26)
+            Text(title)
+                .font(.subheadline)
+                .foregroundColor(.primary)
+            Spacer(minLength: 12)
+            Text(value)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.trailing)
+                .fixedSize(horizontal: false, vertical: true)
         }
-    }
-    
-    var sharing: some View {
-        Group {
-            Toggle("Share Directory", isOn: .constant(wizardState.sharingDirectoryURL != nil))
-            if let sharingPath = wizardState.sharingDirectoryURL?.path {
-                TextField("Directory", text: .constant(sharingPath))
-                Toggle("Read Only", isOn: $wizardState.sharingReadOnly)
-            }
-        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 14)
     }
 }
 
 struct VMWizardSummaryView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardSummaryView(wizardState: wizardState)
     }

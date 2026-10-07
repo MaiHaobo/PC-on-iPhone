@@ -19,9 +19,15 @@ import SwiftUI
 import Virtualization
 #endif
 
+/// Entry page: choose how the VM will run.
+///
+/// The two engine choices are the largest, most consequential decision in the
+/// wizard — virtualization is dramatically faster but architecturally limited —
+/// so they get the full card treatment with the trade-off stated in the
+/// subtitle rather than hidden behind a one-word label.
 struct VMWizardStartView: View {
     @ObservedObject var wizardState: VMWizardState
-    
+
     var isVirtualizationSupported: Bool {
         #if os(macOS)
         VZVirtualMachine.isSupported && !processIsTranslated()
@@ -29,7 +35,7 @@ struct VMWizardStartView: View {
         UTMCapabilities.current.contains(.hasHypervisorSupport)
         #endif
     }
-    
+
     var isEmulationSupported: Bool {
         #if !WITH_JIT
         true
@@ -37,88 +43,88 @@ struct VMWizardStartView: View {
         Main.jitAvailable
         #endif
     }
-    
+
     var body: some View {
-        VMWizardContent("Start") {
-            Section {
-                let virtButton = Button {
+        VMWizardContent("Start", page: .start) {
+            WizardCardGroup("Custom", footer: engineFooter) {
+                WizardCard(
+                    title: "Virtualize",
+                    subtitle: "Faster, but can only run the native CPU architecture.",
+                    isEnabled: isVirtualizationSupported
+                ) {
                     wizardState.useVirtualization = true
                     wizardState.next()
-                } label: {
-                    HStack {
-                        Image(systemName: "hare")
-                            .font(.title)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Virtualize")
-                                .font(.title)
-                            Text("Faster, but can only run the native CPU architecture.")
-                                .font(.caption)
-                        }
-                        Spacer()
-                    }
-                    .padding()
+                } icon: {
+                    Image(systemName: "hare")
+                        .font(.system(size: 26))
+                        .foregroundColor(.accentColor)
                 }
-                .buttonStyle(.inList)
-                .disabled(!isVirtualizationSupported)
-                virtButton
 
-                Button {
+                WizardRowDivider()
+
+                WizardCard(
+                    title: "Emulate",
+                    subtitle: "Slower, but can run other CPU architectures."
+                ) {
                     wizardState.useVirtualization = false
                     wizardState.next()
-                } label: {
-                    HStack {
-                        Image(systemName: "tortoise")
-                            .font(.title)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Emulate")
-                                .font(.title)
-                            Text("Slower, but can run other CPU architectures.")
-                                .font(.caption)
-                        }
-                        Spacer()
-                    }
-                    .padding()
+                } icon: {
+                    Image(systemName: "tortoise")
+                        .font(.system(size: 26))
+                        .foregroundColor(.accentColor)
                 }
-                .buttonStyle(.inList)
-                
-            } header: {
-                Text("Custom")
-            } footer: {
-                if !isEmulationSupported && !isVirtualizationSupported {
-                    Text("Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details.")
-                } else if !isVirtualizationSupported {
-                    Text("Virtualization is not supported on your system.")
-                } else if !isEmulationSupported {
-                    Text("This build does not emulation.")
-                }
-            }
-            Section {
-                Button {
-                    NotificationCenter.default.post(name: NSNotification.OpenVirtualMachine, object: nil)
-                } label: {
-                    Label {
-                        Text("Open…")
-                    } icon: {
-                        Image(systemName: "doc")
-                    }
-                }
-                #if os(macOS)
-                .buttonStyle(.link)
-                #endif
-                Link(destination: URL(string: "https://mac.getutm.app/gallery/")!) {
-                    Label {
-                        Text("Download prebuilt from UTM Gallery…")
-                    } icon: {
-                        Image(systemName: "arrow.down.doc")
-                    }
-                }
-            } header: {
-                Text("Existing")
             }
 
+            WizardCardGroup("Existing") {
+                WizardCard(title: "Open…") {
+                    NotificationCenter.default.post(name: NSNotification.OpenVirtualMachine,
+                                                    object: nil)
+                } icon: {
+                    Image(systemName: "folder")
+                        .font(.system(size: 24))
+                        .foregroundColor(.accentColor)
+                }
+
+                WizardRowDivider()
+
+                Link(destination: URL(string: "https://mac.getutm.app/gallery/")!) {
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: "arrow.down.circle")
+                            .font(.system(size: 24))
+                            .foregroundColor(.accentColor)
+                            .frame(width: 34, height: 34)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Download prebuilt from UTM Gallery…")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
-    
+
+    /// Explains, when relevant, why an engine is unavailable. Empty when both
+    /// work, so the card group renders no footer at all.
+    private var engineFooter: LocalizedStringKey? {
+        if !isEmulationSupported && !isVirtualizationSupported {
+            return "Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details."
+        } else if !isVirtualizationSupported {
+            return "Virtualization is not supported on your system."
+        } else if !isEmulationSupported {
+            return "This build does not emulation."
+        }
+        return nil
+    }
+
     private func processIsTranslated() -> Bool {
         let key = "sysctl.proc_translated"
         var ret = Int32(0)
@@ -134,7 +140,7 @@ struct VMWizardStartView: View {
 
 struct VMWizardStartView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardStartView(wizardState: wizardState)
     }

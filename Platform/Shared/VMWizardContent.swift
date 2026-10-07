@@ -16,40 +16,67 @@
 
 import SwiftUI
 
+/// Page scaffold for the new-VM wizard.
+///
+/// Every wizard page wraps its body in this view so the step indicator and the
+/// page title sit in the same place throughout. The content is a `ScrollView`
+/// rather than the previous `List`: the pages are now built from cards and
+/// grouped rows with their own chrome, which a `List` would fight by imposing
+/// row backgrounds, insets and separators on each child.
 struct VMWizardContent<Content>: View where Content: View {
     let titleKey: LocalizedStringKey
+    var page: VMWizardPage?
     let content: Content
-    
-    init(_ titleKey: LocalizedStringKey, @ViewBuilder content: () -> Content) {
+
+    init(_ titleKey: LocalizedStringKey,
+         page: VMWizardPage? = nil,
+         @ViewBuilder content: () -> Content) {
         self.titleKey = titleKey
+        self.page = page
         self.content = content()
     }
-    
+
     var body: some View {
-        #if os(macOS)
-        Text(titleKey)
-            .font(.largeTitle)
-        #endif
-        List {
-            #if os(macOS)
-            if #available(macOS 13, *) {
-                content.listRowSeparator(.hidden)
-            } else {
-                content
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                if let page = page {
+                    WizardProgressBar(page: page)
+                    Divider()
+                }
+                VStack(alignment: .leading, spacing: 18) {
+                    content
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 18)
+                .padding(.bottom, 32)
             }
-            #else
-            content
-            #endif
+            .frame(maxWidth: 640, alignment: .leading)
+            .frame(maxWidth: .infinity)
         }
-        #if os(iOS) || os(visionOS)
+        #if os(macOS)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            Text(titleKey)
+                .font(.largeTitle)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+        }
+        #else
         .navigationTitle(Text(titleKey))
         #endif
     }
 }
 
 #Preview {
-    VMWizardContent("Test") {
-        Text("Test 1")
-        Text("Test 2")
+    VMWizardContent("Test", page: .hardware) {
+        WizardCardGroup("Section") {
+            WizardRow("Memory", systemImage: "memorychip") {
+                Text("2 GB").foregroundColor(.secondary)
+            }
+            WizardRowDivider()
+            WizardRow("CPU Cores", systemImage: "cpu") {
+                Text("4").foregroundColor(.secondary)
+            }
+        }
     }
 }

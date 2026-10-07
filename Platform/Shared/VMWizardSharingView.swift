@@ -19,24 +19,38 @@ import SwiftUI
 struct VMWizardSharingView: View {
     @ObservedObject var wizardState: VMWizardState
     @State private var isFileImporterPresented: Bool = false
-    
+
     var body: some View {
-        VMWizardContent("Shared Directory") {
-            DetailedSection("Shared Directory Path", description: "Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details.") {
-                FileBrowseField(url: $wizardState.sharingDirectoryURL, isFileImporterPresented: $isFileImporterPresented)
-                
-                if !wizardState.useAppleVirtualization {
-                    Toggle("Share is read only", isOn: $wizardState.sharingReadOnly)
+        VMWizardContent("Shared Directory", page: .sharing) {
+            WizardCardGroup("Shared Directory Path",
+                            footer: "Optionally select a directory to make accessible inside the VM. Note that support for shared directories varies by the guest operating system and may require additional guest drivers to be installed. See UTM support pages for more details.") {
+                FileBrowseField(url: $wizardState.sharingDirectoryURL,
+                                isFileImporterPresented: $isFileImporterPresented)
+
+                if wizardState.sharingDirectoryURL != nil && !wizardState.useAppleVirtualization {
+                    WizardRowDivider()
+                    WizardToggleRow("Share is read only",
+                                    subtitle: "The guest cannot modify files in this directory",
+                                    systemImage: "lock",
+                                    isOn: $wizardState.sharingReadOnly)
                 }
-                
+
                 if wizardState.isBusy {
-                    Spinner(size: .large)
+                    WizardRowDivider()
+                    HStack {
+                        Spacer()
+                        Spinner(size: .large)
+                        Spacer()
+                    }
+                    .padding(.vertical, 14)
                 }
             }
         }
-        .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.folder], onCompletion: processDirectory)
+        .fileImporter(isPresented: $isFileImporterPresented,
+                      allowedContentTypes: [.folder],
+                      onCompletion: processDirectory)
     }
-    
+
     private func processDirectory(_ result: Result<URL, Error>) {
         wizardState.busyWorkAsync {
             let url = try result.get()
@@ -49,7 +63,7 @@ struct VMWizardSharingView: View {
 
 struct VMWizardSharingView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardSharingView(wizardState: wizardState)
     }

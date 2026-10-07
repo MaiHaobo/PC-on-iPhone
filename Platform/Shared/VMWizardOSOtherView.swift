@@ -25,42 +25,56 @@ struct VMWizardOSOtherView: View {
     }
 
     var body: some View {
-        VMWizardContent("Other") {
-            Picker("Boot Device", selection: $wizardState.bootDevice) {
-                Text("None").tag(VMBootDevice.none)
-                Text("CD/DVD Image").tag(VMBootDevice.cd)
-                if wizardState.legacyHardware {
-                    Text("Floppy Image").tag(VMBootDevice.floppy)
+        VMWizardContent("Other", page: .otherBoot) {
+            WizardCardGroup("Boot Device") {
+                WizardRow("Boot Device",
+                          subtitle: "Where the guest boots from",
+                          systemImage: "opticaldisc") {
+                    Picker("Boot Device", selection: $wizardState.bootDevice) {
+                        Text("None").tag(VMBootDevice.none)
+                        Text("CD/DVD Image").tag(VMBootDevice.cd)
+                        if wizardState.legacyHardware {
+                            Text("Floppy Image").tag(VMBootDevice.floppy)
+                        }
+                        Text("Drive Image").tag(VMBootDevice.drive)
+                    }
+                    .labelsHidden()
                 }
-                Text("Drive Image").tag(VMBootDevice.drive)
-            }.pickerStyle(.inline)
-            .onAppear {
-                if !wizardState.legacyHardware && wizardState.bootDevice == .floppy {
-                    wizardState.bootDevice = .none
-                } else if wizardState.legacyHardware {
-                    wizardState.systemBootUefi = false
+                .onAppear {
+                    if !wizardState.legacyHardware && wizardState.bootDevice == .floppy {
+                        wizardState.bootDevice = .none
+                    } else if wizardState.legacyHardware {
+                        wizardState.systemBootUefi = false
+                    }
                 }
             }
+
             if wizardState.bootDevice != .none {
-                Section {
-                    FileBrowseField(url: $wizardState.bootImageURL, isFileImporterPresented: $isFileImporterPresented, hasClearButton: false)
-                    .padding(.leading, 1)
+                WizardCardGroup(imageSectionTitle) {
+                    FileBrowseField(url: $wizardState.bootImageURL,
+                                    isFileImporterPresented: $isFileImporterPresented,
+                                    hasClearButton: false)
                     if wizardState.isBusy {
-                        Spinner(size: .large)
-                    }
-                } header: {
-                    if wizardState.bootDevice == .cd {
-                        Text("Boot ISO Image")
-                    } else if wizardState.bootDevice == .drive {
-                        Text("Import Disk Image")
-                    } else {
-                        Text("Boot IMG Image")
+                        WizardRowDivider()
+                        HStack {
+                            Spacer()
+                            Spinner(size: .large)
+                            Spacer()
+                        }
+                        .padding(.vertical, 14)
                     }
                 }
             }
+
             if !wizardState.legacyHardware {
-                DetailedSection("Options") {
-                    Toggle("UEFI Boot", isOn: $wizardState.systemBootUefi)
+                WizardCardGroup("Options",
+                                footer: supportsUefi
+                                ? nil
+                                : "UEFI boot is not available for the selected architecture.") {
+                    WizardToggleRow("UEFI Boot",
+                                    subtitle: "Boot using UEFI firmware",
+                                    systemImage: "power",
+                                    isOn: $wizardState.systemBootUefi)
                         .disabled(!supportsUefi)
                         .onAppear {
                             if !supportsUefi {
@@ -70,9 +84,21 @@ struct VMWizardOSOtherView: View {
                 }
             }
         }
-        .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.data], onCompletion: processImage)
+        .fileImporter(isPresented: $isFileImporterPresented,
+                      allowedContentTypes: [.data],
+                      onCompletion: processImage)
     }
-    
+
+    private var imageSectionTitle: LocalizedStringKey {
+        if wizardState.bootDevice == .cd {
+            return "Boot ISO Image"
+        } else if wizardState.bootDevice == .drive {
+            return "Import Disk Image"
+        } else {
+            return "Boot IMG Image"
+        }
+    }
+
     private func processImage(_ result: Result<URL, Error>) {
         wizardState.busyWorkAsync {
             let url = try result.get()
@@ -85,7 +111,7 @@ struct VMWizardOSOtherView: View {
 
 struct VMWizardOSOtherView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardOSOtherView(wizardState: wizardState)
     }

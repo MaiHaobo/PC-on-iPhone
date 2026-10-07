@@ -23,11 +23,11 @@ struct VMWizardOSLinuxView: View {
         case rootImage
         case bootImage
     }
-    
+
     @ObservedObject var wizardState: VMWizardState
     @State private var isFileImporterPresented: Bool = false
     @State private var selectImage: SelectImage = .kernel
-    
+
     private var hasVenturaFeatures: Bool {
         if #available(macOS 13, *) {
             return true
@@ -37,121 +37,162 @@ struct VMWizardOSLinuxView: View {
     }
 
     var body: some View {
-        VMWizardContent("Linux") {
-#if os(macOS)
+        VMWizardContent("Linux", page: .linuxBoot) {
+            #if os(macOS)
             if wizardState.useVirtualization {
-                DetailedSection("Virtualization Engine", description: "Apple Virtualization is experimental and only for advanced use cases. Leave unchecked to use QEMU, which is recommended.") {
-                    Toggle("Use Apple Virtualization", isOn: $wizardState.useAppleVirtualization)
-                }
-            }
-#endif
-
-            Picker("Boot Image Type", selection: $wizardState.bootDevice) {
-                Text("Boot from kernel image").tag(VMBootDevice.kernel)
-                if !wizardState.useAppleVirtualization || hasVenturaFeatures {
-                    Text("Boot from ISO image").tag(VMBootDevice.cd)
-                    Text("Import existing drive").tag(VMBootDevice.drive)
-                }
-            }.pickerStyle(.inline)
-            .onAppear {
-                if ![.kernel, .cd, .drive].contains(wizardState.bootDevice) {
-                    wizardState.bootDevice = .cd
-                }
-            }
-            if wizardState.bootDevice != .kernel {
-                if wizardState.useAppleVirtualization {
-                    Link(destination: URL(string: "https://docs.getutm.app/guides/debian/")!) {
-                        Label("Debian Install Guide", systemImage: "link")
-                    }.buttonStyle(.borderless)
-                } else {
-                    Link(destination: URL(string: "https://docs.getutm.app/guides/ubuntu/")!) {
-                        Label("Ubuntu Install Guide", systemImage: "link")
-                    }.buttonStyle(.borderless)
-                }
-            }
-            
-            #if arch(arm64)
-            if #available(macOS 13, *), wizardState.useAppleVirtualization {
-                Section {
-                    Toggle("Enable Rosetta (x86_64 Emulation)", isOn: $wizardState.linuxHasRosetta)
-                    Link(destination: URL(string: "https://docs.getutm.app/advanced/rosetta/")!) {
-                        Label("Installation Instructions", systemImage: "link")
-                    }.buttonStyle(.borderless)
-                } header: {
-                    Text("Additional Options")
+                WizardCardGroup("Virtualization Engine",
+                                footer: "Apple Virtualization is experimental and only for advanced use cases. Leave unchecked to use QEMU, which is recommended.") {
+                    WizardToggleRow("Use Apple Virtualization",
+                                    subtitle: "Experimental, advanced use cases only",
+                                    systemImage: "cpu",
+                                    isOn: $wizardState.useAppleVirtualization)
                 }
             }
             #endif
-            
-            if wizardState.bootDevice == .kernel {
 
-                Section {
-                    FileBrowseField(url: $wizardState.linuxKernelURL, isFileImporterPresented: $isFileImporterPresented, hasClearButton: false) {
+            WizardCardGroup("Boot Image Type") {
+                WizardRow("Boot Method",
+                          subtitle: "How the installer or system is loaded",
+                          systemImage: "opticaldisc") {
+                    Picker("Boot Image Type", selection: $wizardState.bootDevice) {
+                        Text("Boot from kernel image").tag(VMBootDevice.kernel)
+                        if !wizardState.useAppleVirtualization || hasVenturaFeatures {
+                            Text("Boot from ISO image").tag(VMBootDevice.cd)
+                            Text("Import existing drive").tag(VMBootDevice.drive)
+                        }
+                    }
+                    .labelsHidden()
+                }
+                .onAppear {
+                    if ![.kernel, .cd, .drive].contains(wizardState.bootDevice) {
+                        wizardState.bootDevice = .cd
+                    }
+                }
+
+                if wizardState.bootDevice != .kernel {
+                    WizardRowDivider()
+                    Link(destination: URL(string: wizardState.useAppleVirtualization
+                                          ? "https://docs.getutm.app/guides/debian/"
+                                          : "https://docs.getutm.app/guides/ubuntu/")!) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "book")
+                                .font(.system(size: 17))
+                                .foregroundColor(.accentColor)
+                                .frame(width: 26)
+                            Text(wizardState.useAppleVirtualization
+                                 ? "Debian Install Guide"
+                                 : "Ubuntu Install Guide")
+                                .font(.subheadline)
+                                .foregroundColor(.accentColor)
+                            Spacer(minLength: 8)
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 14)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            #if arch(arm64)
+            if #available(macOS 13, *), wizardState.useAppleVirtualization {
+                WizardCardGroup("Additional Options") {
+                    WizardToggleRow("Enable Rosetta (x86_64 Emulation)",
+                                    subtitle: "Run x86_64 binaries on Apple silicon",
+                                    systemImage: "arrow.triangle.2.circlepath",
+                                    isOn: $wizardState.linuxHasRosetta)
+                    WizardRowDivider()
+                    Link(destination: URL(string: "https://docs.getutm.app/advanced/rosetta/")!) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "book")
+                                .font(.system(size: 17))
+                                .foregroundColor(.accentColor)
+                                .frame(width: 26)
+                            Text("Installation Instructions")
+                                .font(.subheadline)
+                                .foregroundColor(.accentColor)
+                            Spacer(minLength: 8)
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 14)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            #endif
+
+            if wizardState.bootDevice == .kernel {
+                WizardCardGroup(kernelSectionTitle,
+                                footer: "These are typically the files you downloaded alongside a Linux distribution's ISO.") {
+                    FileBrowseField(url: $wizardState.linuxKernelURL,
+                                    isFileImporterPresented: $isFileImporterPresented,
+                                    hasClearButton: false) {
                         selectImage = .kernel
                     }
-                } header: {
-                    if wizardState.useAppleVirtualization {
-                        Text("Uncompressed Linux kernel (required)")
-                    } else {
-                        Text("Linux kernel (required)")
-                    }
-                }
-                
-                Section {
-                    FileBrowseField(url: $wizardState.linuxInitialRamdiskURL, isFileImporterPresented: $isFileImporterPresented) {
+                    WizardRowDivider()
+                    FileBrowseField(url: $wizardState.linuxInitialRamdiskURL,
+                                    isFileImporterPresented: $isFileImporterPresented) {
                         selectImage = .initialRamdisk
                     }
-                } header: {
-                    if wizardState.useAppleVirtualization {
-                        Text("Uncompressed Linux initial ramdisk (optional)")
-                    } else {
-                        Text("Linux initial ramdisk (optional)")
-                    }
-                }
-                
-                Section {
-                    FileBrowseField(url: $wizardState.linuxRootImageURL, isFileImporterPresented: $isFileImporterPresented) {
+                    WizardRowDivider()
+                    FileBrowseField(url: $wizardState.linuxRootImageURL,
+                                    isFileImporterPresented: $isFileImporterPresented) {
                         selectImage = .rootImage
                     }
-                } header: {
-                    Text("Linux Root FS Image (optional)")
-                }
-                
-                Section {
-                    FileBrowseField(url: $wizardState.bootImageURL, isFileImporterPresented: $isFileImporterPresented) {
+                    WizardRowDivider()
+                    FileBrowseField(url: $wizardState.bootImageURL,
+                                    isFileImporterPresented: $isFileImporterPresented) {
                         selectImage = .bootImage
                     }
-                } header: {
-                    Text("Boot ISO Image (optional)")
                 }
-                
-                Section {
-                    TextField("Boot Arguments", text: $wizardState.linuxBootArguments)
-                } header: {
-                    Text("Boot Arguments")
+
+                WizardCardGroup("Boot Arguments") {
+                    WizardRow("Arguments",
+                              subtitle: "Passed to the kernel on boot",
+                              systemImage: "text.alignleft") {
+                        TextField("Boot Arguments", text: $wizardState.linuxBootArguments)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
             } else {
-                Section {
-                    FileBrowseField(url: $wizardState.bootImageURL, isFileImporterPresented: $isFileImporterPresented) {
+                WizardCardGroup(wizardState.bootDevice == .drive
+                                ? "Import Disk Image"
+                                : "Boot ISO Image") {
+                    FileBrowseField(url: $wizardState.bootImageURL,
+                                    isFileImporterPresented: $isFileImporterPresented) {
                         selectImage = .bootImage
-                    }
-                } header: {
-                    if wizardState.bootDevice == .drive {
-                        Text("Import Disk Image")
-                    } else {
-                        Text("Boot ISO Image")
                     }
                 }
             }
+
             if wizardState.isBusy {
-                Spinner(size: .large)
+                HStack {
+                    Spacer()
+                    Spinner(size: .large)
+                    Spacer()
+                }
             }
-            
-            
         }
-        .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.data], onCompletion: processImage)
+        .fileImporter(isPresented: $isFileImporterPresented,
+                      allowedContentTypes: [.data],
+                      onCompletion: processImage)
     }
-    
+
+    private var kernelSectionTitle: LocalizedStringKey {
+        if wizardState.useAppleVirtualization {
+            return "Uncompressed kernel and ramdisk"
+        } else {
+            return "Kernel and ramdisk"
+        }
+    }
+
     private func processImage(_ result: Result<URL, Error>) {
         wizardState.busyWorkAsync {
             let url = try result.get()
@@ -173,7 +214,7 @@ struct VMWizardOSLinuxView: View {
 
 struct VMWizardOSLinuxView_Previews: PreviewProvider {
     @StateObject static var wizardState = VMWizardState()
-    
+
     static var previews: some View {
         VMWizardOSLinuxView(wizardState: wizardState)
     }
