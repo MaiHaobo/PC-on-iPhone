@@ -233,7 +233,7 @@ private struct WizardCardButtonStyle: ButtonStyle {
 /// subtitle, and a trailing control supplied by the caller.
 struct WizardRow<Control: View>: View {
     let title: LocalizedStringKey
-    var subtitle: LocalizedStringKey?
+    let subtitle: LocalizedStringKey?
     let systemImage: String
     let control: () -> Control
 
@@ -243,6 +243,19 @@ struct WizardRow<Control: View>: View {
          @ViewBuilder control: @escaping () -> Control) {
         self.title = title
         self.subtitle = subtitle
+        self.systemImage = systemImage
+        self.control = control
+    }
+
+    /// Convenience for subtitles that are only known at runtime (a formatted
+    /// byte count, a slug, a machine identifier). Those must not go through
+    /// localization lookup, so they are wrapped as a pre-resolved key.
+    init(_ title: LocalizedStringKey,
+         subtitle: String,
+         systemImage: String,
+         @ViewBuilder control: @escaping () -> Control) {
+        self.title = title
+        self.subtitle = LocalizedStringKey(subtitle)
         self.systemImage = systemImage
         self.control = control
     }
@@ -274,7 +287,7 @@ struct WizardRow<Control: View>: View {
 
 /// Groups `WizardRow`s into a single rounded card with hairline separators,
 /// so a page of settings reads as a few blocks instead of a long list.
-struct WizardCardGroup<Content>: View {
+struct WizardCardGroup<Content>: View where Content: View {
     let title: LocalizedStringKey?
     let footer: LocalizedStringKey?
     let content: Content

@@ -28,7 +28,6 @@ struct VMWizardOSMacView: View {
                 #if arch(arm64)
                 if let selected = wizardState.macRecoveryIpswURL {
                     WizardRow("Selected",
-                              subtitle: nil,
                               systemImage: "doc") {
                         Text(selected.lastPathComponent)
                             .font(.caption)
