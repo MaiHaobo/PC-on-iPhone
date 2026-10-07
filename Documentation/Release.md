@@ -63,6 +63,26 @@ The app downloads the notes for its own version from the GitHub release and show
     1. Changes for every platform, then `(iOS…)` changes, then `(visionOS…)` changes, then `(macOS…)` changes. Keep a versioned prefix such as `(macOS 26)` next to the others for that platform.
     2. Within each platform group, bullets with no component first, then one run of bullets per component, so every change for the same component on the same platform sits together.
 
+### Asset file names
+
+**Every IPA that leaves the build must carry the version in its file name**, with a
+`v` prefix: `PC-on-iPhone-v0.4.1.ipa`, `PC-on-iPhone-HV-v0.4.1.ipa`,
+`PC-on-iPhone-SE-v0.4.1.ipa`.
+
+This applies to:
+
+- the release assets uploaded to GitHub Releases;
+- the IPAs handed to the user (e.g. copied into the workspace).
+
+Inside a versioned directory (`PC-on-iPhone-0.4.1/`) the directory already carries
+the version, but the file names keep it too so a file that gets moved out on its
+own is still self-describing.
+
+Rename the assets with `gh release upload` under the new name and then delete the
+old-named ones — do not leave both. The `SHA256 校验值` block in the release notes
+lists the same versioned names, so the digest can be matched against the file a
+user actually downloaded.
+
 ### Release notes template
 
 `## Notes` and `## Known Issues` are optional; remove them if they are empty. Use the footer (from `## Issues` to the end) verbatim.
