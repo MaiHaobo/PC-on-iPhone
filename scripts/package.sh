@@ -143,15 +143,78 @@ EOL
 	rm "$OPTIONS"
 }
 
+# Rewrites CFBundleIdentifier in an Info.plist to $_bundle_id.
+#
+# Needed because the build product only ever knows the bundle id its target was
+# compiled with, and ldid's -I only stamps the *signature* identifier — it does
+# not change the plist. The iOS target builds as com.utmapp.poi, and both the
+# JIT and HV IPAs are cut from that same archive, so without this the HV
+# package would declare com.utmapp.poi and installing it would replace the
+# standard build. (SE is unaffected: its target overrides
+# PRODUCT_BUNDLE_IDENTIFIER to com.utmapp.poi-SE at build time, so its plist is
+# already correct and the prefix check below skips it.)
+#
+# Sub-bundles (the helper .appex and any nested .app/.appex) are rewritten by
+# swapping the base id for the new one, so they stay in the same ID family as
+# the app — which the extension-to-host relationship depends on.
+rewrite_bundle_id() {
+	local _plist=$1
+	local _from=$2
+	local _to=$3
+
+	[ -f "$_plist" ] || return 0
+
+	local _current
+	_current=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$_plist" 2>/dev/null) || return 0
+	[ -z "$_current" ] && return 0
+	# Leave unrelated identifiers alone (third-party frameworks, etc).
+	case "$_current" in
+	"$_from" | "$_from".*) ;;
+	*) return 0 ;;
+	esac
+
+	local _new=${_current/#$_from/$_to}
+	if ! /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ${_new}" "$_plist"; then
+		echo "error: could not set CFBundleIdentifier in $_plist" >&2
+		return 1
+	fi
+	echo "  bundle id: ${_current} -> ${_new}"
+	# Read it back so a silent no-op cannot ship.
+	if [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$_plist")" != "$_new" ]; then
+		echo "error: CFBundleIdentifier did not stick in $_plist" >&2
+		return 1
+	fi
+}
+
 fake_sign() {
 	local _name=$1
 	local _bundle_id=$2
 	local _input=$3
 	local _output=$4
 	local _fakeent=$5
+	# The identifier the build product was compiled with; the mode's
+	# $_bundle_id replaces it everywhere it appears.
+	local _base_id="com.utmapp.poi"
 
 	mkdir -p "$_output"
 	cp -a "$_input" "$_output/"
+
+	# Rename the bundle identifier on disk before signing, so the signature
+	# matches the plist instead of contradicting it. The app's own plist is
+	# handled explicitly; nested executables (the helper .appex, plus any
+	# .app/.appex a build might add) are walked. The `-mindepth 1` keeps the
+	# outer .app from being visited twice.
+	#
+	# A pipeline would run the body in a subshell and swallow its exit status,
+	# so the loop reads from a here-string via a file list instead.
+	if [ "$_bundle_id" != "$_base_id" ]; then
+		rewrite_bundle_id "$_output/Applications/$_name.app/Info.plist" "$_base_id" "$_bundle_id" || return 1
+		while IFS= read -r _nested; do
+			rewrite_bundle_id "$_nested/Info.plist" "$_base_id" "$_bundle_id" || return 1
+		done < <(find "$_output/Applications/$_name.app" -mindepth 1 -type d \
+			\( -name '*.appex' -o -name '*.app' \) -print)
+	fi
+
 	find "$_output" -type d -path '*/Frameworks/*.framework' -exec ldid -S \{\} \;
 	find "$_output" -type d -path '*/Extensions/*.appex' -exec ldid -S \{\} \;
 	if [ ! -z "${_fakeent}" ]; then
@@ -219,7 +282,7 @@ create_fake_ipa() {
 	# so glob rather than hardcoding "UTM.ipa" — the old hardcoded name left a
 	# stale "UTM SE.ipa" behind on reruns.
 	rm -rf "$OUTPUT/Applications" "$OUTPUT/Payload" "$OUTPUT"/*.ipa
-	fake_sign "$NAME" "$BUNDLE_ID" "$INPUT/Products/Applications" "$OUTPUT" "$FAKEENT"
+	fake_sign "$NAME" "$BUNDLE_ID" "$INPUT/Products/Applications" "$OUTPUT" "$FAKEENT" || return 1
 	mv "$OUTPUT/Applications" "$OUTPUT/Payload"
 	cd "$OUTPUT"
 	zip -r "$IPA_NAME.ipa" "Payload" -x "._*" -x ".DS_Store" -x "__MACOSX"
