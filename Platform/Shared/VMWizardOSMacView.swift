@@ -61,10 +61,17 @@ struct VMWizardOSMacView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 22)
             .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
-                    .foregroundColor(Color.wizardCardBorder)
+                RoundedRectangle(cornerRadius: WizardMetrics.cornerRadius,
+                                 style: .continuous)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [5, 4]))
+                    .foregroundColor(Color.secondary.opacity(0.4))
             )
+        }
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy || wizardState.isPendingIpswDownload) {
+                wizardState.next()
+            }
         }
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.ipsw], onCompletion: processIpsw)
         .onDrop(of: [.fileURL], delegate: self)

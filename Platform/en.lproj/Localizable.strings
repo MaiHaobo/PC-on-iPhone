@@ -73,3 +73,8 @@
 "Modified %@" = "Modified %@";
 "Overwrite" = "Overwrite";
 "Restore" = "Restore";
+
+/* MARK: New-VM wizard */
+"Step %lld of %lld · %@" = "Step %lld of %lld · %@";
+"Common Sizes" = "Common Sizes";
+"Preset" = "Preset";

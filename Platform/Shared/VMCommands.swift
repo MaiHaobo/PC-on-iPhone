@@ -56,4 +56,9 @@ extension NSNotification {
     static let OpenVirtualMachine = NSNotification.Name("OpenVirtualMachine")
     static let ShowReleaseNotes = NSNotification.Name("ShowReleaseNotes")
     static let InstallGuestTools = NSNotification.Name("InstallGuestTools")
+    /// Posted by the summary page once a VM has been created, so the wizard
+    /// sheet can dismiss itself. The summary page is deep inside the sheet's
+    /// navigation stack and has no reference to the presenting view, so a
+    /// notification is the least-coupled way to close it.
+    static let CloseVirtualMachineWizard = NSNotification.Name("CloseVirtualMachineWizard")
 }

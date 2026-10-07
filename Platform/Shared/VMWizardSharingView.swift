@@ -34,16 +34,12 @@ struct VMWizardSharingView: View {
                                     systemImage: "lock",
                                     isOn: $wizardState.sharingReadOnly)
                 }
-
-                if wizardState.isBusy {
-                    WizardRowDivider()
-                    HStack {
-                        Spacer()
-                        Spinner(size: .large)
-                        Spacer()
-                    }
-                    .padding(.vertical, 14)
-                }
+            }
+        }
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy) {
+                wizardState.next()
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented,

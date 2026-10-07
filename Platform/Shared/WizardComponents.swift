@@ -18,21 +18,26 @@ import SwiftUI
 
 /// Shared presentation pieces for the new-VM wizard.
 ///
-/// The wizard used to be built out of plain `List` rows: a title, a sentence,
-/// and a control, all with identical weight, so every page read as an
-/// undifferentiated wall of text and the user had no sense of how far along
-/// they were. These three components give the wizard a consistent visual
-/// language — a step indicator, tappable cards for choices, and labelled rows
-/// for settings — without touching `VMWizardState`, which still drives page
-/// order and validation exactly as before.
+/// These deliberately mirror the stock Settings app rather than inventing a
+/// look: grouped cards on the system grouped background, one 10pt corner
+/// radius, hairline separators that stop where the system's do, and controls
+/// drawn by SwiftUI itself. The earlier revision drew its own borders, used
+/// uppercase micro-headings and animated a scale on press, which made the
+/// wizard read as a foreign surface next to the rest of iOS. Everything the
+/// user sees now comes from system semantic colours and system control styles.
+///
+/// `VMWizardState` is untouched: page order, validation and navigation are
+/// exactly as before.
 
 // MARK: - Cross-platform surface colours
 
-/// Semantic colours for the card surfaces. The wizard runs on iOS, macOS and
+/// Semantic colours for grouped content. The wizard runs on iOS, macOS and
 /// visionOS, so the UIKit/AppKit distinction has to be made somewhere; keeping
 /// it here means the components themselves stay platform-agnostic.
 extension Color {
-    /// Background for a card sitting on the grouped page background.
+    /// Background of a grouped card. On iOS this is the same colour the
+    /// Settings app paints its cells with, so the wizard matches it exactly in
+    /// both light and dark mode without hard-coding a grey.
     static var wizardCardSurface: Color {
         #if os(macOS)
         return Color(NSColor.controlBackgroundColor)
@@ -41,14 +46,35 @@ extension Color {
         #endif
     }
 
-    /// Hairline border drawn around cards.
-    static var wizardCardBorder: Color {
+    /// Background the grouped cards sit on. iOS already paints this behind a
+    /// grouped `List`; the wizard scrolls its own content, so it has to fill it
+    /// in explicitly to avoid the cards floating on the default window colour.
+    static var wizardPageBackground: Color {
         #if os(macOS)
-        return Color(NSColor.separatorColor)
+        return Color(NSColor.windowBackgroundColor)
         #else
-        return Color(UIColor.separator).opacity(0.5)
+        return Color(UIColor.systemGroupedBackground)
         #endif
     }
+}
+
+// MARK: - Metrics
+
+/// The measurements the stock Settings app uses. Centralised so every card
+/// lines up, and so a future change lands in one place.
+enum WizardMetrics {
+    /// Corner radius of a grouped card. iOS grouped tables use 10pt.
+    static let cornerRadius: CGFloat = 10
+    /// Horizontal inset of the cards from the page edge.
+    static let cardInset: CGFloat = 16
+    /// Left inset of row content (icon + label).
+    static let rowInset: CGFloat = 16
+    /// Vertical padding inside a row.
+    static let rowVerticalPadding: CGFloat = 11
+    /// Width reserved for a row's leading icon so labels align in a column.
+    static let iconWidth: CGFloat = 26
+    /// Distance a separator is inset so it starts where the text does.
+    static let separatorInset: CGFloat = 52
 }
 
 // MARK: - Step indicator
@@ -97,8 +123,12 @@ enum WizardStep: Int, CaseIterable {
     }
 }
 
-/// A segmented bar plus "Step N of 5 · Title" caption, shown under the
-/// navigation title on every wizard page.
+/// A slim progress track plus a caption, drawn to sit under the navigation bar.
+///
+/// Styled after the system's own progress affordances: a single continuous
+/// track with a filled accent portion and a thin callout, rather than five
+/// detached segments. The track is 4pt tall, which is the height iOS uses for
+/// its own thin bars, and the fill is the standard accent colour.
 struct WizardProgressBar: View {
     let page: VMWizardPage
 
@@ -108,24 +138,31 @@ struct WizardProgressBar: View {
 
     private var totalSteps: Int { WizardStep.allCases.count }
 
+    private var fraction: CGFloat {
+        CGFloat(stepNumber) / CGFloat(totalSteps)
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 5) {
-                ForEach(WizardStep.allCases, id: \.rawValue) { candidate in
+        VStack(alignment: .leading, spacing: 6) {
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(candidate.rawValue <= step.rawValue
-                              ? Color.accentColor
-                              : Color.secondary.opacity(0.22))
-                        .frame(height: 3)
+                        .fill(Color.secondary.opacity(0.2))
+                    Capsule()
+                        .fill(Color.accentColor)
+                        .frame(width: max(geo.size.width * fraction, 4))
                 }
             }
+            .frame(height: 4)
+
             Text(stepCaption)
-                .font(.caption2)
+                .font(.footnote)
                 .foregroundColor(.secondary)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 4)
-        .padding(.bottom, 10)
+        .padding(.horizontal, WizardMetrics.cardInset)
+        .padding(.top, 2)
+        .padding(.bottom, 12)
+        .animation(.easeInOut(duration: 0.25), value: stepNumber)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(stepCaption))
     }
@@ -140,13 +177,14 @@ struct WizardProgressBar: View {
 
 // MARK: - Choice card
 
-/// A large tappable card used for the mutually exclusive choices the wizard
-/// asks for (OS, engine, machine type). Shows an icon, a title, an optional
-/// subtitle, and draws a selection ring when chosen.
+/// A tappable card used for the mutually exclusive choices the wizard asks for
+/// (OS, engine, machine type).
 ///
-/// The whole card is the hit target, which is the main usability win over the
-/// old `.inList` rows: on a phone the previous rows were only tappable on the
-/// text itself.
+/// Visually this is a plain group of rows rather than a bordered tile: leading
+/// icon, title, optional subtitle, and — when selected — a stock checkmark at
+/// the trailing edge, which is exactly how the Settings app marks a chosen
+/// option. There is no custom border or press animation; the system's own
+/// highlighted state is used instead.
 struct WizardCard<Icon: View>: View {
     let title: LocalizedStringKey
     var subtitle: LocalizedStringKey?
@@ -171,12 +209,12 @@ struct WizardCard<Icon: View>: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(alignment: .top, spacing: 12) {
+            HStack(alignment: .center, spacing: 12) {
                 icon()
-                    .frame(width: 34, height: 34)
-                VStack(alignment: .leading, spacing: 3) {
+                    .frame(width: WizardMetrics.iconWidth, height: WizardMetrics.iconWidth)
+                VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(.headline)
+                        .font(.body)
                         .foregroundColor(.primary)
                     if let subtitle = subtitle {
                         Text(subtitle)
@@ -186,44 +224,35 @@ struct WizardCard<Icon: View>: View {
                             .multilineTextAlignment(.leading)
                     }
                 }
-                Spacer(minLength: 0)
+                Spacer(minLength: 8)
                 if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(.accentColor)
-                        .font(.body)
                 }
             }
-            .padding(14)
+            .padding(.vertical, WizardMetrics.rowVerticalPadding)
+            .padding(.horizontal, WizardMetrics.rowInset)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .contentShape(Rectangle())
         }
-        .buttonStyle(WizardCardButtonStyle(isSelected: isSelected,
-                                           isEnabled: isEnabled))
+        .buttonStyle(WizardRowButtonStyle())
         .disabled(!isEnabled)
-        .opacity(isEnabled ? 1 : 0.45)
+        .opacity(isEnabled ? 1 : 0.4)
     }
 }
 
-/// Card chrome: rounded surface, hairline border, accent ring when selected.
-private struct WizardCardButtonStyle: ButtonStyle {
-    let isSelected: Bool
-    let isEnabled: Bool
-
+/// Uses the system's own tap feedback (a grey highlight that fades out) rather
+/// than a custom opacity/scale animation, which is what makes an in-app row
+/// feel like a system row.
+private struct WizardRowButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.wizardCardSurface)
+                configuration.isPressed
+                ? Color.primary.opacity(0.08)
+                : Color.clear
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(isSelected ? Color.accentColor
-                                             : Color.wizardCardBorder,
-                                  lineWidth: isSelected ? 2 : 1)
-            )
-            .opacity(configuration.isPressed ? 0.7 : 1)
-            .scaleEffect(configuration.isPressed ? 0.985 : 1)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
@@ -265,14 +294,14 @@ struct WizardRow<Control: View>: View {
             Image(systemName: systemImage)
                 .font(.system(size: 17))
                 .foregroundColor(.accentColor)
-                .frame(width: 26)
+                .frame(width: WizardMetrics.iconWidth)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.subheadline)
+                    .font(.body)
                     .foregroundColor(.primary)
                 if let subtitle = subtitle {
                     Text(subtitle)
-                        .font(.caption2)
+                        .font(.caption)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -280,13 +309,15 @@ struct WizardRow<Control: View>: View {
             Spacer(minLength: 8)
             control()
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 14)
+        .padding(.vertical, WizardMetrics.rowVerticalPadding)
+        .padding(.horizontal, WizardMetrics.rowInset)
     }
 }
 
-/// Groups `WizardRow`s into a single rounded card with hairline separators,
-/// so a page of settings reads as a few blocks instead of a long list.
+/// Groups rows into the single rounded card the Settings app uses for a block
+/// of related settings. A section heading, when given, is a plain sentence-case
+/// label above the card — not the uppercase micro-caps the previous revision
+/// drew, which is not a style iOS uses anywhere.
 struct WizardCardGroup<Content>: View where Content: View {
     let title: LocalizedStringKey?
     let footer: LocalizedStringKey?
@@ -301,28 +332,22 @@ struct WizardCardGroup<Content>: View where Content: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
+        VStack(alignment: .leading, spacing: 6) {
             if let title = title {
                 Text(title)
-                    .font(.caption)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
-                    .textCase(.uppercase)
                     .padding(.horizontal, 4)
             }
             VStack(spacing: 0) {
                 content
             }
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.wizardCardSurface)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(Color.wizardCardBorder, lineWidth: 1)
-            )
+            .background(Color.wizardCardSurface)
+            .clipShape(RoundedRectangle(cornerRadius: WizardMetrics.cornerRadius,
+                                        style: .continuous))
             if let footer = footer {
                 Text(footer)
-                    .font(.caption2)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 4)
@@ -357,14 +382,14 @@ struct WizardToggleRow: View {
                 Image(systemName: systemImage)
                     .font(.system(size: 17))
                     .foregroundColor(.accentColor)
-                    .frame(width: 26)
+                    .frame(width: WizardMetrics.iconWidth)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(.subheadline)
+                        .font(.body)
                         .foregroundColor(.primary)
                     if let subtitle = subtitle {
                         Text(subtitle)
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -374,16 +399,16 @@ struct WizardToggleRow: View {
         #if os(iOS)
         .toggleStyle(.switch)
         #endif
-        .padding(.vertical, 10)
-        .padding(.horizontal, 14)
+        .padding(.vertical, WizardMetrics.rowVerticalPadding)
+        .padding(.horizontal, WizardMetrics.rowInset)
     }
 }
 
 /// Hairline separator sized to line up with `WizardRow` labels (i.e. inset
-/// past the icon column).
+/// past the icon column), matching where the Settings app stops its rules.
 struct WizardRowDivider: View {
     var body: some View {
         Divider()
-            .padding(.leading, 52)
+            .padding(.leading, WizardMetrics.separatorInset)
     }
 }

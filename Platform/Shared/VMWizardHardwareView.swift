@@ -354,6 +354,12 @@ struct VMWizardHardwareView: View {
                 apply(machine)
             }
         }
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy) {
+                wizardState.next()
+            }
+        }
     }
 
     /// The machine picker. Collapsed to a summary row by default and expanded

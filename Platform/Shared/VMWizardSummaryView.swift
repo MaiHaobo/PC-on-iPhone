@@ -136,6 +136,11 @@ struct VMWizardSummaryView: View {
                 }
             }
         }
+        .wizardBottomAction {
+            WizardPrimaryButton("Save", isBusy: wizardState.isBusy) {
+                save()
+            }
+        }
         .onAppear {
             if wizardState.name == nil {
                 let os = wizardState.operatingSystem
@@ -146,6 +151,34 @@ struct VMWizardSummaryView: View {
                 }
             }
             wizardState.confusedUserCheck()
+        }
+    }
+
+    /// Creates the VM from the collected settings. This used to live in the
+    /// navigation bar; it moved here so the sheet that owns the wizard state
+    /// also owns the action that finishes it, instead of reaching back through
+    /// a toolbar modifier to dismiss and mutate shared data.
+    private func save() {
+        data.busyWorkAsync {
+            let config = try await wizardState.generateConfig()
+            if let qemuConfig = config as? UTMQemuConfiguration {
+                let vm = try await data.create(config: qemuConfig)
+                await MainActor.run {
+                    if wizardState.isGuestToolsInstallRequested {
+                        NotificationCenter.default.post(name: NSNotification.InstallGuestTools,
+                                                        object: vm.wrapped!)
+                    }
+                }
+            } else {
+                fatalError("Invalid configuration type.")
+            }
+            if await wizardState.isOpenSettingsAfterCreation {
+                await data.showSettingsForCurrentVM()
+            }
+            await MainActor.run {
+                NotificationCenter.default.post(name: NSNotification.CloseVirtualMachineWizard,
+                                                object: nil)
+            }
         }
     }
 

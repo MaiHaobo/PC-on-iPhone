@@ -46,57 +46,27 @@ struct VMWizardDrivesView: View {
                 }
             }
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Common Sizes")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .textCase(.uppercase)
-                    .padding(.horizontal, 4)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 74), spacing: 8)],
-                          spacing: 8) {
+            WizardCardGroup("Common Sizes") {
+                // A stock segmented control rather than a grid of hand-drawn
+                // chips: the system already renders this affordance, and using
+                // it keeps the wizard visually identical to Settings.
+                Picker("Preset", selection: $wizardState.storageSizeGib) {
                     ForEach(presets, id: \.self) { size in
-                        sizeChip(size)
+                        Text("\(size) GiB").tag(size)
                     }
                 }
-            }
-
-            if wizardState.isBusy {
-                HStack {
-                    Spacer()
-                    Spinner(size: .large)
-                    Spacer()
-                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .padding(.horizontal, WizardMetrics.rowInset)
+                .padding(.vertical, 12)
             }
         }
-    }
-
-    @ViewBuilder
-    private func sizeChip(_ size: Int) -> some View {
-        let isSelected = wizardState.storageSizeGib == size
-        Button {
-            withAnimation(.easeInOut(duration: 0.15)) {
-                wizardState.storageSizeGib = size
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy) {
+                wizardState.next()
             }
-        } label: {
-            Text("\(size) GiB")
-                .font(.subheadline.weight(isSelected ? .semibold : .regular))
-                .foregroundColor(isSelected ? .white : .primary)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.accentColor
-                                         : Color.wizardCardSurface)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .strokeBorder(isSelected ? Color.clear
-                                                 : Color.wizardCardBorder,
-                                      lineWidth: 1)
-                )
-                .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
-        .buttonStyle(.plain)
     }
 }
 

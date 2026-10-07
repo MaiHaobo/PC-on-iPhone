@@ -116,6 +116,12 @@ struct VMWizardOSClassicMacView: View {
                 }
             }
         }
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy) {
+                wizardState.next()
+            }
+        }
         .onAppear {
             wizardState.bootDevice = .cd
         }

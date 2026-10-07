@@ -25,6 +25,11 @@ struct VMWizardView: View {
             WizardNavigationView(wizardState: wizardState) {
                 presentationMode.wrappedValue.dismiss()
             }
+            // The summary page posts this once the VM exists; the sheet owns
+            // its own dismissal, so the page does not need a binding to it.
+            .onReceive(NSNotification.CloseVirtualMachineWizard) { _ in
+                presentationMode.wrappedValue.dismiss()
+            }
         } else {
             NavigationView {
                 WizardWrapper(page: .start, wizardState: wizardState) {
@@ -39,10 +44,14 @@ struct VMWizardView: View {
     }
 }
 
+/// Only the leading Cancel item lives in the navigation bar now. The primary
+/// action (Continue / Save) is pinned to the bottom of each page instead, which
+/// is where the system's own setup assistants put it and where it is reachable
+/// with a thumb. Removing it from the bar also stops the two affordances from
+/// competing for attention.
 fileprivate struct WizardToolbar: ViewModifier {
     @ObservedObject var wizardState: VMWizardState
     let onDismiss: () -> Void
-    @EnvironmentObject private var data: UTMData
 
     func body(content: Content) -> some View {
         content.toolbar {
@@ -52,34 +61,6 @@ fileprivate struct WizardToolbar: ViewModifier {
                         Label("Cancel", systemImage: "xmark")
                             .labelStyle(.iconOnly)
                     }
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if wizardState.hasNextButton {
-                    Button(action: { wizardState.next() }) {
-                        Label("Continue", systemImage: "chevron.right")
-                            .labelStyle(.iconOnly)
-                    }
-                } else if wizardState.currentPage == .summary {
-                    ConfirmationButton("Save", action: {
-                        onDismiss()
-                        data.busyWorkAsync {
-                            let config = try await wizardState.generateConfig()
-                            if let qemuConfig = config as? UTMQemuConfiguration {
-                                let vm = try await data.create(config: qemuConfig)
-                                await MainActor.run {
-                                    if wizardState.isGuestToolsInstallRequested {
-                                        NotificationCenter.default.post(name: NSNotification.InstallGuestTools, object: vm.wrapped!)
-                                    }
-                                }
-                            } else {
-                                fatalError("Invalid configuration type.")
-                            }
-                            if await wizardState.isOpenSettingsAfterCreation {
-                                await data.showSettingsForCurrentVM()
-                            }
-                        }
-                    })
                 }
             }
         }
@@ -93,7 +74,6 @@ fileprivate struct WizardWrapper: View {
     @ObservedObject var wizardState: VMWizardState
     @State private var nextPage: VMWizardPage?
     let onDismiss: () -> Void
-    @EnvironmentObject private var data: UTMData
     
     var body: some View {
         VStack {
@@ -112,6 +92,9 @@ fileprivate struct WizardWrapper: View {
         .listStyle(.insetGrouped) // needed for iOS 14
         .textFieldStyle(.roundedBorder)
         .modifier(WizardToolbar(wizardState: wizardState, onDismiss: onDismiss))
+        .onReceive(NSNotification.CloseVirtualMachineWizard) { _ in
+            onDismiss()
+        }
         .onChange(of: nextPage) { newPage in
             if newPage == nil {
                 wizardState.currentPage = page

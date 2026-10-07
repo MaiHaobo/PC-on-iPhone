@@ -84,6 +84,12 @@ struct VMWizardOSOtherView: View {
                 }
             }
         }
+        .wizardBottomAction {
+            WizardPrimaryButton("Continue", systemImage: "chevron.right",
+                                isBusy: wizardState.isBusy) {
+                wizardState.next()
+            }
+        }
         .fileImporter(isPresented: $isFileImporterPresented,
                       allowedContentTypes: [.data],
                       onCompletion: processImage)
