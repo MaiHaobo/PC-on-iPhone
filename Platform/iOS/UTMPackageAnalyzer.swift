@@ -131,7 +131,7 @@ enum UTMPackageAnalyzer {
     /// deliberate: without it there is no way to tell an image from a leftover,
     /// and guessing would mean reporting live files as waste. An empty report
     /// says nothing, which is the safe failure.
-    static func analyze(packageURL: URL) async -> Report {
+    @MainActor static func analyze(packageURL: URL) async -> Report {
         // The bundle is named after the VM on disk, but the configuration holds
         // the name the user actually sees, so prefer that when it is available.
         let fallbackName = packageURL.deletingPathExtension().lastPathComponent
@@ -154,9 +154,11 @@ enum UTMPackageAnalyzer {
         guard let config = try? UTMQemuConfiguration.load(from: packageURL) as? UTMQemuConfiguration else {
             return emptyReport(didRead: false)
         }
-        let displayName = config.information.name
 
-        // Everything the configuration points at, by file name.
+        // Everything the configuration points at, by file name. The accessors
+        // are main actor-isolated, so the whole set is collected here and only
+        // plain values are handed to the background work below.
+        let displayName = config.information.name
         var referenced: Set<String> = []
         for drive in config.drives {
             if let imageName = drive.imageName {
@@ -186,6 +188,10 @@ enum UTMPackageAnalyzer {
         if let suspendIdentifier = manifest?.suspendIdentifier {
             snapshotIdentifiers.insert(suspendIdentifier)
         }
+        let namedScreenshots = Set(manifest?.snapshots.compactMap { $0.screenshotName } ?? [])
+        // A report with no manifest keeps every screenshot: none can be ruled
+        // out without the list that names them.
+        let hasManifest = manifest != nil
 
         let dataURL = packageURL.appendingPathComponent(UTMQemuConfiguration.dataDirectoryName)
 
@@ -228,12 +234,11 @@ enum UTMPackageAnalyzer {
                 at: screenshotsURL,
                 includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey]
             )) ?? []
-            let namedScreenshots = Set(manifest?.snapshots.compactMap { $0.screenshotName } ?? [])
             for url in screenshots {
                 let values = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
                 let size = Int64(values?.fileSize ?? 0)
                 let kind: FileKind
-                if manifest == nil || namedScreenshots.contains(url.lastPathComponent) {
+                if !hasManifest || namedScreenshots.contains(url.lastPathComponent) {
                     kind = .snapshot
                 } else {
                     kind = .orphan
@@ -247,7 +252,7 @@ enum UTMPackageAnalyzer {
     }
 
     /// Analyzes every bundle, in order.
-    static func analyzeAll(packageURLs: [URL]) async -> [Report] {
+    @MainActor static func analyzeAll(packageURLs: [URL]) async -> [Report] {
         var reports: [Report] = []
         for url in packageURLs {
             reports.append(await analyze(packageURL: url))
@@ -279,7 +284,7 @@ enum UTMPackageAnalyzer {
     ///   - report: The report those choices came from.
     /// - Returns: What was removed and what was held back.
     @discardableResult
-    static func remove(_ urls: [URL], from report: Report) async -> RemovalResult {
+    @MainActor static func remove(_ urls: [URL], from report: Report) async -> RemovalResult {
         guard !urls.isEmpty else {
             return RemovalResult(removedCount: 0, freedSize: 0, keptNames: [])
         }

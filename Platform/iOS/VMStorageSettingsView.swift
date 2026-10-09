@@ -27,6 +27,7 @@ import SwiftUI
 /// Only entries the analyzer calls reclaimable can be selected. Files in use and
 /// snapshot state are listed but have no selection control, so there is no way
 /// to remove them from this screen even by mistake.
+@MainActor
 struct VMStorageSettingsView: View {
     let vm: VMData
     /// Called after a cleanup finishes. The overview screen uses this to know

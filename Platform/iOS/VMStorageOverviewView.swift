@@ -23,6 +23,7 @@ import SwiftUI
 /// bundle is holding on to space?". Scanning every VM means reading each
 /// bundle, so it runs in the background and the list fills in as results
 /// arrive rather than blocking on the whole set.
+@MainActor
 struct VMStorageOverviewView: View {
     @EnvironmentObject private var data: UTMData
 
