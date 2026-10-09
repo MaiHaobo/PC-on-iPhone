@@ -147,7 +147,11 @@ enum UTMPackageAnalyzer {
             }
         }
 
-        guard let config = try? UTMConfiguration.load(from: packageURL) as? UTMQemuConfiguration else {
+        // `load` lives in an extension on the protocol, which has an associated
+        // type and so cannot be called on the metatype; naming the concrete type
+        // is what makes it resolve. Anything that is not a QEMU configuration —
+        // including a bundle whose plist cannot be decoded — ends up as nil.
+        guard let config = try? UTMQemuConfiguration.load(from: packageURL) as? UTMQemuConfiguration else {
             return emptyReport(didRead: false)
         }
         let displayName = config.information.name
@@ -170,8 +174,18 @@ enum UTMPackageAnalyzer {
         // after them, so a name that begins with a referenced image plus a dot
         // is a snapshot candidate.
         let manifest = (try? UTMSnapshotManifest.load(from: packageURL)) ?? nil
-        let snapshotIdentifiers = Set(manifest?.snapshots.map { $0.backendIdentifier } ?? [])
-        let suspendIdentifier = manifest?.suspendIdentifier
+        var snapshotIdentifiers = Set(manifest?.snapshots.map { $0.backendIdentifier } ?? [])
+        // QEMU suspends under a fixed name when the manifest does not record
+        // one, which is how builds before the manifest existed wrote it, and
+        // such a state is still resumable. `suspendSnapshotName` falls back to
+        // that constant, so it has to be treated as a live snapshot even when
+        // there is no manifest at all. The cost is that a file genuinely named
+        // `<image>.suspend` is never reported as waste, which is the safe way
+        // to be wrong.
+        snapshotIdentifiers.insert(kUTMQemuDefaultSuspendSnapshotName)
+        if let suspendIdentifier = manifest?.suspendIdentifier {
+            snapshotIdentifiers.insert(suspendIdentifier)
+        }
 
         let dataURL = packageURL.appendingPathComponent(UTMQemuConfiguration.dataDirectoryName)
 
@@ -200,24 +214,31 @@ enum UTMPackageAnalyzer {
                 let kind = classify(
                     url: url,
                     referenced: referenced,
-                    snapshotIdentifiers: snapshotIdentifiers,
-                    suspendIdentifier: suspendIdentifier
+                    snapshotIdentifiers: snapshotIdentifiers
                 )
                 entries.append(Entry(url: url, size: size, kind: kind))
             }
 
             // Screenshots are referenced by the manifest, never by the
-            // configuration. Without a manifest there is no way to tell which
-            // are current, so they are all kept.
+            // configuration. One the manifest no longer names belongs to a
+            // snapshot that was deleted. Without a manifest none of them can be
+            // ruled out, so they are all kept.
             let screenshotsURL = UTMSnapshotManifest.screenshotsURL(in: packageURL)
             let screenshots = (try? fileManager.contentsOfDirectory(
                 at: screenshotsURL,
                 includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey]
             )) ?? []
+            let namedScreenshots = Set(manifest?.snapshots.compactMap { $0.screenshotName } ?? [])
             for url in screenshots {
                 let values = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
                 let size = Int64(values?.fileSize ?? 0)
-                entries.append(Entry(url: url, size: size, kind: .snapshot))
+                let kind: FileKind
+                if manifest == nil || namedScreenshots.contains(url.lastPathComponent) {
+                    kind = .snapshot
+                } else {
+                    kind = .orphan
+                }
+                entries.append(Entry(url: url, size: size, kind: kind))
             }
 
             entries.sort { $0.size > $1.size }
@@ -234,13 +255,80 @@ enum UTMPackageAnalyzer {
         return reports
     }
 
+    // MARK: - Removal
+
+    struct RemovalResult {
+        var removedCount: Int
+        var freedSize: Int64
+        /// Files that were asked for but kept, because they no longer classify
+        /// as reclaimable or could not be removed.
+        var keptNames: [String]
+    }
+
+    /// Deletes the given files, but only after checking each one again.
+    ///
+    /// The report is a snapshot of an earlier moment: the configuration could
+    /// have been edited, a snapshot taken, or the machine started since. So each
+    /// candidate is re-classified against the state on disk right now and
+    /// anything that is no longer disposable is left alone. Names are matched
+    /// against the freshly built classification rather than trusted from the
+    /// caller, which is what keeps a stale list from deleting live data.
+    ///
+    /// - Parameters:
+    ///   - urls: Files the user chose to remove.
+    ///   - report: The report those choices came from.
+    /// - Returns: What was removed and what was held back.
+    @discardableResult
+    static func remove(_ urls: [URL], from report: Report) async -> RemovalResult {
+        guard !urls.isEmpty else {
+            return RemovalResult(removedCount: 0, freedSize: 0, keptNames: [])
+        }
+
+        // Re-scan so the decision is made on current state, not on the report
+        // the user was looking at.
+        let fresh = await analyze(packageURL: report.packageURL)
+        let allowed = Dictionary(
+            fresh.entries.filter { $0.kind.isReclaimable }.map { ($0.url, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        let scoped = report.packageURL.startAccessingSecurityScopedResource()
+        defer {
+            if scoped {
+                report.packageURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        return await Task.detached(priority: .userInitiated) {
+            var removedCount = 0
+            var freed: Int64 = 0
+            var kept: [String] = []
+            let fileManager = FileManager.default
+
+            for url in urls {
+                guard let entry = allowed[url] else {
+                    // No longer disposable, or never was.
+                    kept.append(url.lastPathComponent)
+                    continue
+                }
+                do {
+                    try fileManager.removeItem(at: url)
+                    removedCount += 1
+                    freed += entry.size
+                } catch {
+                    kept.append(url.lastPathComponent)
+                }
+            }
+            return RemovalResult(removedCount: removedCount, freedSize: freed, keptNames: kept)
+        }.value
+    }
+
     // MARK: - Classification
 
     private static func classify(
         url: URL,
         referenced: Set<String>,
-        snapshotIdentifiers: Set<String>,
-        suspendIdentifier: String?
+        snapshotIdentifiers: Set<String>
     ) -> FileKind {
         let name = url.lastPathComponent
 
@@ -249,16 +337,13 @@ enum UTMPackageAnalyzer {
         }
 
         // A snapshot file is named after the image it belongs to plus an
-        // identifier: `<image>.<identifier>` for a saved state or a layer. With
-        // a readable manifest the identifiers are known; without one every name
-        // of that shape is kept, because mistaking a snapshot for a leftover is
-        // the one error the user cannot undo.
-        var identifiers = snapshotIdentifiers
-        if let suspendIdentifier = suspendIdentifier {
-            identifiers.insert(suspendIdentifier)
-        }
-        if !identifiers.isEmpty {
-            for identifier in identifiers where name.hasSuffix("." + identifier) {
+        // identifier: `<image>.<identifier>` for a saved state or a layer. The
+        // identifiers come from the manifest plus the QEMU suspend default, so
+        // a state that predates the manifest is still recognised. Without a
+        // manifest every name of that shape is kept, because mistaking a
+        // snapshot for a leftover is the one error the user cannot undo.
+        if !snapshotIdentifiers.isEmpty {
+            for identifier in snapshotIdentifiers where name.hasSuffix("." + identifier) {
                 return .snapshot
             }
         }

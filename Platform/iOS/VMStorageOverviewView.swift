@@ -28,7 +28,9 @@ struct VMStorageOverviewView: View {
 
     @State private var reports: [UTMPackageAnalyzer.Report] = []
     @State private var isScanning = false
-    @State private var hasScanned = false
+    /// Set while the overview is waiting on a per-VM screen that may have just
+    /// deleted something, so the totals are refreshed on the way back.
+    @State private var needsRescan = false
 
     private static let byteFormatter: ByteCountFormatter = {
         let formatter = ByteCountFormatter()
@@ -64,7 +66,7 @@ struct VMStorageOverviewView: View {
                     } header: {
                         Text("All Virtual Machines")
                     } footer: {
-                        Text("Space held by files that no configuration refers to. Nothing has been deleted.")
+                        Text("Space held by files that no configuration refers to. You can remove them from this screen.")
                     }
                 }
                 Section {
@@ -72,7 +74,7 @@ struct VMStorageOverviewView: View {
                         // The trailing-closure `NavigationLink` is iOS 16+; this
                         // screen also compiles against the iOS 15 SE target, so
                         // the older label/destination form is used instead.
-                        NavigationLink(destination: VMStorageSettingsView(vm: vm)) {
+                        NavigationLink(destination: storageView(for: vm)) {
                             row(for: vm)
                         }
                     }
@@ -83,7 +85,24 @@ struct VMStorageOverviewView: View {
         }
         .navigationTitle("Virtual Machines")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: scan)
+        .onAppear {
+            // A push is not an appearance, so a report that was stale before
+            // navigating away stays stale. Rescan instead of trusting it.
+            if needsRescan {
+                needsRescan = false
+                scan()
+            } else if reports.isEmpty {
+                scan()
+            }
+        }
+    }
+
+    /// The per-VM screen, with a callback that marks the totals as stale when
+    /// the user comes back — deleting files there changes what this lists.
+    private func storageView(for vm: VMData) -> some View {
+        VMStorageSettingsView(vm: vm) {
+            needsRescan = true
+        }
     }
 
     @ViewBuilder
@@ -124,6 +143,7 @@ struct VMStorageOverviewView: View {
     private func scan() {
         guard !isScanning else { return }
         isScanning = true
+        reports.removeAll()
         let urls = data.virtualMachines.map { $0.pathUrl }
         Task {
             // One VM at a time so a large bundle does not monopolise the disk,
@@ -136,7 +156,6 @@ struct VMStorageOverviewView: View {
             }
             await MainActor.run {
                 isScanning = false
-                hasScanned = true
             }
         }
     }
