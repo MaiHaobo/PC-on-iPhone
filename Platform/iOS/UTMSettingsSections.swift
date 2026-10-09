@@ -156,6 +156,10 @@ struct SettingsCoreSections: View {
                                   systemImage: "internaldrive",
                                   pane: .cache,
                                   usesValueNavigation: usesValueNavigation)
+            SettingsSelectableRow(title: "Virtual Machines",
+                                  systemImage: "externaldrive",
+                                  pane: .virtualMachineStorage,
+                                  usesValueNavigation: usesValueNavigation)
         }
 
         SettingsGroup(title: "About") {
@@ -356,6 +360,8 @@ struct SettingsDetailDestination: View {
         switch pane {
         case .cache:
             VMCacheSettingsView()
+        case .virtualMachineStorage:
+            VMStorageOverviewView()
         case .license:
             SettingsLicenseView()
         case .jitStreamer:

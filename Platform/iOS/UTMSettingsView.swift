@@ -85,6 +85,9 @@ enum SettingsPane: Hashable {
     case cache
     case license
     case jitStreamer
+    /// Storage across every virtual machine. The per-VM report is reached from
+    /// that VM's own settings instead.
+    case virtualMachineStorage
 }
 
 // MARK: - Sidebar (the list)

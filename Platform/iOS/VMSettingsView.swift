@@ -72,6 +72,12 @@ struct VMSettingsView: View {
                                 .labelStyle(.roundRectIcon)
                         })
                     Devices(config: config, state: devicesState)
+                    NavigationLink(
+                        destination: VMStorageSettingsView(vm: vm).navigationTitle("Storage"),
+                        label: {
+                            Label("Storage", systemImage: "externaldrive")
+                                .labelStyle(.roundRectIcon)
+                        })
                 }
             }
             #if !os(visionOS)

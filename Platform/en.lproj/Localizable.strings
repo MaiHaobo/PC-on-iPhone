@@ -78,3 +78,18 @@
 "Step %lld of %lld · %@" = "Step %lld of %lld · %@";
 "Common Sizes" = "Common Sizes";
 "Preset" = "Preset";
+
+/* MARK: Storage report */
+"Scanning…" = "Scanning…";
+"Unused" = "Unused";
+"In Use" = "In Use";
+"Snapshots" = "Snapshots";
+"Temporary" = "Temporary";
+"%@ unused" = "%@ unused";
+"All Virtual Machines" = "All Virtual Machines";
+"There are no virtual machines." = "There are no virtual machines.";
+"This virtual machine has no data files in its bundle." = "This virtual machine has no data files in its bundle.";
+"The configuration for this virtual machine could not be read, so nothing was scanned." = "The configuration for this virtual machine could not be read, so nothing was scanned.";
+"Files listed as Unused or Temporary are not referenced by this virtual machine. Nothing has been deleted — this screen only reports what is there." = "Files listed as Unused or Temporary are not referenced by this virtual machine. Nothing has been deleted — this screen only reports what is there.";
+"Every file in this bundle is referenced by the configuration or belongs to a snapshot." = "Every file in this bundle is referenced by the configuration or belongs to a snapshot.";
+"Space held by files that no configuration refers to. Nothing has been deleted." = "Space held by files that no configuration refers to. Nothing has been deleted.";

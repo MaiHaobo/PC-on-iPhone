@@ -2950,3 +2950,18 @@ VMWizardOSMacView */
 "Menu" = "菜单";
 "R1" = "R1";
 "R2" = "R2";
+
+/* MARK: Storage report */
+"Scanning…" = "正在扫描…";
+"Unused" = "未使用";
+"In Use" = "使用中";
+"Snapshots" = "快照";
+"Temporary" = "临时文件";
+"%@ unused" = "%@ 未使用";
+"All Virtual Machines" = "全部虚拟机";
+"There are no virtual machines." = "没有虚拟机。";
+"This virtual machine has no data files in its bundle." = "这个虚拟机的包里没有数据文件。";
+"The configuration for this virtual machine could not be read, so nothing was scanned." = "无法读取这个虚拟机的配置，因此没有扫描任何内容。";
+"Files listed as Unused or Temporary are not referenced by this virtual machine. Nothing has been deleted — this screen only reports what is there." = "标记为「未使用」或「临时文件」的内容没有被这个虚拟机引用。目前没有删除任何文件——本页只做报告。";
+"Every file in this bundle is referenced by the configuration or belongs to a snapshot." = "这个包里的每个文件都被配置引用，或属于某个快照。";
+"Space held by files that no configuration refers to. Nothing has been deleted." = "没有被任何配置引用的文件所占用的空间。目前没有删除任何文件。";
