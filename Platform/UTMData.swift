@@ -696,7 +696,14 @@ enum AlertItem: Identifiable {
     /// Otherwise we create a shortcut (default for macOS) or a copy (default for iOS)
     /// - Parameter url: File URL to read from
     /// - Parameter asShortcut: Create a shortcut rather than a copy
-    func importUTM(from url: URL, asShortcut: Bool = true) async throws {
+    ///   (nil: use platform default, which is copy on iOS since shortcuts
+    ///   require persistent security-scoped access outside the sandbox)
+    func importUTM(from url: URL, asShortcut: Bool? = nil) async throws {
+        #if os(macOS)
+        let useShortcut = asShortcut ?? true
+        #else
+        let useShortcut = asShortcut ?? false
+        #endif
         guard url.isFileURL else { return }
         let isScopedAccess = url.startAccessingSecurityScopedResource()
         defer {
@@ -735,7 +742,7 @@ enum AlertItem: Identifiable {
             logger.info("moving from Inbox")
             try fileManager.moveItem(at: url, to: dest)
             vm = try VMData(url: dest)
-        } else if asShortcut {
+        } else if useShortcut {
             logger.info("loading as a shortcut")
             vm = try VMData(url: url)
         } else {
@@ -1501,7 +1508,7 @@ class UTMRemoteData: UTMData {
         (try? await remoteClient.server.getPackageSize(for: vm.id)) ?? 0
     }
 
-    override func importUTM(from url: URL, asShortcut: Bool) async throws {
+    override func importUTM(from url: URL, asShortcut: Bool?) async throws {
         throw UTMDataError.notImplemented
     }
 
