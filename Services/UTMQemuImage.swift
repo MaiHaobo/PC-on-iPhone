@@ -23,10 +23,10 @@ import Foundation
     private let errorOutput = UTMQemuImageOutput()
     private var processExitContinuation: CheckedContinuation<Void, any Error>?
     #if os(iOS) || os(visionOS)
-    private let helper: UTMHelperProcess
+    private let helper: UTMHelperProcess?
     #endif
 
-    /// qemu-img is available: on iOS it runs in a helper extension
+    /// qemu-img is available: on iOS it runs in a helper extension, or in-process as a fallback
     static var isSupported: Bool {
         #if os(iOS) || os(visionOS)
         return UTMHelperProcess.isSupported
@@ -35,24 +35,82 @@ import Foundation
         #endif
     }
 
+    private typealias QemuImgMainFunction = @convention(c) (Int32, UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?) -> Int32
+    private var qemuImgMain: QemuImgMainFunction!
+
     #if os(iOS) || os(visionOS)
     private init(helper: UTMHelperProcess) {
         self.helper = helper
         super.init(arguments: [], connection: helper.connection)
     }
 
+    /// Fallback that runs qemu-img in a thread of this process, for when the helper
+    /// extension cannot be launched (such as on sideloaded installs)
+    private init() {
+        super.init(arguments: [])
+        entry = { process, argc, argv, _ in
+            // when the tool calls exit(), flush its buffered output and detach the redirected
+            // stdout/stderr so the reader sees the end of the output before the thread stops
+            atexit_b {
+                fflush(nil)
+                let null = open("/dev/null", O_WRONLY)
+                if null >= 0 {
+                    dup2(null, STDOUT_FILENO)
+                    dup2(null, STDERR_FILENO)
+                    close(null)
+                }
+            }
+            let _self = process as! UTMQemuImage
+            let argvArg = unsafeBitCast(argv, to: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>.self)
+            let status = _self.qemuImgMain(Int32(argc), argvArg)
+            fflush(nil)
+            return status
+        }
+    }
+
     deinit {
-        helper.invalidate()
+        helper?.invalidate()
     }
     #else
     private init() {
         super.init(arguments: [])
+        entry = { process, argc, argv, _ in
+            // when the tool calls exit(), flush its buffered output and detach the redirected
+            // stdout/stderr so the reader sees the end of the output before the thread stops
+            atexit_b {
+                fflush(nil)
+                let null = open("/dev/null", O_WRONLY)
+                if null >= 0 {
+                    dup2(null, STDOUT_FILENO)
+                    dup2(null, STDERR_FILENO)
+                    close(null)
+                }
+            }
+            let _self = process as! UTMQemuImage
+            let argvArg = unsafeBitCast(argv, to: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>.self)
+            let status = _self.qemuImgMain(Int32(argc), argvArg)
+            fflush(nil)
+            return status
+        }
     }
     #endif
 
+    override func didLoadDylib(_ handle: UnsafeMutableRawPointer) -> Bool {
+        guard let symbol = dlsym(handle, "main") else {
+            return false
+        }
+        qemuImgMain = unsafeBitCast(symbol, to: QemuImgMainFunction.self)
+        return true
+    }
+
     private static func makeProcess() async throws -> UTMQemuImage {
         #if os(iOS) || os(visionOS)
-        return UTMQemuImage(helper: try await UTMHelperProcess.launch())
+        do {
+            return UTMQemuImage(helper: try await UTMHelperProcess.launch())
+        } catch {
+            logger.error("Failed to launch helper extension, falling back to in-process qemu-img: \(error.localizedDescription)")
+            return UTMQemuImage()
+        }
         #else
         return UTMQemuImage()
         #endif
@@ -74,7 +132,7 @@ import Foundation
 
     private func finish() async {
         #if os(iOS) || os(visionOS)
-        await helper.terminate()
+        await helper?.terminate()
         #endif
         stop()
     }
@@ -107,10 +165,22 @@ import Foundation
         DispatchQueue.global().async(execute: resume)
     }
 
+    /// Saved standard file descriptors while an in-process tool has them redirected
+    private var savedStdout: Int32 = -1
+    private var savedStderr: Int32 = -1
+
     /// Runs qemu-img with the arguments and waits for it to exit and for its output to end
     private func start(onProgress: ProgressCallback? = nil) async throws {
         standardOutput = output.pipe
         standardError = errorOutput.pipe
+        if !hasRemoteProcess {
+            // an in-process tool writes to this process's stdout, so redirect it into the pipes
+            fflush(nil)
+            savedStdout = dup(STDOUT_FILENO)
+            savedStderr = dup(STDERR_FILENO)
+            dup2(output.pipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
+            dup2(errorOutput.pipe.fileHandleForWriting.fileDescriptor, STDERR_FILENO)
+        }
         if let onProgress = onProgress {
             output.onLine = { line in
                 if let progress = Self.parseProgress(line) {
@@ -139,6 +209,14 @@ import Foundation
         }
         await output.waitForEnd()
         await errorOutput.waitForEnd()
+        if savedStdout >= 0 {
+            dup2(savedStdout, STDOUT_FILENO)
+            dup2(savedStderr, STDERR_FILENO)
+            close(savedStdout)
+            close(savedStderr)
+            savedStdout = -1
+            savedStderr = -1
+        }
         if let exitError = exitError {
             if case UTMQemuImageError.unknown = exitError, let message = errorOutput.lines.last(where: { !$0.isEmpty }) {
                 throw UTMQemuImageError.qemuError(message)
@@ -161,7 +239,7 @@ import Foundation
         }
         guard success else {
             #if os(iOS) || os(visionOS)
-            if helper.isLost {
+            if helper?.isLost == true {
                 throw UTMHelperProcessError.lost
             }
             #endif

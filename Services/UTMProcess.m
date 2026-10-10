@@ -288,11 +288,13 @@ static int defaultEntry(UTMProcess *self, int argc, const char *argv[], const ch
 #else
     NSString *base = @"Versions/A/";
 #endif
-    NSString *dylib = [NSString stringWithFormat:@"%@.framework/%@%@", name, base, name];
+    NSString *framework = [NSString stringWithFormat:@"%@.framework/%@%@", name, base, name];
     self.processName = name;
     if (_connection) {
-        [self startQemuRemote:dylib completion:completion];
+        [self startQemuRemote:framework completion:completion];
     } else {
+        // in-process: dlopen needs an absolute path as the app's working directory is "/"
+        NSString *dylib = [[self.libraryURL URLByAppendingPathComponent:framework] path];
         [self startDylibThread:dylib completion:completion];
     }
 }
