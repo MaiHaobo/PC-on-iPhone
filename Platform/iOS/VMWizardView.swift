@@ -170,6 +170,9 @@ fileprivate struct WizardNavigationView: View {
         .onChange(of: wizardState.alertMessage?.message) { newValue in
             isAlertShown = newValue != nil
         }
+        .onReceive(NSNotification.CloseVirtualMachineWizard) { _ in
+            onDismiss()
+        }
     }
 }
 
