@@ -519,11 +519,10 @@ enum AlertItem: Identifiable {
             guard let url = drive.imageURL else {
                 continue
             }
+            // `changeMedium` records the bookmark in the registry, which is what
+            // the drive list reads its path from, so there is nothing to write
+            // back onto the configuration here.
             try await qemuVM.changeMedium(drive, to: url)
-            // The registry is the source of truth for an external drive's path;
-            // mirror it back so the freshly created VM shows its image right away
-            // instead of waiting for the next load.
-            drive.imageURL = url
         }
     }
     
