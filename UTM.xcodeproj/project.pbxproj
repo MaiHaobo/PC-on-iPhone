@@ -177,6 +177,9 @@
 		846F8D5A2E3891FE0037162B /* UTMKeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846F8D592E3891FE0037162B /* UTMKeyboardShortcuts.swift */; };
 		846F8D5B2E3891FE0037162B /* UTMKeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846F8D592E3891FE0037162B /* UTMKeyboardShortcuts.swift */; };
 		846F8D5D2E3891FE0037162B /* UTMKeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846F8D592E3891FE0037162B /* UTMKeyboardShortcuts.swift */; };
+		846F8D622E4072960037162B /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 846F8D612E4072960037162B /* AppIcon.icon */; };
+		846F8D632E4072960037162B /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 846F8D612E4072960037162B /* AppIcon.icon */; };
+		846F8D692E4075F00037162B /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 846F8D612E4072960037162B /* AppIcon.icon */; };
 		846F8D662E4072AA0037162B /* AppIcon-Remote.icon in Resources */ = {isa = PBXBuildFile; fileRef = 846F8D652E4072AA0037162B /* AppIcon-Remote.icon */; };
 		8471770627CC974F00D3A50B /* DefaultTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471770527CC974F00D3A50B /* DefaultTextField.swift */; };
 		8471770727CC974F00D3A50B /* DefaultTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471770527CC974F00D3A50B /* DefaultTextField.swift */; };
@@ -1890,6 +1893,7 @@
 		845F95E22A57628400A016D7 /* UTMSWTPM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSWTPM.swift; sourceTree = "<group>"; };
 		846F8D572E3850620037162B /* VMKeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMKeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		846F8D592E3891FE0037162B /* UTMKeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMKeyboardShortcuts.swift; sourceTree = "<group>"; };
+		846F8D612E4072960037162B /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		846F8D652E4072AA0037162B /* AppIcon-Remote.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "AppIcon-Remote.icon"; sourceTree = "<group>"; };
 		8471770527CC974F00D3A50B /* DefaultTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTextField.swift; sourceTree = "<group>"; };
 		8471772727CD3CAB00D3A50B /* DetailedSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedSection.swift; sourceTree = "<group>"; };
@@ -2928,6 +2932,7 @@
 				CE550BD52259479D0063E575 /* Assets.xcassets */,
 				521F3EFB2414F73800130500 /* Localizable.strings */,
 				CED8DF7928A120C100C34345 /* Localizable.stringsdict */,
+				846F8D612E4072960037162B /* AppIcon.icon */,
 				846F8D652E4072AA0037162B /* AppIcon-Remote.icon */,
 			);
 			path = Platform;
@@ -3774,6 +3779,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846F8D622E4072960037162B /* AppIcon.icon in Resources */,
 				CE4698F924C8FBD9008C1BD6 /* Icons in Resources */,
 				FFB02A8C266CB09C006CD71A /* InfoPlist.strings in Resources */,
 				CE2D936B24AD46670059923A /* Localizable.strings in Resources */,
@@ -3790,6 +3796,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846F8D632E4072960037162B /* AppIcon.icon in Resources */,
 				CE63B0F12F0ED67700C59D13 /* vulkan in Resources */,
 				CE0B6CEC24AD532500FE012D /* Assets.xcassets in Resources */,
 				CEF83F262500901300557D15 /* qemu in Resources */,
@@ -3813,6 +3820,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846F8D692E4075F00037162B /* AppIcon.icon in Resources */,
 				CEA45F64263519B5002FA97D /* Icons in Resources */,
 				FFB02A8D266CB09C006CD71A /* InfoPlist.strings in Resources */,
 				CEA45F67263519B5002FA97D /* Localizable.strings in Resources */,
