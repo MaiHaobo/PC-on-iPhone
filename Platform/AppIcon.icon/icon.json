@@ -10,12 +10,7 @@
   },
   {
    "appearance": "dark",
-   "value": {
-    "linear-gradient": [
-     "display-p3:0.05882,0.09020,0.17255,1.00000",
-     "display-p3:0.01176,0.02353,0.04706,1.00000"
-    ]
-   }
+   "value": "system-dark"
   }
  ],
  "groups": [
@@ -53,12 +48,6 @@
       {
        "value": {
         "solid": "srgb:0.04314,0.06275,0.11765,1.00000"
-       }
-      },
-      {
-       "appearance": "dark",
-       "value": {
-        "solid": "srgb:0.03137,0.04706,0.09020,1.00000"
        }
       }
      ],
@@ -120,12 +109,6 @@
     {
      "fill-specializations": [
       {
-       "value": {
-        "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
-       }
-      },
-      {
-       "appearance": "dark",
        "value": {
         "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
        }
