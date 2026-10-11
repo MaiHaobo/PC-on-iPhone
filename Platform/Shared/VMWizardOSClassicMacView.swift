@@ -109,8 +109,23 @@ struct VMWizardOSClassicMacView: View {
             }
         }
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.data]) { result in
+            // The picker's grant over a security-scoped URL only lasts until this
+            // closure returns, and the work below runs later on a background task.
+            // Convert the URL into one that carries its own scope *now*, while the
+            // grant is still live, so the URL stays readable once we hand it on.
+            let resolved: Result<URL, Error>
+            switch result {
+            case .success(let picked):
+                do {
+                    resolved = .success(try picked.withPersistedAccess())
+                } catch {
+                    resolved = .failure(error)
+                }
+            case .failure:
+                resolved = result
+            }
             wizardState.busyWorkAsync {
-                let url = try result.get()
+                let url = try resolved.get()
                 await MainActor.run {
                     switch selectImage {
                     case .bios:

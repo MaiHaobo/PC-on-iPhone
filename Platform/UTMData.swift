@@ -484,6 +484,7 @@ enum AlertItem: Identifiable {
         let vm = try VMData(creatingFromConfig: config, destinationUrl: Self.defaultStorageUrl)
         do {
             try await save(vm: vm)
+            try await adoptExternalDrives(for: vm)
         } catch {
             if isDirectoryEmpty(vm.pathUrl) {
                 try? fileManager.removeItem(at: vm.pathUrl)
@@ -493,6 +494,37 @@ enum AlertItem: Identifiable {
         listAdd(vm: vm)
         listSelect(vm: vm)
         return vm
+    }
+
+    /// Persists a bookmark for every external drive the configuration carries.
+    ///
+    /// An external drive keeps no path of its own — `UTMQemuConfigurationDrive`
+    /// deliberately skips encoding `imageName` when `isExternal` is set, because
+    /// the image lives outside the VM bundle and can only be reached through a
+    /// security-scoped bookmark. That bookmark is written by `changeMedium`, and
+    /// nothing else writes it.
+    ///
+    /// The wizard therefore used to build a brand new VM whose boot ISO was
+    /// simply dropped: the drive existed in the config, but its `imageURL` was
+    /// never saved, so `updateRegistryFromConfig()` saw a nil URL, took the
+    /// `eject` branch, and the CD/DVD row came up empty. Calling `changeMedium`
+    /// here closes that gap — the URL is still the one the picker handed back,
+    /// and the bookmark gets stored while we are still inside the creation flow.
+    private func adoptExternalDrives(for vm: VMData) async throws {
+        guard let qemuConfig = vm.config as? UTMQemuConfiguration,
+              let qemuVM = vm.wrapped as? any UTMSpiceVirtualMachine else {
+            return
+        }
+        for drive in qemuConfig.drives where drive.isExternal {
+            guard let url = drive.imageURL else {
+                continue
+            }
+            try await qemuVM.changeMedium(drive, to: url)
+            // The registry is the source of truth for an external drive's path;
+            // mirror it back so the freshly created VM shows its image right away
+            // instead of waiting for the next load.
+            drive.imageURL = url
+        }
     }
     
     /// Delete a VM from disk

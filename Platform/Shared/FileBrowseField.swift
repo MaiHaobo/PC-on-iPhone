@@ -22,7 +22,17 @@ struct FileBrowseField: View {
     @Binding var isFileImporterPresented: Bool
     let hasClearButton: Bool
     let onBrowse: () -> Void
-    
+
+    /// Set to `true` while the fix for the SwiftUI importer bug is being applied.
+    ///
+    /// See `VMRemovableDrivesView` for the full write-up. In short: tapping
+    /// outside the importer dismisses it without clearing the `isPresented`
+    /// binding, so the next tap toggles a flag that is already `true` and
+    /// nothing presents. The drive list works around that by forcing the flag
+    /// back to `false` first and re-presenting on the following runloop tick;
+    /// the wizards need the same treatment, and they get it through this flag.
+    @State private var workaroundFileImporterBug: Bool = false
+
     init(_ titleKey: LocalizedStringKey = "Path", url: Binding<URL?>, isFileImporterPresented: Binding<Bool>, hasClearButton: Bool = true, onBrowse: @escaping () -> Void = {}) {
         self.titleKey = titleKey
         self._url = url
@@ -30,7 +40,23 @@ struct FileBrowseField: View {
         self.hasClearButton = hasClearButton
         self.onBrowse = onBrowse
     }
-    
+
+    /// Presents the importer, routing around the stale-binding bug.
+    ///
+    /// A plain `toggle()` is not enough: once the bug has left the binding stuck
+    /// at `true`, toggling it flips it to `false` and no picker ever appears — the
+    /// "tap does nothing" symptom. Resetting to `false` *first* and only
+    /// re-presenting on the next tick guarantees the state actually changes.
+    private func presentImporter() {
+        onBrowse()
+        if isFileImporterPresented {
+            isFileImporterPresented = false
+            workaroundFileImporterBug = true
+        } else {
+            isFileImporterPresented = true
+        }
+    }
+
     var body: some View {
         #if os(macOS)
         HStack {
@@ -45,8 +71,7 @@ struct FileBrowseField: View {
                 }
             }
             Button {
-                onBrowse()
-                isFileImporterPresented.toggle()
+                presentImporter()
             } label: {
                 Label("Browse…", systemImage: "folder")
             }
@@ -70,10 +95,18 @@ struct FileBrowseField: View {
             }
         }
         Button {
-            onBrowse()
-            isFileImporterPresented.toggle()
+            presentImporter()
         } label: {
             Label("Browse…", systemImage: "folder")
+        }
+        .onChange(of: workaroundFileImporterBug) { doWorkaround in
+            /// Explanation see "SwiftUI FileImporter modal bug" in `presentImporter()`
+            if doWorkaround {
+                DispatchQueue.main.async {
+                    workaroundFileImporterBug = false
+                    isFileImporterPresented = true
+                }
+            }
         }
         #endif
     }

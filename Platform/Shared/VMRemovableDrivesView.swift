@@ -234,8 +234,23 @@ struct VMRemovableDrivesView: View {
     }
     
     private func selectRemovableImage(forDrive drive: UTMQemuConfigurationDrive, result: Result<URL, Error>) {
+        // The picker's grant over a security-scoped URL only lasts until this
+        // handler returns, and everything below runs later on a background task.
+        // Convert the URL into one that carries its own scope *now*, while the
+        // grant is still live, so `changeMedium` can still read the image.
+        let resolved: Result<URL, Error>
+        switch result {
+        case .success(let picked):
+            do {
+                resolved = .success(try picked.withPersistedAccess())
+            } catch {
+                resolved = .failure(error)
+            }
+        case .failure:
+            resolved = result
+        }
         data.busyWorkAsync {
-            switch result {
+            switch resolved {
             case .success(let url):
                 try await qemuVM.changeMedium(drive, to: url)
                 break

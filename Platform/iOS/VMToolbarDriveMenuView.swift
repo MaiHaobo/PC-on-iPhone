@@ -87,10 +87,20 @@ struct VMToolbarDriveMenuView: View {
         }.fileImporter(isPresented: $isFileImporterShown, allowedContentTypes: isSelectingShare ? [.folder] : [.item]) { result in
             switch result {
             case .success(let success):
+                // The picker's grant only lasts until this closure returns, but
+                // both branches hand the URL to a detached task. Re-wrap it into
+                // one that carries its own scope now, while the grant is live.
+                let url: URL
+                do {
+                    url = try success.withPersistedAccess()
+                } catch {
+                    session.nonfatalError = error.localizedDescription
+                    return
+                }
                 if isSelectingShare {
-                    changeSharedDirectory(to: success)
+                    changeSharedDirectory(to: url)
                 } else if let drive = selectedDrive {
-                    changeDriveImage(for: drive, with: success)
+                    changeDriveImage(for: drive, with: url)
                 }
             case .failure(let failure):
                 session.nonfatalError = failure.localizedDescription
