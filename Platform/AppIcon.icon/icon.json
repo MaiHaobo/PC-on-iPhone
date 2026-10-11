@@ -59,42 +59,6 @@
      "fill-specializations": [
       {
        "value": {
-        "solid": "srgb:1.00000,0.37255,0.33725,1.00000"
-       }
-      }
-     ],
-     "image-name": "DotRed.svg",
-     "name": "DotRed",
-     "opacity": 1
-    },
-    {
-     "fill-specializations": [
-      {
-       "value": {
-        "solid": "srgb:1.00000,0.74118,0.18039,1.00000"
-       }
-      }
-     ],
-     "image-name": "DotYellow.svg",
-     "name": "DotYellow",
-     "opacity": 1
-    },
-    {
-     "fill-specializations": [
-      {
-       "value": {
-        "solid": "srgb:0.15294,0.78824,0.24706,1.00000"
-       }
-      }
-     ],
-     "image-name": "DotGreen.svg",
-     "name": "DotGreen",
-     "opacity": 1
-    },
-    {
-     "fill-specializations": [
-      {
-       "value": {
         "linear-gradient": [
          "display-p3:0.03922,0.51765,1.00000,1.00000",
          "display-p3:0.39216,0.82353,1.00000,1.00000"
@@ -102,33 +66,9 @@
        }
       }
      ],
-     "image-name": "CodeLine1.svg",
-     "name": "CodeLine1",
+     "image-name": "TerminalContent.svg",
+     "name": "TerminalContent",
      "opacity": 1
-    },
-    {
-     "fill-specializations": [
-      {
-       "value": {
-        "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
-       }
-      }
-     ],
-     "image-name": "Cursor.svg",
-     "name": "Cursor",
-     "opacity": 1
-    },
-    {
-     "fill-specializations": [
-      {
-       "value": {
-        "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
-       }
-      }
-     ],
-     "image-name": "CodeLine2.svg",
-     "name": "CodeLine2",
-     "opacity": 0.28
     }
    ],
    "lighting": "individual",
