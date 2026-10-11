@@ -23,7 +23,7 @@ import Foundation
     private let errorOutput = UTMQemuImageOutput()
     private var processExitContinuation: CheckedContinuation<Void, any Error>?
     #if os(iOS) || os(visionOS)
-    private let helper: UTMHelperProcess?
+    private var helper: UTMHelperProcess?
     #endif
 
     /// qemu-img is available: on iOS it runs in a helper extension, or in-process as a fallback
@@ -47,6 +47,7 @@ import Foundation
     /// Fallback that runs qemu-img in a thread of this process, for when the helper
     /// extension cannot be launched (such as on sideloaded installs)
     private init() {
+        self.helper = nil
         super.init(arguments: [])
         entry = { process, argc, argv, _ in
             // when the tool calls exit(), flush its buffered output and detach the redirected
