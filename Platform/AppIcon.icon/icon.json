@@ -21,7 +21,7 @@
  "groups": [
   {
    "blend-mode": "normal",
-   "blur-material": true,
+   "blur-material": null,
    "hidden": false,
    "layers": [
     {
@@ -34,7 +34,7 @@
      ],
      "image-name": "WindowBack.svg",
      "name": "WindowBack",
-     "opacity": 0.45
+     "opacity": 0.4
     },
     {
      "fill-specializations": [
@@ -46,44 +46,19 @@
      ],
      "image-name": "WindowFront.svg",
      "name": "WindowFront",
-     "opacity": 0.6
-    }
-   ],
-   "lighting": "individual",
-   "opacity": 1,
-   "position": {
-    "scale": 1,
-    "translation-in-points": [
-     0,
-     0
-    ]
-   },
-   "shadow": {
-    "kind": "neutral",
-    "opacity": 0.4
-   },
-   "specular": true,
-   "translucency": {
-    "enabled": true,
-    "value": 0.6
-   }
-  },
-  {
-   "blend-mode": "normal",
-   "blur-material": false,
-   "hidden": false,
-   "layers": [
+     "opacity": 0.55
+    },
     {
      "fill-specializations": [
       {
        "value": {
-        "solid": "srgb:0.04314,0.06275,0.11765,0.92000"
+        "solid": "srgb:0.04314,0.06275,0.11765,1.00000"
        }
       },
       {
        "appearance": "dark",
        "value": {
-        "solid": "srgb:0.03137,0.04706,0.09020,0.94000"
+        "solid": "srgb:0.03137,0.04706,0.09020,1.00000"
        }
       }
      ],
@@ -148,6 +123,12 @@
        "value": {
         "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
        }
+      },
+      {
+       "appearance": "dark",
+       "value": {
+        "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
+       }
       }
      ],
      "image-name": "Cursor.svg",
@@ -183,7 +164,7 @@
    "specular": true,
    "translucency": {
     "enabled": true,
-    "value": 0.15
+    "value": 0.5
    }
   }
  ],
