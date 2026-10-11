@@ -43,6 +43,8 @@ private struct SettingsGroup<Content: View>: View {
 /// which is the system Settings look.
 private struct SettingsPickerRow: View {
     let title: LocalizedStringKey
+    let systemImage: String
+    let tint: SettingsIconTint
     let key: String
     /// Option labels are `LocalizedStringKey` (not `String`) so the menu items
     /// go through the localisation lookup too — `Text` only localises when it
@@ -52,20 +54,29 @@ private struct SettingsPickerRow: View {
     @AppStorage private var rawValue: Int
 
     init(title: LocalizedStringKey,
+         systemImage: String,
+         tint: SettingsIconTint,
          key: String,
          default defaultValue: Int,
          options: [(title: LocalizedStringKey, value: Int)]) {
         self.title = title
+        self.systemImage = systemImage
+        self.tint = tint
         self.key = key
         self.options = options
         self._rawValue = AppStorage(wrappedValue: defaultValue, key)
     }
 
     var body: some View {
-        Picker(title, selection: $rawValue) {
+        // The picker's label is what draws the badge, so the icon rides along
+        // inside it. `.menu` keeps the system's trailing-value treatment.
+        Picker(selection: $rawValue) {
             ForEach(options, id: \.value) { option in
                 Text(option.title).tag(option.value)
             }
+        } label: {
+            Label(title, systemImage: systemImage)
+                .labelStyle(.settingsIcon(tint))
         }
         .pickerStyle(.menu)
     }
@@ -76,6 +87,8 @@ private struct SettingsPickerRow: View {
 /// keys with `integerForKey:`.
 private struct SettingsSliderRow: View {
     let title: LocalizedStringKey
+    let systemImage: String
+    let tint: SettingsIconTint
     let key: String
     let range: ClosedRange<Int>
     let defaultValue: Int
@@ -84,11 +97,15 @@ private struct SettingsSliderRow: View {
     @AppStorage private var value: Int
 
     init(title: LocalizedStringKey,
+         systemImage: String,
+         tint: SettingsIconTint,
          key: String,
          range: ClosedRange<Int>,
          defaultValue: Int,
          showsValue: Bool = true) {
         self.title = title
+        self.systemImage = systemImage
+        self.tint = tint
         self.key = key
         self.range = range
         self.defaultValue = defaultValue
@@ -107,7 +124,10 @@ private struct SettingsSliderRow: View {
             set: { intBinding.wrappedValue = Int($0.rounded()) }
         )
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            HStack(spacing: 12) {
+                SettingsIconBadge(tint: tint) {
+                    Image(systemName: systemImage)
+                }
                 Text(title)
                 if showsValue {
                     Spacer()
@@ -132,21 +152,31 @@ struct SettingsCoreSections: View {
     var body: some View {
         SettingsGroup(title: "Background") {
             SettingsToggleRow(title: "Continue running VM in the background",
+                              systemImage: "arrow.triangle.2.circlepath",
+                              tint: .background,
                               key: "RunInBackground",
                               defaultValue: false)
             SettingsToggleRow(title: "Auto save on background",
+                              systemImage: "clock.arrow.circlepath",
+                              tint: .background,
                               key: "AutosaveBackground",
                               defaultValue: true)
             SettingsToggleRow(title: "Auto save on low memory",
+                              systemImage: "memorychip",
+                              tint: .background,
                               key: "AutosaveLowMemory",
                               defaultValue: true)
         }
 
         SettingsGroup(title: "Idle") {
             SettingsToggleRow(title: "Disable screen dimming when idle",
+                              systemImage: "sun.max",
+                              tint: .idle,
                               key: "DisableIdleTimer",
                               defaultValue: false)
             SettingsToggleRow(title: "Do not save VM screenshot to disk",
+                              systemImage: "photo",
+                              tint: .idle,
                               key: "NoSaveScreenshot",
                               defaultValue: false)
         }
@@ -154,19 +184,28 @@ struct SettingsCoreSections: View {
         SettingsGroup(title: "Storage") {
             SettingsSelectableRow(title: "Cache",
                                   systemImage: "internaldrive",
+                                  tint: .storage,
                                   pane: .cache,
                                   usesValueNavigation: usesValueNavigation)
             SettingsSelectableRow(title: "Virtual Machines",
                                   systemImage: "externaldrive",
+                                  tint: .storage,
                                   pane: .virtualMachineStorage,
                                   usesValueNavigation: usesValueNavigation)
         }
 
         SettingsGroup(title: "About") {
-            SettingsInfoRow(title: "Version", value: SettingsInfo.version)
-            SettingsInfoRow(title: "Build", value: SettingsInfo.build)
+            SettingsInfoRow(title: "Version",
+                            systemImage: "number",
+                            tint: .about,
+                            value: SettingsInfo.version)
+            SettingsInfoRow(title: "Build",
+                            systemImage: "hammer",
+                            tint: .about,
+                            value: SettingsInfo.build)
             SettingsSelectableRow(title: "License",
                                   systemImage: "doc.text",
+                                  tint: .about,
                                   pane: .license,
                                   usesValueNavigation: usesValueNavigation)
         }
@@ -183,27 +222,39 @@ struct SettingsAdvancedSections: View {
     var body: some View {
         SettingsGroup(title: "Devices") {
             SettingsToggleRow(title: "Do not show prompt when USB device is plugged in",
+                              systemImage: "cable.connector",
+                              tint: .devices,
                               key: "NoUsbPrompt",
                               defaultValue: false)
             SettingsToggleRow(title: "Prefer device to external microphone",
+                              systemImage: "mic",
+                              tint: .devices,
                               key: "PreferDeviceMicrophone",
                               defaultValue: false)
         }
 
         SettingsGroup(title: "Graphics") {
             SettingsPickerRow(title: "Renderer Backend",
+                              systemImage: "cpu",
+                              tint: .graphics,
                               key: "QEMURendererBackend",
                               default: 0,
                               options: [("Default", 0), ("ANGLE (OpenGL)", 1), ("ANGLE (Metal)", 2)])
             SettingsPickerRow(title: "Vulkan Driver",
+                              systemImage: "cube",
+                              tint: .graphics,
                               key: "QEMUVulkanDriver",
                               default: 0,
                               options: [("Default", 0), ("Disabled", 1), ("MoltenVK", 2), ("KosmicKrisp", 3)])
             SettingsPickerRow(title: "DirectX Driver",
+                              systemImage: "gamecontroller",
+                              tint: .graphics,
                               key: "QEMUDirectXDriver",
                               default: 0,
                               options: [("Default", 0), ("Disabled", 1), ("DXMT", 2)])
             SettingsPickerRow(title: "FPS Limit",
+                              systemImage: "speedometer",
+                              tint: .graphics,
                               key: "QEMURendererFPSLimit",
                               default: 0,
                               options: [("None", 0), ("15", 15), ("30", 30), ("45", 45),
@@ -212,24 +263,34 @@ struct SettingsAdvancedSections: View {
 
         SettingsGroup(title: "Gestures") {
             SettingsPickerRow(title: "Long Press",
+                              systemImage: "hand.tap",
+                              tint: .gestures,
                               key: "GestureLongPress",
                               default: 1,
                               options: [("Disabled", 0), ("Click & Hold", 1),
                                         ("Right Click", 2), ("Middle Click", 5)])
             SettingsPickerRow(title: "Two Finger Tap",
+                              systemImage: "hand.point.up.left",
+                              tint: .gestures,
                               key: "GestureTwoTap",
                               default: 2,
                               options: [("Disabled", 0), ("Right Click", 2), ("Middle Click", 5)])
             SettingsPickerRow(title: "Two Finger Pan",
+                              systemImage: "hand.draw",
+                              tint: .gestures,
                               key: "GestureTwoPan",
                               default: 3,
                               options: [("Disabled", 0), ("Move Screen", 3), ("Click & Hold", 1),
                                         ("Mouse Wheel", 4), ("Right Click & Hold", 6), ("Middle Click & Hold", 7)])
             SettingsPickerRow(title: "Two Finger Swipe",
+                              systemImage: "hand.point.up",
+                              tint: .gestures,
                               key: "GestureTwoScroll",
                               default: 0,
                               options: [("Disabled", 0), ("Mouse Wheel (per swipe)", 4)])
             SettingsPickerRow(title: "Three Finger Pan",
+                              systemImage: "hand.raised",
+                              tint: .gestures,
                               key: "GestureThreePan",
                               default: 0,
                               options: [("Disabled", 0), ("Move Screen", 3), ("Click & Hold", 1),
@@ -238,22 +299,30 @@ struct SettingsAdvancedSections: View {
 
         SettingsGroup(title: "Cursor") {
             SettingsPickerRow(title: "Touch Input",
+                              systemImage: "hand.point.up.left.fill",
+                              tint: .cursor,
                               key: "MouseTouchType",
                               default: 0,
                               options: [("Drag cursor", 0), ("Touch mode (always show cursor)", 1),
                                         ("Touch mode (try hiding cursor)", 2), ("Touch mode (drag to scroll)", 3)])
             SettingsPickerRow(title: "Apple Pencil Input",
+                              systemImage: "pencil.tip",
+                              tint: .cursor,
                               key: "MousePencilType",
                               default: 2,
                               options: [("Drag cursor", 0), ("Tablet mode (always show cursor)", 1),
                                         ("Tablet mode (try hiding cursor)", 2)])
             SettingsSliderRow(title: "Drag Speed",
+                              systemImage: "hare",
+                              tint: .cursor,
                               key: "DragCursorSpeed",
                               range: 1...100,
                               defaultValue: 100)        }
 
         SettingsGroup(title: "Cursor - Scroll Wheel") {
             SettingsToggleRow(title: "Invert Scroll",
+                              systemImage: "arrow.up.arrow.down",
+                              tint: .cursor,
                               key: "InvertScroll",
                               defaultValue: false)
         }
@@ -261,6 +330,8 @@ struct SettingsAdvancedSections: View {
         SettingsGroup(title: "Gamepad") {
             SettingsGamepadRows()
             SettingsSliderRow(title: "Cursor Speed",
+                              systemImage: "gauge.with.dots.needle.67percent",
+                              tint: .gamepad,
                               key: "GCThumbstickRightSpeed",
                               range: 1...100,
                               defaultValue: 10)
@@ -268,10 +339,13 @@ struct SettingsAdvancedSections: View {
 
         SettingsGroup(title: "JitStreamer") {
             SettingsToggleRow(title: "Enable JitStreamer Attach",
+                              systemImage: "bolt",
+                              tint: .network,
                               key: "JitStreamerAttach",
                               defaultValue: false)
             SettingsSelectableRow(title: "JitStreamer IP Address",
                                   systemImage: "network",
+                                  tint: .network,
                                   pane: .jitStreamer,
                                   usesValueNavigation: usesValueNavigation)
         }
@@ -283,30 +357,48 @@ struct SettingsAdvancedSections: View {
 /// A `PSToggleSwitchSpecifier` row bound to a `UserDefaults` key.
 private struct SettingsToggleRow: View {
     let title: LocalizedStringKey
+    let systemImage: String
+    let tint: SettingsIconTint
     let key: String
     let defaultValue: Bool
 
     @AppStorage private var value: Bool
 
-    init(title: LocalizedStringKey, key: String, defaultValue: Bool) {
+    init(title: LocalizedStringKey,
+         systemImage: String,
+         tint: SettingsIconTint,
+         key: String,
+         defaultValue: Bool) {
         self.title = title
+        self.systemImage = systemImage
+        self.tint = tint
         self.key = key
         self.defaultValue = defaultValue
         self._value = AppStorage(wrappedValue: defaultValue, key)
     }
 
     var body: some View {
-        Toggle(title, isOn: $value)
+        // `Toggle(title, isOn:)` would draw its own text-only label; the
+        // label-at-a-time initialiser is what lets a badge sit in front.
+        Toggle(isOn: $value) {
+            Label(title, systemImage: systemImage)
+                .labelStyle(.settingsIcon(tint))
+        }
     }
 }
 
 /// A read-only row showing a title and its value (Version / Build).
 private struct SettingsInfoRow: View {
     let title: LocalizedStringKey
+    let systemImage: String
+    let tint: SettingsIconTint
     let value: String
 
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            SettingsIconBadge(tint: tint) {
+                Image(systemName: systemImage)
+            }
             Text(title)
             Spacer()
             Text(value)
@@ -325,6 +417,7 @@ private struct SettingsInfoRow: View {
 private struct SettingsSelectableRow: View {
     let title: LocalizedStringKey
     let systemImage: String
+    let tint: SettingsIconTint
     let pane: SettingsPane
     let usesValueNavigation: Bool
 
@@ -333,6 +426,7 @@ private struct SettingsSelectableRow: View {
             if #available(iOS 16, *) {
                 NavigationLink(value: pane) {
                     Label(title, systemImage: systemImage)
+                        .labelStyle(.settingsIcon(tint))
                 }
             } else {
                 legacyLink
@@ -347,6 +441,7 @@ private struct SettingsSelectableRow: View {
             SettingsDetailDestination(pane: pane)
         } label: {
             Label(title, systemImage: systemImage)
+                .labelStyle(.settingsIcon(tint))
         }
     }
 }

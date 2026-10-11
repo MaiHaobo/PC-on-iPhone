@@ -300,6 +300,8 @@
 		061DF697F3544B7CB1CF00E0 /* VMStorageOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F77D79FD0544650A02C3D2D /* VMStorageOverviewView.swift */; platformFilter = ios; };
 		608642177D36CBBF875C340901 /* UTMSettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */; platformFilter = ios; };
 		608642177D36CBBF875C340902 /* UTMSettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */; platformFilter = ios; };
+		608642177D36CBBF875C34AB /* SettingsIconStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C34AA /* SettingsIconStyle.swift */; platformFilter = ios; };
+		608642177D36CBBF875C34AC /* SettingsIconStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608642177D36CBBF875C34AA /* SettingsIconStyle.swift */; platformFilter = ios; };
 		EAE775ACDBCD7A180073B5C101 /* UTMSettingsDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */; platformFilter = ios; };
 		EAE775ACDBCD7A180073B5C102 /* UTMSettingsDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */; platformFilter = ios; };
 		2633B08D5345E3839E38EE8D /* VMMainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */; platformFilter = ios; };
@@ -1961,6 +1963,7 @@
 		D879ABD53F8245E7945C0B68 /* VMStorageSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMStorageSettingsView.swift; sourceTree = "<group>"; };
 		7F77D79FD0544650A02C3D2D /* VMStorageOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMStorageOverviewView.swift; sourceTree = "<group>"; };
 		608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsSections.swift; sourceTree = "<group>"; };
+		608642177D36CBBF875C34AA /* SettingsIconStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIconStyle.swift; sourceTree = "<group>"; };
 		EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsDetailViews.swift; sourceTree = "<group>"; };
 		4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMMainTabView.swift; sourceTree = "<group>"; };
 		84CE3DB02904C7A100FF068B /* UTMSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMSettingsView.swift; sourceTree = "<group>"; };
@@ -2995,6 +2998,7 @@
 				D879ABD53F8245E7945C0B68 /* VMStorageSettingsView.swift */,
 				7F77D79FD0544650A02C3D2D /* VMStorageOverviewView.swift */,
 				608642177D36CBBF875C3409FF /* UTMSettingsSections.swift */,
+				608642177D36CBBF875C34AA /* SettingsIconStyle.swift */,
 				EAE775ACDBCD7A180073B5C1FF /* UTMSettingsDetailViews.swift */,
 				4ACF79C7E31D146E090523B7 /* VMMainTabView.swift */,
 				CE08334A2B784FD400522C03 /* RemoteContentView.swift */,
@@ -4178,6 +4182,7 @@
 				84CE3DAE2904C17C00FF068B /* IASKAppSettings.swift in Sources */,
 				282A5CA543507E60B6D1EF98 /* VMCacheSettingsView.swift in Sources */,
 				608642177D36CBBF875C340901 /* UTMSettingsSections.swift in Sources */,
+				608642177D36CBBF875C34AB /* SettingsIconStyle.swift in Sources */,
 				EAE775ACDBCD7A180073B5C101 /* UTMSettingsDetailViews.swift in Sources */,
 				2633B08D5345E3839E38EE8D /* VMMainTabView.swift in Sources */,
 				84C2E8652AA429E800B17308 /* VMWizardContent.swift in Sources */,
@@ -4517,6 +4522,7 @@
 				84CE3DAF2904C17C00FF068B /* IASKAppSettings.swift in Sources */,
 				263507AC5370AB9A1A10677F /* VMCacheSettingsView.swift in Sources */,
 				608642177D36CBBF875C340902 /* UTMSettingsSections.swift in Sources */,
+				608642177D36CBBF875C34AC /* SettingsIconStyle.swift in Sources */,
 				EAE775ACDBCD7A180073B5C102 /* UTMSettingsDetailViews.swift in Sources */,
 				022B4CF17A74F2EDCAB3F741 /* VMMainTabView.swift in Sources */,
 				84C4D9032880CA8A00EC3B2B /* VMSettingsAddDeviceMenuView.swift in Sources */,

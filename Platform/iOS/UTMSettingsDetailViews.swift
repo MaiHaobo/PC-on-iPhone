@@ -159,7 +159,12 @@ private struct SettingsGamepadRow: View {
                 Text(option.title).tag(option.value)
             }
         } label: {
-            Text(title)
+            // Every button row carries the same gamepad glyph. The row titles
+            // are one or two characters ("A", "L1"), so a per-button symbol
+            // would be noise; a constant badge is what makes the group read as
+            // one block, the way the system Settings app badges repeated rows.
+            Label(title, systemImage: "gamecontroller")
+                .labelStyle(.settingsIcon(.gamepad))
         }
         .pickerStyle(.menu)
     }

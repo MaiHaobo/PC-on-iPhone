@@ -39,13 +39,13 @@ struct VMSettingsView: View {
                         destination: VMConfigInfoView(config: $config.information).navigationTitle("Information"),
                         label: {
                             Label("Information", systemImage: "info.circle")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.general))
                         })
                     NavigationLink(
                         destination: VMConfigSystemView(config: $config.system, isResetConfig: $isResetConfig).navigationTitle("System"),
                         label: {
                             Label("System", systemImage: "cpu")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.graphics))
                         })
                     .onChange(of: isResetConfig) { newValue in
                         if newValue {
@@ -57,26 +57,26 @@ struct VMSettingsView: View {
                         destination: VMConfigQEMUView(config: config).navigationTitle("QEMU"),
                         label: {
                             Label("QEMU", systemImage: "shippingbox")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.general))
                         })
                     NavigationLink(
                         destination: VMConfigInputView(config: $config.input, hasUsbSupport: config.system.architecture.hasUsbSupport).navigationTitle("Input"),
                         label: {
                             Label("Input", systemImage: "keyboard")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.gestures))
                         })
                     NavigationLink(
                         destination: VMConfigSharingView(config: $config.sharing).navigationTitle("Sharing"),
                         label: {
                             Label("Sharing", systemImage: "person.crop.circle")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.network))
                         })
                     Devices(config: config, state: devicesState)
                     NavigationLink(
                         destination: VMStorageSettingsView(vm: vm).navigationTitle("Storage"),
                         label: {
                             Label("Storage", systemImage: "externaldrive")
-                                .labelStyle(.roundRectIcon)
+                                .labelStyle(.settingsIcon(.storage))
                         })
                 }
             }
@@ -140,7 +140,7 @@ private struct Devices: View {
             ForEach($config.displays) { $display in
                 NavigationLink(destination: VMConfigDisplayView(config: $display, system: $config.system).navigationTitle("Display")) {
                     Label("Display", systemImage: "rectangle.on.rectangle")
-                        .labelStyle(RoundRectIconLabelStyle(color: .green))
+                        .labelStyle(.settingsIcon(.devices))
                 }
             }.onDelete { offsets in
                 config.displays.remove(atOffsets: offsets)
@@ -148,7 +148,7 @@ private struct Devices: View {
             ForEach($config.serials) { $serial in
                 NavigationLink(destination: VMConfigSerialView(config: $serial, system: $config.system).navigationTitle("Serial")) {
                     Label("Serial", systemImage: "rectangle.connected.to.line.below")
-                        .labelStyle(RoundRectIconLabelStyle(color: .green))
+                        .labelStyle(.settingsIcon(.devices))
                 }
             }.onDelete { offsets in
                 config.serials.remove(atOffsets: offsets)
@@ -156,7 +156,7 @@ private struct Devices: View {
             ForEach($config.networks) { $network in
                 NavigationLink(destination: VMConfigNetworkView(config: $network, system: $config.system).navigationTitle("Network")) {
                     Label("Network", systemImage: "network")
-                        .labelStyle(RoundRectIconLabelStyle(color: .green))
+                        .labelStyle(.settingsIcon(.devices))
                 }
             }.onDelete { offsets in
                 config.networks.remove(atOffsets: offsets)
@@ -164,7 +164,7 @@ private struct Devices: View {
             ForEach($config.sound) { $sound in
                 NavigationLink(destination: VMConfigSoundView(config: $sound, system: $config.system).navigationTitle("Sound")) {
                     Label("Sound", systemImage: "speaker.wave.2")
-                        .labelStyle(RoundRectIconLabelStyle(color: .green))
+                        .labelStyle(.settingsIcon(.devices))
                 }
             }.onDelete { offsets in
                 config.sound.remove(atOffsets: offsets)
@@ -172,32 +172,8 @@ private struct Devices: View {
         }
         Section(header: Text("Drives")) {
             VMDrivesSettingsView(config: config, isCreateDriveShown: $state.isCreateDriveShown, isImportDriveShown: $state.isImportDriveShown)
-                .labelStyle(RoundRectIconLabelStyle(color: .yellow))
+                .labelStyle(.settingsIcon(.drives))
         }
-    }
-}
-
-struct RoundRectIconLabelStyle: LabelStyle {
-    var color: Color = .blue
-    
-    func makeBody(configuration: Configuration) -> some View {
-        Label(
-            title: { configuration.title },
-            icon: {
-                ZStack(alignment: .center) {
-                    RoundedRectangle(cornerRadius: 10.0, style: .circular)
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(color)
-                    configuration.icon.foregroundColor(.white)
-                        .imageScale(.medium)
-                }
-            })
-    }
-}
-
-extension LabelStyle where Self == RoundRectIconLabelStyle {
-    static var roundRectIcon: RoundRectIconLabelStyle {
-        RoundRectIconLabelStyle()
     }
 }
 
