@@ -1,133 +1,196 @@
 {
-  "fill-specializations" : [
+ "fill-specializations": [
+  {
+   "value": {
+    "linear-gradient": [
+     "display-p3:0.12549,0.18039,0.30980,1.00000",
+     "display-p3:0.01569,0.02745,0.05490,1.00000"
+    ]
+   }
+  },
+  {
+   "appearance": "dark",
+   "value": {
+    "linear-gradient": [
+     "display-p3:0.05882,0.09020,0.17255,1.00000",
+     "display-p3:0.01176,0.02353,0.04706,1.00000"
+    ]
+   }
+  }
+ ],
+ "groups": [
+  {
+   "blend-mode": "normal",
+   "blur-material": true,
+   "hidden": false,
+   "layers": [
     {
-      "value" : {
-        "linear-gradient" : [
-          "display-p3:0.34510,0.56078,0.93725,1.00000",
-          "display-p3:0.00392,0.00784,0.63922,1.00000"
-        ]
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+       }
       }
+     ],
+     "image-name": "WindowBack.svg",
+     "name": "WindowBack",
+     "opacity": 0.45
     },
     {
-      "appearance" : "dark",
-      "value" : "system-dark"
-    }
-  ],
-  "groups" : [
-    {
-      "blend-mode" : "normal",
-      "blur-material" : null,
-      "hidden" : false,
-      "layers" : [
-        {
-          "fill-specializations" : [
-            {
-              "value" : {
-                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.34510,0.56078,0.93725,1.00000",
-                  "display-p3:0.00392,0.00784,0.63922,1.00000"
-                ]
-              }
-            }
-          ],
-          "image-name" : "InnerCircle.svg",
-          "name" : "InnerCircle",
-          "opacity" : 1
-        },
-        {
-          "fill-specializations" : [
-            {
-              "value" : {
-                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.34510,0.56078,0.93725,1.00000",
-                  "display-p3:0.00392,0.00784,0.63922,1.00000"
-                ]
-              }
-            }
-          ],
-          "image-name" : "Ring3.svg",
-          "name" : "Ring3",
-          "opacity" : 1
-        },
-        {
-          "fill-specializations" : [
-            {
-              "value" : {
-                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.34510,0.56078,0.93725,1.00000",
-                  "display-p3:0.00392,0.00784,0.63922,1.00000"
-                ]
-              }
-            }
-          ],
-          "image-name" : "Ring2.svg",
-          "name" : "Ring2",
-          "opacity" : 1
-        },
-        {
-          "fill-specializations" : [
-            {
-              "value" : {
-                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
-              }
-            },
-            {
-              "appearance" : "dark",
-              "value" : {
-                "linear-gradient" : [
-                  "display-p3:0.34510,0.56078,0.93725,1.00000",
-                  "display-p3:0.00392,0.00784,0.63922,1.00000"
-                ]
-              }
-            }
-          ],
-          "image-name" : "Ring1.svg",
-          "name" : "Ring1",
-          "opacity" : 1
-        }
-      ],
-      "lighting" : "individual",
-      "opacity" : 1,
-      "position" : {
-        "scale" : 1,
-        "translation-in-points" : [
-          0,
-          0
-        ]
-      },
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "specular" : true,
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+       }
       }
+     ],
+     "image-name": "WindowFront.svg",
+     "name": "WindowFront",
+     "opacity": 0.6
     }
-  ],
-  "supported-platforms" : {
-    "circles" : [
-      "watchOS"
-    ],
-    "squares" : "shared"
+   ],
+   "lighting": "individual",
+   "opacity": 1,
+   "position": {
+    "scale": 1,
+    "translation-in-points": [
+     0,
+     0
+    ]
+   },
+   "shadow": {
+    "kind": "neutral",
+    "opacity": 0.4
+   },
+   "specular": true,
+   "translucency": {
+    "enabled": true,
+    "value": 0.6
+   }
+  },
+  {
+   "blend-mode": "normal",
+   "blur-material": false,
+   "hidden": false,
+   "layers": [
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:0.04314,0.06275,0.11765,0.92000"
+       }
+      },
+      {
+       "appearance": "dark",
+       "value": {
+        "solid": "srgb:0.03137,0.04706,0.09020,0.94000"
+       }
+      }
+     ],
+     "image-name": "Terminal.svg",
+     "name": "Terminal",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:1.00000,0.37255,0.33725,1.00000"
+       }
+      }
+     ],
+     "image-name": "DotRed.svg",
+     "name": "DotRed",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:1.00000,0.74118,0.18039,1.00000"
+       }
+      }
+     ],
+     "image-name": "DotYellow.svg",
+     "name": "DotYellow",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:0.15294,0.78824,0.24706,1.00000"
+       }
+      }
+     ],
+     "image-name": "DotGreen.svg",
+     "name": "DotGreen",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "linear-gradient": [
+         "display-p3:0.03922,0.51765,1.00000,1.00000",
+         "display-p3:0.39216,0.82353,1.00000,1.00000"
+        ]
+       }
+      }
+     ],
+     "image-name": "CodeLine1.svg",
+     "name": "CodeLine1",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "display-p3:0.39216,0.82353,1.00000,1.00000"
+       }
+      }
+     ],
+     "image-name": "Cursor.svg",
+     "name": "Cursor",
+     "opacity": 1
+    },
+    {
+     "fill-specializations": [
+      {
+       "value": {
+        "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+       }
+      }
+     ],
+     "image-name": "CodeLine2.svg",
+     "name": "CodeLine2",
+     "opacity": 0.28
+    }
+   ],
+   "lighting": "individual",
+   "opacity": 1,
+   "position": {
+    "scale": 1,
+    "translation-in-points": [
+     0,
+     0
+    ]
+   },
+   "shadow": {
+    "kind": "neutral",
+    "opacity": 0.5
+   },
+   "specular": true,
+   "translucency": {
+    "enabled": true,
+    "value": 0.15
+   }
   }
+ ],
+ "supported-platforms": {
+  "circles": [
+   "watchOS"
+  ],
+  "squares": "shared"
+ }
 }
