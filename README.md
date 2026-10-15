@@ -59,6 +59,7 @@ open UTM.xcodeproj
 ## 注意
 
 1.PC on iPhone使用WorkBuddy生成，难免会有错误，发现请联系3602246802@qq.com。
+
 2.PC on iPhone移除了对MacOS的支持！
 ## 许可
 
