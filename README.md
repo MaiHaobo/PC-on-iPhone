@@ -58,7 +58,8 @@ open UTM.xcodeproj
 
 ## 注意
 
-PC on iPhone移除了对MacOS的支持！
+1.PC on iPhone使用WorkBuddy生成，难免会有错误，发现请联系3602246802@qq.com。
+2.PC on iPhone移除了对MacOS的支持！
 ## 许可
 
 本项目基于 **Apache 2.0** 许可证分发。但它使用了若干 (L)GPL 组件：多数为动态链接，但 GStreamer 插件为静态链接，且部分代码取自 QEMU。若计划重新分发本应用，请留意这一点。
