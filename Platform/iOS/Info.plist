@@ -29,6 +29,11 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
+	<!-- Home screen label. Without this the icon falls back to
+	     $(PRODUCT_NAME), which is still "UTM" for binary compatibility;
+	     the visible name should follow the fork's own branding. -->
+	<key>CFBundleDisplayName</key>
+	<string>PC on iPhone</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
