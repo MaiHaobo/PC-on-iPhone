@@ -46,6 +46,10 @@ ipa-hv )
 	OUTPUT_NAME="UTM"
 	BUNDLE_ID="com.utmapp.poi-HV"
 	INPUT_APP="$INPUT/Products/Applications/UTM.app"
+	# HV is cut from the same archive as the standard build, so it inherits
+	# the standard build's home screen name. Stamp the HV suffix on so the
+	# two stay distinguishable when both are installed on one device.
+	DISPLAY_NAME="PC on iPhone HV"
 	;;
 ipa-se | ipa-se-signed )
 	APP_NAME="PC on iPhone SE"
@@ -198,6 +202,16 @@ fake_sign() {
 
 	mkdir -p "$_output"
 	cp -a "$_input" "$_output/"
+
+	# Home screen name override for modes that share the standard build's
+	# archive (HV). The plist already carries a CFBundleDisplayName, so Set
+	# with an Add fallback covers either shape.
+	if [ -n "$DISPLAY_NAME" ]; then
+		/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $DISPLAY_NAME" \
+			"$_output/Applications/$_name.app/Info.plist" 2>/dev/null ||
+		/usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string $DISPLAY_NAME" \
+			"$_output/Applications/$_name.app/Info.plist"
+	fi
 
 	# Rename the bundle identifier on disk before signing, so the signature
 	# matches the plist instead of contradicting it. The app's own plist is

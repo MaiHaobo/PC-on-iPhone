@@ -3883,7 +3883,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\nPLISTBUDDY=/usr/libexec/PlistBuddy\nINFO_PLIST=\"$SCRIPT_OUTPUT_FILE_0\"\ncp \"$SCRIPT_INPUT_FILE_0\" \"$INFO_PLIST\"\n\n$PLISTBUDDY -c \"Delete :ALTDeviceID\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationAlwaysAndWhenInUseUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationAlwaysUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationWhenInUseUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :UIBackgroundModes:1\" \"$INFO_PLIST\"\n";
+			shellScript = "#!/bin/sh\n\nPLISTBUDDY=/usr/libexec/PlistBuddy\nINFO_PLIST=\"$SCRIPT_OUTPUT_FILE_0\"\ncp \"$SCRIPT_INPUT_FILE_0\" \"$INFO_PLIST\"\n\n# The base plist carries the standard build home screen name; this target\n# needs the SE suffix so it stays distinguishable next to a standard install.\n$PLISTBUDDY -c \"Set :CFBundleDisplayName PC on iPhone SE\" \"$INFO_PLIST\" 2>/dev/null || $PLISTBUDDY -c \"Add :CFBundleDisplayName string PC on iPhone SE\" \"$INFO_PLIST\"\n\n$PLISTBUDDY -c \"Delete :ALTDeviceID\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationAlwaysAndWhenInUseUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationAlwaysUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :NSLocationWhenInUseUsageDescription\" \"$INFO_PLIST\"\n$PLISTBUDDY -c \"Delete :UIBackgroundModes:1\" \"$INFO_PLIST\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CE59A7B12ABCC75F00E5FFBD /* Patch Settings bundle */ = {
