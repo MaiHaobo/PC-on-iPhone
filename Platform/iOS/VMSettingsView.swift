@@ -33,53 +33,57 @@ struct VMSettingsView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                List {
-                    NavigationLink(
-                        destination: VMConfigInfoView(config: $config.information).navigationTitle("Information"),
-                        label: {
-                            Label("Information", systemImage: "info.circle")
-                                .labelStyle(.settingsIcon(.general))
-                        })
-                    NavigationLink(
-                        destination: VMConfigSystemView(config: $config.system, isResetConfig: $isResetConfig).navigationTitle("System"),
-                        label: {
-                            Label("System", systemImage: "cpu")
-                                .labelStyle(.settingsIcon(.graphics))
-                        })
-                    .onChange(of: isResetConfig) { newValue in
-                        if newValue {
-                            config.reset(forArchitecture: config.system.architecture, target: config.system.target)
-                            isResetConfig = false
-                        }
+            // A bare `List` styled `.insetGrouped`, not `Form { List { ... } }`.
+            // `Form` is itself a grouped list on iOS, so wrapping one inside the
+            // other nests two sets of insets: rows end up with padding the system
+            // Settings app never has, and the icon column no longer lines up with
+            // where a Settings row puts it.
+            List {
+                NavigationLink(
+                    destination: VMConfigInfoView(config: $config.information).navigationTitle("Information"),
+                    label: {
+                        Label("Information", systemImage: "info.circle")
+                            .labelStyle(.settingsIcon(.general))
+                    })
+                NavigationLink(
+                    destination: VMConfigSystemView(config: $config.system, isResetConfig: $isResetConfig).navigationTitle("System"),
+                    label: {
+                        Label("System", systemImage: "cpu")
+                            .labelStyle(.settingsIcon(.graphics))
+                    })
+                .onChange(of: isResetConfig) { newValue in
+                    if newValue {
+                        config.reset(forArchitecture: config.system.architecture, target: config.system.target)
+                        isResetConfig = false
                     }
-                    NavigationLink(
-                        destination: VMConfigQEMUView(config: config).navigationTitle("QEMU"),
-                        label: {
-                            Label("QEMU", systemImage: "shippingbox")
-                                .labelStyle(.settingsIcon(.general))
-                        })
-                    NavigationLink(
-                        destination: VMConfigInputView(config: $config.input, hasUsbSupport: config.system.architecture.hasUsbSupport).navigationTitle("Input"),
-                        label: {
-                            Label("Input", systemImage: "keyboard")
-                                .labelStyle(.settingsIcon(.gestures))
-                        })
-                    NavigationLink(
-                        destination: VMConfigSharingView(config: $config.sharing).navigationTitle("Sharing"),
-                        label: {
-                            Label("Sharing", systemImage: "person.crop.circle")
-                                .labelStyle(.settingsIcon(.network))
-                        })
-                    Devices(config: config, state: devicesState)
-                    NavigationLink(
-                        destination: VMStorageSettingsView(vm: vm).navigationTitle("Storage"),
-                        label: {
-                            Label("Storage", systemImage: "externaldrive")
-                                .labelStyle(.settingsIcon(.storage))
-                        })
                 }
+                NavigationLink(
+                    destination: VMConfigQEMUView(config: config).navigationTitle("QEMU"),
+                    label: {
+                        Label("QEMU", systemImage: "shippingbox")
+                            .labelStyle(.settingsIcon(.general))
+                    })
+                NavigationLink(
+                    destination: VMConfigInputView(config: $config.input, hasUsbSupport: config.system.architecture.hasUsbSupport).navigationTitle("Input"),
+                    label: {
+                        Label("Input", systemImage: "keyboard")
+                            .labelStyle(.settingsIcon(.gestures))
+                    })
+                NavigationLink(
+                    destination: VMConfigSharingView(config: $config.sharing).navigationTitle("Sharing"),
+                    label: {
+                        Label("Sharing", systemImage: "person.crop.circle")
+                            .labelStyle(.settingsIcon(.network))
+                    })
+                Devices(config: config, state: devicesState)
+                NavigationLink(
+                    destination: VMStorageSettingsView(vm: vm).navigationTitle("Storage"),
+                    label: {
+                        Label("Storage", systemImage: "externaldrive")
+                            .labelStyle(.settingsIcon(.storage))
+                    })
             }
+            .listStyle(.insetGrouped)
             #if !os(visionOS)
             .navigationTitle("Settings")
             #endif

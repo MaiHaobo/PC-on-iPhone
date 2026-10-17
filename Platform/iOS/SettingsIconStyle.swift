@@ -46,19 +46,24 @@ enum SettingsIconTint {
 
     var color: Color {
         switch self {
-        case .general:    return .gray
-        case .background: return .blue
-        case .idle:       return .purple
-        case .storage:    return .teal
-        case .about:      return .indigo
-        case .devices:    return .green
-        case .graphics:   return .orange
-        case .gestures:   return .pink
-        case .cursor:     return .cyan
-        case .gamepad:    return .mint
-        case .network:    return .blue
-        case .drives:     return .yellow
-        case .danger:     return .red
+        // These are the system Settings hues rather than SwiftUI's generic
+        // `.yellow` / `.mint` / `.teal`, which are noticeably paler. Settings
+        // chips are deeper so white glyphs stay legible at 17pt.
+        // Red appears twice on purpose: the system reuses the same warm red
+        // for destructive rows and for its media category.
+        case .general:    return Color(red: 0.557, green: 0.557, blue: 0.576) // systemGray
+        case .background: return Color(red: 0.000, green: 0.478, blue: 1.000) // systemBlue
+        case .idle:       return Color(red: 0.686, green: 0.322, blue: 0.871) // systemPurple
+        case .storage:    return Color(red: 0.188, green: 0.690, blue: 0.780) // systemTeal
+        case .about:      return Color(red: 0.345, green: 0.337, blue: 0.839) // systemIndigo
+        case .devices:    return Color(red: 0.204, green: 0.780, blue: 0.349) // systemGreen
+        case .graphics:   return Color(red: 1.000, green: 0.584, blue: 0.000) // systemOrange
+        case .gestures:   return Color(red: 1.000, green: 0.176, blue: 0.333) // systemPink
+        case .cursor:     return Color(red: 0.196, green: 0.678, blue: 0.902) // systemCyan
+        case .gamepad:    return Color(red: 0.000, green: 0.780, blue: 0.745) // systemMint (deepened)
+        case .network:    return Color(red: 0.000, green: 0.478, blue: 1.000) // systemBlue
+        case .drives:     return Color(red: 1.000, green: 0.800, blue: 0.000) // systemYellow
+        case .danger:     return Color(red: 1.000, green: 0.231, blue: 0.188) // systemRed
         }
     }
 }
@@ -97,6 +102,16 @@ struct SettingsIconLabelStyle: LabelStyle {
 /// The rounded-square badge itself. Public so rows whose label is custom
 /// (a `Toggle`, a `Picker`, a slider header) can place the glyph manually and
 /// still get identical geometry and material.
+///
+/// Geometry matches the system Settings app: a 29pt square with a 7pt
+/// continuous corner radius and a ~17pt glyph, so a row here sits at the same
+/// weight as a row in Settings.
+///
+/// The fill is a flat, saturated colour in both light and dark mode. An earlier
+/// version used `.glassEffect(...)` on iOS 26 in the belief that system icons
+/// were glassy; they are not. Real Settings rows are solid colour chips, and
+/// tinting glass with the category colour desaturates it into a muddy grey —
+/// most obvious on yellow and mint, which read as beige and sage.
 struct SettingsIconBadge<Glyph: View>: View {
     var tint: SettingsIconTint
     var size: CGFloat = 29
@@ -104,29 +119,16 @@ struct SettingsIconBadge<Glyph: View>: View {
     @ViewBuilder var glyph: () -> Glyph
 
     var body: some View {
-        badge
+        glyph()
+            .font(.system(size: size * 0.6, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(tint.color.gradient,
+                        in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .compositingGroup()
             // The badge is decorative; VoiceOver should read the row title and
             // value, not a colour name or a glyph.
             .accessibilityHidden(true)
-    }
-
-    @ViewBuilder
-    private var badge: some View {
-        if #available(iOS 26, *) {
-            glyph()
-                .font(.system(size: size * 0.5, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: size, height: size)
-                .glassEffect(.regular.tint(tint.color.opacity(0.85)).interactive(),
-                             in: .rect(cornerRadius: cornerRadius))
-        } else {
-            glyph()
-                .font(.system(size: size * 0.5, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: size, height: size)
-                .background(tint.color,
-                            in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        }
     }
 }
 
