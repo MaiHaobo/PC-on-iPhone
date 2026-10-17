@@ -123,12 +123,21 @@ struct SettingsIconBadge<Glyph: View>: View {
             .font(.system(size: size * 0.6, weight: .semibold))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background(tint.color.gradient,
+            .background(fill,
                         in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .compositingGroup()
             // The badge is decorative; VoiceOver should read the row title and
             // value, not a colour name or a glyph.
             .accessibilityHidden(true)
+    }
+
+    /// `Color.gradient` is iOS 16+, and this app still deploys to 15, so the
+    /// two-stop gradient is spelled out. The slight darkening towards the
+    /// bottom is what keeps the chips from reading as flat stickers.
+    private var fill: LinearGradient {
+        LinearGradient(colors: [tint.color.opacity(0.92), tint.color],
+                       startPoint: .top,
+                       endPoint: .bottom)
     }
 }
 
