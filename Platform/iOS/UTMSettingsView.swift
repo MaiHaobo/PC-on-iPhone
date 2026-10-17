@@ -135,6 +135,7 @@ private struct SettingsSidebar: View {
             SettingsListContent(showAdvanced: $showAdvanced, usesValueNavigation: true)
         }
         .listStyle(.insetGrouped)
+        .settingsSectionSpacing()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: SettingsPane.self) { pane in
@@ -165,6 +166,7 @@ private struct SettingsSidebarLegacy: View {
             SettingsListContent(showAdvanced: $showAdvanced, usesValueNavigation: false)
         }
         .listStyle(.insetGrouped)
+        .settingsSectionSpacing()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
         // The condition lives inside the ToolbarItem: the toolbar builder's
@@ -179,6 +181,25 @@ private struct SettingsSidebarLegacy: View {
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - Section spacing
+
+extension View {
+    /// Tightens the gap between grouped sections to what the system Settings
+    /// app uses. Measured against Settings on the same OS: the default gap in
+    /// an `.insetGrouped` list here renders at ~58pt where Settings shows
+    /// ~35pt, which is what made the screen feel airy next to the real app.
+    ///
+    /// `.listSectionSpacing` is iOS 17+, so older systems keep the default
+    /// spacing rather than growing a second layout branch.
+    @ViewBuilder func settingsSectionSpacing() -> some View {
+        if #available(iOS 17, *) {
+            self.listSectionSpacing(.compact)
+        } else {
+            self
         }
     }
 }
