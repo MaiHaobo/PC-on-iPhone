@@ -251,8 +251,17 @@ struct SettingsLicenseView: View {
 /// Reads the marketing version and build number straight from the bundle,
 /// replacing the two deprecated `PSTitleValueSpecifier` rows.
 enum SettingsInfo {
+    /// The marketing version, with the pre-release label appended when one is
+    /// set. Keeping the label out of `CFBundleShortVersionString` matters:
+    /// iOS compares that string when deciding whether an update is newer, and
+    /// a suffix like "0.5.2 Beta 3" would make the comparison meaningless.
     static var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+        let base = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+        let label = Bundle.main.object(forInfoDictionaryKey: "PCIPreReleaseLabel") as? String
+        guard let label, !label.isEmpty else {
+            return base
+        }
+        return "\(base) \(label)"
     }
 
     static var build: String {

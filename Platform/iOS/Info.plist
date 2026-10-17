@@ -38,6 +38,11 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<!-- Pre-release label shown next to the version in Settings. Kept out of
+	     CFBundleShortVersionString so iOS's update comparison still sees a
+	     clean dotted version number. -->
+	<key>PCIPreReleaseLabel</key>
+	<string>Beta 3</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
