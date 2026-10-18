@@ -85,8 +85,8 @@ enum SettingsIconTint {
 /// `SettingsIconBadge`, below.
 struct SettingsIconLabelStyle: LabelStyle {
     var tint: SettingsIconTint
-    var size: CGFloat = 29
-    var cornerRadius: CGFloat = 7
+    var size: CGFloat = 25
+    var cornerRadius: CGFloat = 6
 
     func makeBody(configuration: Configuration) -> some View {
         Label {
@@ -103,9 +103,12 @@ struct SettingsIconLabelStyle: LabelStyle {
 /// (a `Toggle`, a `Picker`, a slider header) can place the glyph manually and
 /// still get identical geometry and material.
 ///
-/// Geometry matches the system Settings app: a 29pt square with a 7pt
-/// continuous corner radius and a ~17pt glyph, so a row here sits at the same
-/// weight as a row in Settings.
+/// Geometry: a 25pt square with a 6pt continuous corner radius and a ~14pt
+/// medium-weight glyph. Pixel-measured against the system Settings app this
+/// is slightly smaller than Apple's 29pt chip — deliberately so: on-device
+/// comparison kept reading our chips as oversized next to Settings, even with
+/// identical geometry, because the heavier glyph and stronger fill contrast
+/// made them look bulkier. The compact size reads closer to the system row.
 ///
 /// The fill is a flat, saturated colour in both light and dark mode. An earlier
 /// version used `.glassEffect(...)` on iOS 26 in the belief that system icons
@@ -114,13 +117,13 @@ struct SettingsIconLabelStyle: LabelStyle {
 /// most obvious on yellow and mint, which read as beige and sage.
 struct SettingsIconBadge<Glyph: View>: View {
     var tint: SettingsIconTint
-    var size: CGFloat = 29
-    var cornerRadius: CGFloat = 7
+    var size: CGFloat = 25
+    var cornerRadius: CGFloat = 6
     @ViewBuilder var glyph: () -> Glyph
 
     var body: some View {
         glyph()
-            .font(.system(size: size * 0.6, weight: .semibold))
+            .font(.system(size: size * 0.56, weight: .medium))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
             .background(fill,
@@ -144,8 +147,8 @@ struct SettingsIconBadge<Glyph: View>: View {
 extension LabelStyle where Self == SettingsIconLabelStyle {
     /// `.labelStyle(.settingsIcon(.storage))`
     static func settingsIcon(_ tint: SettingsIconTint,
-                             size: CGFloat = 29,
-                             cornerRadius: CGFloat = 7) -> SettingsIconLabelStyle {
+                             size: CGFloat = 25,
+                             cornerRadius: CGFloat = 6) -> SettingsIconLabelStyle {
         SettingsIconLabelStyle(tint: tint, size: size, cornerRadius: cornerRadius)
     }
 }
