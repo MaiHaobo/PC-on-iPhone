@@ -85,16 +85,20 @@ enum SettingsIconTint {
 /// `SettingsIconBadge`, below.
 struct SettingsIconLabelStyle: LabelStyle {
     var tint: SettingsIconTint
-    var size: CGFloat = 25
-    var cornerRadius: CGFloat = 6
+    var size: CGFloat = 24
+    var cornerRadius: CGFloat = 5.4
 
     func makeBody(configuration: Configuration) -> some View {
         Label {
             configuration.title
         } icon: {
+            // The system leaves a visible gutter between chip and text. Without
+            // it the label crowds the chip and the whole row reads tighter and
+            // heavier than Settings does.
             SettingsIconBadge(tint: tint, size: size, cornerRadius: cornerRadius) {
                 configuration.icon
             }
+            .padding(.trailing, 10)
         }
     }
 }
@@ -103,27 +107,26 @@ struct SettingsIconLabelStyle: LabelStyle {
 /// (a `Toggle`, a `Picker`, a slider header) can place the glyph manually and
 /// still get identical geometry and material.
 ///
-/// Geometry: a 25pt square with a 6pt continuous corner radius and a ~14pt
-/// medium-weight glyph. Pixel-measured against the system Settings app this
-/// is slightly smaller than Apple's 29pt chip — deliberately so: on-device
-/// comparison kept reading our chips as oversized next to Settings, even with
-/// identical geometry, because the heavier glyph and stronger fill contrast
-/// made them look bulkier. The compact size reads closer to the system row.
+/// Geometry: a 24pt square with a 5.4pt continuous corner radius (the system
+/// ratio, roughly 0.22 × side) and a ~13pt regular-weight glyph.
 ///
-/// The fill is a flat, saturated colour in both light and dark mode. An earlier
-/// version used `.glassEffect(...)` on iOS 26 in the belief that system icons
-/// were glassy; they are not. Real Settings rows are solid colour chips, and
-/// tinting glass with the category colour desaturates it into a muddy grey —
-/// most obvious on yellow and mint, which read as beige and sage.
+/// Two adjustments came out of comparing screenshots side by side:
+///
+/// * Size. Apple's chips measure 28pt on the same screen, but ours read
+///   larger at equal size. Sizing down to 24pt and thinning the corner radius
+///   removes most of that; the radius matters because an over-rounded square
+///   reads as a blob that fills more of the row than a proper squircle does.
+/// * Weight. `.regular` rather than `.semibold`/`.medium`: white strokes on a
+///   saturated fill gain apparent thickness, and the system's glyphs are thin.
 struct SettingsIconBadge<Glyph: View>: View {
     var tint: SettingsIconTint
-    var size: CGFloat = 25
-    var cornerRadius: CGFloat = 6
+    var size: CGFloat = 24
+    var cornerRadius: CGFloat = 5.4
     @ViewBuilder var glyph: () -> Glyph
 
     var body: some View {
         glyph()
-            .font(.system(size: size * 0.56, weight: .medium))
+            .font(.system(size: size * 0.55, weight: .regular))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
             .background(fill,
@@ -147,8 +150,8 @@ struct SettingsIconBadge<Glyph: View>: View {
 extension LabelStyle where Self == SettingsIconLabelStyle {
     /// `.labelStyle(.settingsIcon(.storage))`
     static func settingsIcon(_ tint: SettingsIconTint,
-                             size: CGFloat = 25,
-                             cornerRadius: CGFloat = 6) -> SettingsIconLabelStyle {
+                             size: CGFloat = 24,
+                             cornerRadius: CGFloat = 5.4) -> SettingsIconLabelStyle {
         SettingsIconLabelStyle(tint: tint, size: size, cornerRadius: cornerRadius)
     }
 }
