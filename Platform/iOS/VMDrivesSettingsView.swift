@@ -77,8 +77,23 @@ struct VMDrivesSettingsView: View {
     }
     
     private func importDrive(result: Result<URL, Error>) {
+        // The picker's grant over a security-scoped URL expires when this
+        // handler returns, and the append below happens inside a background
+        // task. Convert the URL while the grant is still live so the drive
+        // entry keeps a bookmark the VM can actually read from.
+        let resolved: Result<URL, Error>
+        switch result {
+        case .success(let picked):
+            do {
+                resolved = .success(try picked.withPersistedAccess())
+            } catch {
+                resolved = .failure(error)
+            }
+        case .failure:
+            resolved = result
+        }
         data.busyWorkAsync {
-            switch result {
+            switch resolved {
             case .success(let url):
                 await MainActor.run {
                     var drive = UTMQemuConfigurationDrive(forArchitecture: config.system.architecture, target: config.system.target, isExternal: false)

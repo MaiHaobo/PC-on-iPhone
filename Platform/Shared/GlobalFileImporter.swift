@@ -45,7 +45,15 @@ struct GlobalFileImporterViewModifier: ViewModifier {
                 if newValue {
                     globalFileImporterShim.allowedContentTypes = allowedContentTypes
                     globalFileImporterShim.onCompletion = onCompletion
-                    globalFileImporterShim.isPresented = newValue
+                    // Reset first, then raise on the next runloop. The shim is
+                    // long-lived, and `.fileImporter` only presents on a
+                    // false → true edge. Without the explicit drop to `false`
+                    // the second "Import…" tap left both flags at `true`, so
+                    // nothing changed and the picker silently never opened.
+                    globalFileImporterShim.isPresented = false
+                    DispatchQueue.main.async {
+                        globalFileImporterShim.isPresented = true
+                    }
                 }
             }
             .onChange(of: globalFileImporterShim.isPresented) { newValue in
