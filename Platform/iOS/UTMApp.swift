@@ -38,7 +38,12 @@ struct UTMApp: App {
 
     var body: some Scene {
         WindowGroup {
-            UTMSingleWindowView(data: data)
+            // The launch animation wraps the root rather than living inside
+            // it: `SplashHost`'s state survives for the process, which is what
+            // makes it a cold-launch-only affair.
+            SplashHost {
+                UTMSingleWindowView(data: data)
+            }
                 .externalDisplayAccessory()
         }.commands {
             VMCommands()
