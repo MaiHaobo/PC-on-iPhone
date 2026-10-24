@@ -84,7 +84,7 @@ struct VMWizardOSView: View {
                 Text("Custom")
             }
         }
-        .buttonStyle(.inList)
+        .buttonStyle(.plain)
     }
 }
 

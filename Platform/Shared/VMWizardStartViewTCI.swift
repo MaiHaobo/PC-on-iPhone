@@ -41,7 +41,7 @@ struct VMWizardStartViewTCI: View {
                     }
                     .padding()
                 }
-                .buttonStyle(.inList)
+                .buttonStyle(.plain)
             } header: {
                 Text("Custom")
             }

@@ -16,44 +16,13 @@
 
 import SwiftUI
 
-/// Icon-only replacement for `EditButton`.
-///
-/// Toggles the enclosing list's edit mode through the `editMode` environment,
-/// exactly like the system button does, but renders an icon instead of a
-/// localised text title: `arrow.up.arrow.down.circle` while inactive (the
-/// mode is for reordering/deleting rows) and the app-wide prominent checkmark
-/// (`ConfirmationButton`'s style) while active (tapping again finishes
-/// editing), matching the system Files app's selection-mode Done button.
-///
-/// The two states use different button styles, so they are built as separate
-/// buttons rather than one button with a conditional label: the system style
-/// modifiers apply per-button, not per-label.
+/// Alias kept so call sites read as intent, but the control itself is the
+/// system `EditButton`: it flips the enclosing list's `editMode` and carries
+/// Apple's own Edit/Done rendering and localisation.
 struct EditToggleButton: View {
-    @Environment(\.editMode) private var editMode
-
-    private var isActive: Bool { editMode?.wrappedValue == .active }
-
-    private func toggle() {
-        switch editMode?.wrappedValue {
-        case .active:
-            editMode?.wrappedValue = .inactive
-        default:
-            editMode?.wrappedValue = .active
-        }
-    }
-
+    // The system control. The previous icon toggle re-implemented what
+    // `EditButton` already does: flips `editMode` and re-labels itself.
     var body: some View {
-        if isActive {
-            Button(action: toggle) {
-                ConfirmationIcon(systemName: "checkmark")
-            }
-            .buttonStyle(.borderedProminent)
-            .accessibilityLabel(Text("Done"))
-        } else {
-            Button(action: toggle) {
-                Image(systemName: "arrow.up.arrow.down.circle")
-            }
-            .accessibilityLabel(Text("Edit"))
-        }
+        EditButton()
     }
 }

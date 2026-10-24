@@ -24,31 +24,20 @@ struct BusyIndicator: View {
     }
 
     var body: some View {
-        progressView
-            .frame(width: 100, height: 100, alignment: .center)
-            .foregroundColor(.white)
-            .background(Color.gray.opacity(0.5))
-            .clipShape(RoundedRectangle(cornerRadius: 25.0, style: .continuous))
-    }
-
-    #if os(macOS)
-    @ViewBuilder
-    private var progressView: some View {
+        // The system control, nothing else: a determinate circular progress
+        // view when a fraction is known, the plain spinner otherwise. The
+        // hand-drawn grey card around it is gone — hosts already present the
+        // overlay against their own chrome, and the boxed look read as a
+        // custom widget rather than system UI.
         if let progress = progress {
-            ProgressView(value: progress)
+            ProgressView(value: Double(progress))
                 .progressViewStyle(.circular)
                 .controlSize(.large)
         } else {
-            Spinner(size: .large)
+            ProgressView()
+                .controlSize(.large)
         }
     }
-    #else
-    // TODO: implement progress spinner for iOS
-    @ViewBuilder
-    private var progressView: some View {
-        Spinner(size: .large)
-    }
-    #endif
 }
 
 struct BusyIndicator_Previews: PreviewProvider {

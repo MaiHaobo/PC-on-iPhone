@@ -93,16 +93,10 @@ extension View {
     /// Style the "New…" menu so it matches the other entries in the settings sidebar.
     @ViewBuilder
     func addDeviceMenuStyle() -> some View {
-        #if os(macOS)
-        if #available(macOS 26, *) {
-            // .borderlessButton renders as a compact pull-down that no longer matches the sidebar rows
-            self.menuStyle(.button).buttonStyle(.plain)
-        } else {
-            self.menuStyle(.borderlessButton)
-        }
-        #else
-        self.menuStyle(.borderlessButton)
-        #endif
+        // The stock Menu presentation. The borderless-button override fought
+        // the system's own menu chrome; the default style is what every
+        // system app's "+" menu uses.
+        self
     }
 }
 

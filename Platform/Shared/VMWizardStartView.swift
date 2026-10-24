@@ -58,7 +58,7 @@ struct VMWizardStartView: View {
                     }
                     .padding()
                 }
-                .buttonStyle(.inList)
+                .buttonStyle(.plain)
                 .disabled(!isVirtualizationSupported)
 
                 Button {
@@ -78,7 +78,7 @@ struct VMWizardStartView: View {
                     }
                     .padding()
                 }
-                .buttonStyle(.inList)
+                .buttonStyle(.plain)
                 .disabled(!isEmulationSupported)
             } header: {
                 Text("Custom")

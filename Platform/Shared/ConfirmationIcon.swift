@@ -82,10 +82,11 @@ struct ConfirmationButton: View {
     }
 
     var body: some View {
+        // A plain text button. In a navigation bar SwiftUI supplies the
+        // system look (bold tinted text) with no custom drawing; the
+        // previous prominent-chip rendering fought the bar's own chrome.
         Button(action: action) {
-            ConfirmationIcon(systemName: systemName, pointSize: pointSize)
+            Text(title)
         }
-        .buttonStyle(.borderedProminent)
-        .accessibilityLabel(Text(title))
     }
 }

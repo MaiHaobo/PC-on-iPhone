@@ -72,11 +72,13 @@ struct UTMRemoteConnectView: View {
                                 } label: {
                                     Label("Edit…", systemImage: "slider.horizontal.3")
                                 }
-                                DestructiveButton("Delete") {
+                                Button(role: .destructive) {
                                     remoteClientState.delete(server: server)
                                     Task {
                                         await remoteClient.refresh()
                                     }
+                                } label: {
+                                    Text("Delete")
                                 }
                             }
                         }.onDelete { indexSet in
