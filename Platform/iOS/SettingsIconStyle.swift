@@ -70,54 +70,33 @@ enum SettingsIconTint {
 
 // MARK: - Settings icon label style
 
-/// Draws a settings row icon the way the system Settings app does: a rounded
-/// square of a category colour with the glyph knocked out in white.
+/// Renders a settings row icon the way system apps without chips do (Mail,
+/// Shortcuts): the bare SF Symbol, tinted with the row's category colour.
 ///
-/// On iOS 26 the square is rendered as Liquid Glass tinted with the category
-/// colour — the glyph sits on real material, so it picks up the surrounding
-/// blur and specular highlight, and `.interactive()` gives it the press
-/// response Apple's own settings rows have. On older systems the same geometry
-/// falls back to a flat fill, which is what those systems expect anyway.
+/// The Settings-app chip was tried first and abandoned: Apple does not
+/// publish a template for it, so every proportion — size, radius, glyph
+/// weight, gutter — was hand-tuned against screenshots and kept drifting.
+/// The bare symbol is the actual system template, needs no geometry, and
+/// inherits the row's dynamic-type size for free.
 ///
 /// The style is a `LabelStyle`, so callers keep using `Label(title, systemImage:)`
 /// and simply attach `.labelStyle(.settingsIcon(.background))`. Rows that put
-/// their own content in the label can instead wrap just the glyph with
+/// their own content in the label can still wrap a glyph with
 /// `SettingsIconBadge`, below.
 struct SettingsIconLabelStyle: LabelStyle {
     var tint: SettingsIconTint
-    var size: CGFloat = 24
-    var cornerRadius: CGFloat = 5.4
 
     func makeBody(configuration: Configuration) -> some View {
         Label {
             configuration.title
         } icon: {
-            // The system leaves a visible gutter between chip and text. Without
-            // it the label crowds the chip and the whole row reads tighter and
-            // heavier than Settings does.
-            SettingsIconBadge(tint: tint, size: size, cornerRadius: cornerRadius) {
-                configuration.icon
-            }
-            .padding(.trailing, 10)
+            configuration.icon
+                .font(.body)
+                .foregroundStyle(tint.color)
         }
     }
 }
 
-/// The rounded-square badge itself. Public so rows whose label is custom
-/// (a `Toggle`, a `Picker`, a slider header) can place the glyph manually and
-/// still get identical geometry and material.
-///
-/// Geometry: a 24pt square with a 5.4pt continuous corner radius (the system
-/// ratio, roughly 0.22 × side) and a ~13pt regular-weight glyph.
-///
-/// Two adjustments came out of comparing screenshots side by side:
-///
-/// * Size. Apple's chips measure 28pt on the same screen, but ours read
-///   larger at equal size. Sizing down to 24pt and thinning the corner radius
-///   removes most of that; the radius matters because an over-rounded square
-///   reads as a blob that fills more of the row than a proper squircle does.
-/// * Weight. `.regular` rather than `.semibold`/`.medium`: white strokes on a
-///   saturated fill gain apparent thickness, and the system's glyphs are thin.
 struct SettingsIconBadge<Glyph: View>: View {
     var tint: SettingsIconTint
     var size: CGFloat = 24
@@ -149,9 +128,7 @@ struct SettingsIconBadge<Glyph: View>: View {
 
 extension LabelStyle where Self == SettingsIconLabelStyle {
     /// `.labelStyle(.settingsIcon(.storage))`
-    static func settingsIcon(_ tint: SettingsIconTint,
-                             size: CGFloat = 24,
-                             cornerRadius: CGFloat = 5.4) -> SettingsIconLabelStyle {
-        SettingsIconLabelStyle(tint: tint, size: size, cornerRadius: cornerRadius)
+    static func settingsIcon(_ tint: SettingsIconTint) -> SettingsIconLabelStyle {
+        SettingsIconLabelStyle(tint: tint)
     }
 }

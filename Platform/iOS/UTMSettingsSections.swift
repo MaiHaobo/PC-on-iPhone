@@ -124,10 +124,10 @@ private struct SettingsSliderRow: View {
             set: { intBinding.wrappedValue = Int($0.rounded()) }
         )
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 12) {
-                SettingsIconBadge(tint: tint) {
-                    Image(systemName: systemImage)
-                }
+            HStack(spacing: 16) {
+                Image(systemName: systemImage)
+                    .font(.body)
+                    .foregroundStyle(tint.color)
                 Text(title)
                 if showsValue {
                     Spacer()
@@ -395,10 +395,10 @@ private struct SettingsInfoRow: View {
     let value: String
 
     var body: some View {
-        HStack(spacing: 12) {
-            SettingsIconBadge(tint: tint) {
-                Image(systemName: systemImage)
-            }
+        HStack(spacing: 16) {
+            Image(systemName: systemImage)
+                .font(.body)
+                .foregroundStyle(tint.color)
             Text(title)
             Spacer()
             Text(value)
