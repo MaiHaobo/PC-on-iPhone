@@ -127,7 +127,8 @@ private struct TileButton: View {
                     label
                         .labelStyle(TileLabelStyle())
                 }
-            }.buttonStyle(.bordered)
+            })
+            .buttonStyle(.bordered)
             .frame(width: width, height: height)
         }
     }
