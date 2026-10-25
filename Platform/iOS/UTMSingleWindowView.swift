@@ -93,8 +93,9 @@ struct UTMSingleWindowView_Previews: PreviewProvider {
 /// corners off their common axis, ending as offset outlines.
 ///
 /// Drawn as vectors rather than played as a clip so it stays crisp at every
-/// screen size, costs no bundle weight, and follows the system appearance —
-/// white lines on black in dark mode, the inverse in light.
+/// screen size, costs no bundle weight, and replicates the liquid-glass App
+/// icon: blue-gradient paper with white layers in light mode, black paper
+/// with blue-gradient layers in dark mode.
 ///
 /// Only a cold launch shows this: `SplashHost` keeps its `@State` for the
 /// process lifetime, so returning from the background goes straight to the
@@ -108,25 +109,48 @@ struct SplashView: View {
 
     @State private var scattered = false
 
-    /// Ink and paper invert with the appearance. The reference clip is the
-    /// dark variant; light mode mirrors it so the animation does not flash a
-    /// black card on a white system.
-    private var paper: Color { colorScheme == .dark ? .black : .white }
-    private var ink: Color { colorScheme == .dark ? .white : .black }
+    /// The still frame is a faithful replica of the liquid-glass App icon
+    /// (Platform/AppIcon.icon): three nested rounded-square rings around a
+    /// centre dot, on the icon's own paper.
+    ///
+    /// Colours come straight from icon.json. Light mode: blue gradient
+    /// paper, white layers — exactly the rendered light icon. Dark mode:
+    /// near-black paper ("system-dark"), and the layers take the icon's blue
+    /// gradient, which is what the dark icon variant does.
+    private static let glassTop = Color(red: 0.34510, green: 0.56078, blue: 0.93725)
+    private static let glassBottom = Color(red: 0.00392, green: 0.00784, blue: 0.63922)
+    private static var glassGradient: LinearGradient {
+        LinearGradient(colors: [glassTop, glassBottom],
+                       startPoint: .top,
+                       endPoint: .bottom)
+    }
 
+    private var paper: some ShapeStyle {
+        colorScheme == .dark
+            ? AnyShapeStyle(Color.black)
+            : AnyShapeStyle(Self.glassGradient)
+    }
+    private var ink: some ShapeStyle {
+        colorScheme == .dark
+            ? AnyShapeStyle(Self.glassGradient)
+            : AnyShapeStyle(Color.white)
+    }
+
+    /// Outer ring side. Inner rings follow the icon's measured nesting:
+    /// Ring2/Ring1 = 0.703, Ring3/Ring1 = 0.423; the stroke is ~7% of a
+    /// ring's side and the centre dot ~11% of the outer side.
     private let side: CGFloat = 108
+    private var ringSides: [CGFloat] { [side, side * 0.703, side * 0.423] }
 
     var body: some View {
         ZStack {
             paper.ignoresSafeArea()
 
             ZStack {
-                ring(index: 0)
-                ring(index: 1)
-                ring(index: 2)
+                ForEach(0..<3, id: \.self) { ring(index: $0) }
                 Circle()
                     .fill(ink)
-                    .frame(width: 9, height: 9)
+                    .frame(width: side * 0.11, height: side * 0.11)
                     .opacity(scattered ? 0 : 1)
             }
             .frame(width: side * 2, height: side * 2)
@@ -149,14 +173,14 @@ struct SplashView: View {
     }
 
     /// One nested rounded square. The scattered state is pure geometry: each
-    /// ring rotates a little further than the one inside it and slides
-    /// down-left, so the group fans out the way overlapping cards would.
+    /// ring shrinks by a step, rotates a little further than the one inside
+    /// it and slides down-left, so the group fans out the way overlapping
+    /// cards would.
     private func ring(index: Int) -> some View {
-        let shrink: CGFloat = 1 - CGFloat(index) * 0.26
-        return RoundedRectangle(cornerRadius: 18, style: .continuous)
-            .strokeBorder(ink, lineWidth: 7)
-            .frame(width: side, height: side)
-            .scaleEffect(scattered ? shrink * 1.06 : shrink)
+        let ringSide = scattered ? ringSides[index] * 0.74 : ringSides[index]
+        return RoundedRectangle(cornerRadius: ringSide * 0.22, style: .continuous)
+            .strokeBorder(ink, lineWidth: ringSides[index] * 0.065)
+            .frame(width: ringSide, height: ringSide)
             .rotationEffect(.degrees(scattered ? Double(index) * 7 : 0))
             .offset(x: scattered ? -CGFloat(index) * 13 : 0,
                     y: scattered ? CGFloat(index) * 17 : 0)

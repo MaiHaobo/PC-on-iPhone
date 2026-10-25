@@ -70,14 +70,12 @@ enum SettingsIconTint {
 
 // MARK: - Settings icon label style
 
-/// Renders a settings row icon the way system apps without chips do (Mail,
-/// Shortcuts): the bare SF Symbol, tinted with the row's category colour.
+/// Renders a settings row icon the way plain system rows do: the bare SF
+/// Symbol in its default colour (the accent tint), no per-category tinting.
 ///
-/// The Settings-app chip was tried first and abandoned: Apple does not
-/// publish a template for it, so every proportion — size, radius, glyph
-/// weight, gutter — was hand-tuned against screenshots and kept drifting.
-/// The bare symbol is the actual system template, needs no geometry, and
-/// inherits the row's dynamic-type size for free.
+/// Hand-picked category colours were tried first and abandoned: they never
+/// quite matched any system app and kept drawing user complaints. The default
+/// tint is the actual system template.
 ///
 /// The style is a `LabelStyle`, so callers keep using `Label(title, systemImage:)`
 /// and simply attach `.labelStyle(.settingsIcon(.background))`. Rows that put
@@ -92,7 +90,6 @@ struct SettingsIconLabelStyle: LabelStyle {
         } icon: {
             configuration.icon
                 .font(.body)
-                .foregroundStyle(tint.color)
         }
     }
 }

@@ -127,7 +127,6 @@ private struct SettingsSliderRow: View {
             HStack(spacing: 16) {
                 Image(systemName: systemImage)
                     .font(.body)
-                    .foregroundStyle(tint.color)
                 Text(title)
                 if showsValue {
                     Spacer()
@@ -398,7 +397,6 @@ private struct SettingsInfoRow: View {
         HStack(spacing: 16) {
             Image(systemName: systemImage)
                 .font(.body)
-                .foregroundStyle(tint.color)
             Text(title)
             Spacer()
             Text(value)
