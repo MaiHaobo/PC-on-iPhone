@@ -144,7 +144,7 @@ struct SplashView: View {
 
     var body: some View {
         ZStack {
-            paper.ignoresSafeArea()
+            Rectangle().fill(paper).ignoresSafeArea()
 
             ZStack {
                 ForEach(0..<3, id: \.self) { ring(index: $0) }
