@@ -336,6 +336,10 @@ struct SettingsAdvancedSections: View {
                               defaultValue: 10)
         }
 
+        SettingsGroup(title: "JIT") {
+            SettingsJITStatusRow()
+        }
+
         SettingsGroup(title: "JitStreamer") {
             SettingsToggleRow(title: "Enable JitStreamer Attach",
                               systemImage: "bolt",
@@ -347,6 +351,44 @@ struct SettingsAdvancedSections: View {
                                   tint: .network,
                                   pane: .jitStreamer,
                                   usesValueNavigation: usesValueNavigation)
+        }
+    }
+}
+
+// MARK: - JIT status
+
+/// Shows whether this process has JIT and, when it does not, offers the guide
+/// again. Without this the only way back to the guide is a relaunch or the
+/// new-VM button, neither of which is discoverable when the user just wants
+/// to fix JIT.
+private struct SettingsJITStatusRow: View {
+    @State private var isGuidePresented = false
+
+    private var hasJIT: Bool {
+        #if os(iOS) && WITH_JIT
+        return Main.jitAvailable
+        #else
+        return true
+        #endif
+    }
+
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: hasJIT ? "bolt.fill" : "bolt.slash")
+                .font(.body)
+            Text(hasJIT ? "JIT Enabled" : "JIT Not Enabled")
+            Spacer()
+            if !hasJIT {
+                Button("Enable…") {
+                    isGuidePresented = true
+                }
+                .buttonStyle(.borderless)
+            }
+        }
+        .fullScreenCover(isPresented: $isGuidePresented) {
+            JITGuideView(reason: .newVirtualMachine) {
+                isGuidePresented = false
+            }
         }
     }
 }

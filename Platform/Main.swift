@@ -33,6 +33,22 @@ let logger = Logger(label: "com.utmapp.UTM") { label in
 @main
 class Main {
     static var jitAvailable = true
+
+    /// Re-read the process's JIT state.
+    ///
+    /// The launch-time probe runs the ptrace tricks, which is a one-shot
+    /// affair. Once an external debugger (StikDebug) attaches and sets
+    /// CS_DEBUGGED, the cheap checks below become true — that is what the
+    /// JIT guide polls after handing off.
+    @discardableResult
+    static func refreshJITAvailability() -> Bool {
+        #if (os(iOS) || os(visionOS)) && WITH_JIT
+        if jb_has_jit_entitlement() || jb_has_cs_disabled() {
+            jitAvailable = true
+        }
+        #endif
+        return jitAvailable
+    }
     
     static func main() {
         #if (os(iOS) || os(visionOS)) && WITH_JIT

@@ -89,8 +89,88 @@ struct UTMSingleWindowView_Previews: PreviewProvider {
 
 // MARK: - Launch animation
 
-/// The launch animation: three concentric rounded squares that spin their
-/// corners off their common axis, ending as offset outlines.
+/// The icon's mark, independent of any choreography: three nested rounded
+/// squares around a centre dot, drawn in the current appearance's colours.
+///
+/// Shared by the launch animation and the JIT spinner so both stay pixel
+/// -identical to the App icon — there is exactly one definition of the ring
+/// ratios and colours in the app.
+struct LiquidGlassMark: View {
+    /// Outer ring side.
+    var side: CGFloat = 108
+    /// 0 = assembled (the icon itself), 1 = fully fanned out.
+    var scatter: CGFloat = 0
+    /// Extra rotation about the mark's centre, used by the spinner.
+    var spin: Angle = .zero
+    /// The centre dot is the icon's core; the spinner drops it.
+    var showsDot: Bool = true
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    /// Colours come straight from icon.json. Light mode: blue gradient
+    /// paper, white layers — exactly the rendered light icon. Dark mode:
+    /// near-black paper ("system-dark"), and the layers take the icon's blue
+    /// gradient, which is what the dark icon variant does.
+    static let glassTop = Color(red: 0.34510, green: 0.56078, blue: 0.93725)
+    static let glassBottom = Color(red: 0.00392, green: 0.00784, blue: 0.63922)
+    static var glassGradient: LinearGradient {
+        LinearGradient(colors: [glassTop, glassBottom],
+                       startPoint: .top,
+                       endPoint: .bottom)
+    }
+
+    var ink: some ShapeStyle {
+        colorScheme == .dark
+            ? AnyShapeStyle(Self.glassGradient)
+            : AnyShapeStyle(Color.white)
+    }
+
+    /// Inner rings follow the icon's measured nesting: Ring2/Ring1 = 0.703,
+    /// Ring3/Ring1 = 0.423; the stroke is ~7% of a ring's side and the centre
+    /// dot ~11% of the outer side.
+    private var ringSides: [CGFloat] { [side, side * 0.703, side * 0.423] }
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<3, id: \.self) { ring(index: $0) }
+            Circle()
+                .fill(ink)
+                .frame(width: side * 0.11, height: side * 0.11)
+                .opacity(showsDot ? (1 - scatter) : 0)
+        }
+        .frame(width: side * 2, height: side * 2)
+        .rotationEffect(spin)
+    }
+
+    /// One nested rounded square. The fanned-out state is pure geometry: each
+    /// ring shrinks by a step, rotates a little further than the one inside
+    /// it and slides down-left, so the group fans out the way overlapping
+    /// cards would.
+    private func ring(index: Int) -> some View {
+        let ringSide = ringSides[index] * (1 - 0.26 * scatter)
+        return RoundedRectangle(cornerRadius: ringSide * 0.22, style: .continuous)
+            .strokeBorder(ink, lineWidth: ringSides[index] * 0.065)
+            .frame(width: ringSide, height: ringSide)
+            .rotationEffect(.degrees(Double(index) * 7 * scatter))
+            .offset(x: -CGFloat(index) * 13 * scatter,
+                    y: CGFloat(index) * 17 * scatter)
+    }
+}
+
+/// Plain colour pair for a full-bleed backdrop matching the icon.
+struct LiquidGlassPaper: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Rectangle()
+            .fill(colorScheme == .dark
+                  ? AnyShapeStyle(Color.black)
+                  : AnyShapeStyle(LiquidGlassMark.glassGradient))
+            .ignoresSafeArea()
+    }
+}
+
+/// The launch animation: the icon assembles, then fans the rings apart.
 ///
 /// Drawn as vectors rather than played as a clip so it stays crisp at every
 /// screen size, costs no bundle weight, and replicates the liquid-glass App
@@ -103,62 +183,23 @@ struct UTMSingleWindowView_Previews: PreviewProvider {
 struct SplashView: View {
     /// Called once the animation has run its course.
     var onFinished: () -> Void
+    /// Hold the last frame instead of dismissing, so the JIT guide can hand
+    /// over from the very image the launch ended on.
+    var holdsLastFrame: Bool = false
 
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var scattered = false
 
-    /// The still frame is a faithful replica of the liquid-glass App icon
-    /// (Platform/AppIcon.icon): three nested rounded-square rings around a
-    /// centre dot, on the icon's own paper.
-    ///
-    /// Colours come straight from icon.json. Light mode: blue gradient
-    /// paper, white layers — exactly the rendered light icon. Dark mode:
-    /// near-black paper ("system-dark"), and the layers take the icon's blue
-    /// gradient, which is what the dark icon variant does.
-    private static let glassTop = Color(red: 0.34510, green: 0.56078, blue: 0.93725)
-    private static let glassBottom = Color(red: 0.00392, green: 0.00784, blue: 0.63922)
-    private static var glassGradient: LinearGradient {
-        LinearGradient(colors: [glassTop, glassBottom],
-                       startPoint: .top,
-                       endPoint: .bottom)
-    }
-
-    private var paper: some ShapeStyle {
-        colorScheme == .dark
-            ? AnyShapeStyle(Color.black)
-            : AnyShapeStyle(Self.glassGradient)
-    }
-    private var ink: some ShapeStyle {
-        colorScheme == .dark
-            ? AnyShapeStyle(Self.glassGradient)
-            : AnyShapeStyle(Color.white)
-    }
-
-    /// Outer ring side. Inner rings follow the icon's measured nesting:
-    /// Ring2/Ring1 = 0.703, Ring3/Ring1 = 0.423; the stroke is ~7% of a
-    /// ring's side and the centre dot ~11% of the outer side.
-    private let side: CGFloat = 108
-    private var ringSides: [CGFloat] { [side, side * 0.703, side * 0.423] }
-
     var body: some View {
         ZStack {
-            Rectangle().fill(paper).ignoresSafeArea()
-
-            ZStack {
-                ForEach(0..<3, id: \.self) { ring(index: $0) }
-                Circle()
-                    .fill(ink)
-                    .frame(width: side * 0.11, height: side * 0.11)
-                    .opacity(scattered ? 0 : 1)
-            }
-            .frame(width: side * 2, height: side * 2)
+            LiquidGlassPaper()
+            LiquidGlassMark(scatter: scattered ? 1 : 0)
         }
         .task {
             guard !reduceMotion else {
                 try? await Task.sleep(nanoseconds: 400_000_000)
-                onFinished()
+                if !holdsLastFrame { onFinished() }
                 return
             }
             // Let the first frame land before starting, otherwise the opening
@@ -168,22 +209,11 @@ struct SplashView: View {
                 scattered = true
             }
             try? await Task.sleep(nanoseconds: 1_250_000_000)
-            onFinished()
+            if !holdsLastFrame { onFinished() }
         }
-    }
-
-    /// One nested rounded square. The scattered state is pure geometry: each
-    /// ring shrinks by a step, rotates a little further than the one inside
-    /// it and slides down-left, so the group fans out the way overlapping
-    /// cards would.
-    private func ring(index: Int) -> some View {
-        let ringSide = scattered ? ringSides[index] * 0.74 : ringSides[index]
-        return RoundedRectangle(cornerRadius: ringSide * 0.22, style: .continuous)
-            .strokeBorder(ink, lineWidth: ringSides[index] * 0.065)
-            .frame(width: ringSide, height: ringSide)
-            .rotationEffect(.degrees(scattered ? Double(index) * 7 : 0))
-            .offset(x: scattered ? -CGFloat(index) * 13 : 0,
-                    y: scattered ? CGFloat(index) * 17 : 0)
+        // Re-running is harmless, but keeping this out of the initial
+        // transition avoids a flash if the guide appears mid-animation.
+        .onDisappear { scattered = false }
     }
 }
 
@@ -192,19 +222,28 @@ struct SplashView: View {
 /// The flag lives on a view that survives for the whole process, so the
 /// animation runs exactly once per cold launch: backgrounding and returning
 /// re-runs `body` but not the state initialiser.
+///
+/// When the build needs JIT and does not have it, the opening animation is
+/// held on its last frame instead of dismissing, and the JIT guide fades in
+/// over that same image — the rings the user just watched fan apart become
+/// the spinner, so the hand-off reads as one continuous motion.
 struct SplashHost<Content: View>: View {
     @ViewBuilder var content: () -> Content
+
+    @StateObject private var jitGuide = JITGuideCoordinator()
 
     /// Never reset, so the animation cannot replay when the scene comes back
     /// from the background — only a fresh process starts at `true`.
     @State private var isVisible = true
+
+    private var needsJITGuide: Bool { JITGuideCoordinator.isNeeded }
 
     var body: some View {
         ZStack {
             content()
 
             if isVisible {
-                SplashView {
+                SplashView(holdsLastFrame: needsJITGuide) {
                     withAnimation(.easeOut(duration: 0.28)) {
                         isVisible = false
                     }
@@ -212,6 +251,29 @@ struct SplashHost<Content: View>: View {
                 .transition(.opacity)
                 .zIndex(1)
             }
+
+            if jitGuide.isPresented {
+                JITGuideView(reason: jitGuide.reason) {
+                    // If the user closed the guide themselves, the launch
+                    // animation must not resume underneath: it already played
+                    // and is holding its last frame.
+                    withAnimation(.easeOut(duration: 0.35)) {
+                        jitGuide.isPresented = false
+                        isVisible = false
+                    }
+                }
+                .transition(.opacity)
+                .zIndex(2)
+            }
+        }
+        .onAppear {
+            guard needsJITGuide else { return }
+            jitGuide.present(reason: .launch)
+        }
+        // Second entry point: reaching for a new virtual machine. Every "new
+        // VM" affordance funnels through `UTMData.newVM`, which posts this.
+        .onReceive(NotificationCenter.default.publisher(for: .NewVirtualMachineRequested)) { _ in
+            jitGuide.present(reason: .newVirtualMachine)
         }
     }
 }

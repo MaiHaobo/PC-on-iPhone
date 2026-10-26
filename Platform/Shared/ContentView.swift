@@ -119,29 +119,10 @@ struct ContentView: View {
             #if !os(visionOS)
             IQKeyboardManager.shared.enable = true
             #endif
-            #if WITH_JIT
-            if !Main.jitAvailable {
-                data.busyWorkAsync {
-                    let jitStreamerAttach = UserDefaults.standard.bool(forKey: "JitStreamerAttach")
-                    if jitStreamerAttach {
-                        try await data.jitStreamerAttach()
-                        return
-                    }
-
-                    #if canImport(AltKit)
-                    if await data.isAltServerCompatible {
-                        try await data.startAltJIT()
-                        return
-                    }
-                    #endif
-
-                    // ignore error when we are running on a HV only build
-                    if !UTMCapabilities.current.contains(.hasHypervisorSupport) {
-                        throw NSLocalizedString("Your version of iOS does not support running VMs while unmodified. You must either run UTM while jailbroken or with a remote debugger attached. See https://getutm.app/install/ for more details.", comment: "ContentView")
-                    }
-                }
-            }
-            #endif
+            // JIT is handled by the guide in `SplashHost`, which hands off to
+            // StikDebug. It used to be attempted silently here as well, but on
+            // sideloaded builds that only produced an error alert on top of
+            // the guide.
             #endif
         }
         #if WITH_SERVER

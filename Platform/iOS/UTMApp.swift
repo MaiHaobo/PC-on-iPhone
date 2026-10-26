@@ -44,6 +44,10 @@ struct UTMApp: App {
             SplashHost {
                 UTMSingleWindowView(data: data)
             }
+                // The JIT guide lives inside `SplashHost`, alongside the
+                // launch animation, so it needs the same data object the
+                // rest of the UI gets.
+                .environmentObject(data)
                 .externalDisplayAccessory()
         }.commands {
             VMCommands()

@@ -414,6 +414,11 @@ enum AlertItem: Identifiable {
     }
 
     func newVM() {
+        // Every "new virtual machine" affordance funnels through here, so
+        // this is where the JIT guide hooks in. A *separate* notification is
+        // used: `.NewVirtualMachine` is the command that calls back into this
+        // very method, so re-posting it would loop.
+        NotificationCenter.default.post(name: .NewVirtualMachineRequested, object: nil)
         showSettingsModal = false
         showNewVMSheet = true
     }

@@ -53,6 +53,9 @@ struct VMCommands: Commands {
 
 extension NSNotification {
     static let NewVirtualMachine = NSNotification.Name("NewVirtualMachine")
+    /// Posted by `UTMData.newVM()` (after the command), so observers that are
+    /// not the command handler can react without re-triggering it.
+    static let NewVirtualMachineRequested = NSNotification.Name("NewVirtualMachineRequested")
     static let OpenVirtualMachine = NSNotification.Name("OpenVirtualMachine")
     static let ShowReleaseNotes = NSNotification.Name("ShowReleaseNotes")
     static let InstallGuestTools = NSNotification.Name("InstallGuestTools")

@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 // MARK: - Gamepad
 
@@ -266,5 +267,411 @@ enum SettingsInfo {
 
     static var build: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"
+    }
+}
+
+// MARK: - JIT guide
+
+/// Why the guide is on screen. Both entry points show the same steps; only
+/// the wording of the first line differs.
+enum JITGuideReason {
+    /// Detected on launch: the process has no JIT and the app would otherwise
+    /// silently fall back to interpreters.
+    case launch
+    /// The user reached for a feature that cannot work without JIT.
+    case newVirtualMachine
+}
+
+/// Walks the user through enabling JIT, then plays the confirmation animation.
+///
+/// Presented as a full-screen cover over the launch animation, so the mark
+/// the user just watched fan apart is the same mark that starts spinning.
+struct JITGuideView: View {
+    var reason: JITGuideReason
+    /// Called after the closing animation has finished.
+    var onDismiss: () -> Void
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @AppStorage("JitStreamerAddress") private var address = "69.69.0.1"
+
+    /// The shipped placeholder from the Settings pane. The guide only reveals
+    /// the field once the user has changed it away from this, because it is
+    /// not a real server address and showing it invites confusion.
+    private static let jitStreamerDefault = "69.69.0.1"
+
+    private enum Phase: Equatable {
+        /// Explaining the steps, waiting for the user to start.
+        case instructions
+        /// Reaching for the JIT server; the mark spins.
+        case enabling
+        /// The mark freezes, then plays the launch fan-out as a finale.
+        case finished
+    }
+
+    @State private var phase: Phase = .instructions
+    @State private var failureMessage: String?
+    /// Set once the hand-off fails, which swaps the steps for the manual
+    /// LocalDevVPN → StikDebug → return walkthrough.
+    @State private var showsFallbackSteps = false
+    /// Continuous rotation, in degrees. The spinner drives this 0 → 360 and
+    /// repeats; `settle` stops it at a whole turn so the stop is seamless.
+    @State private var angle: Double = 0
+    @State private var isSpinning = false
+    @State private var settled = false
+
+    var body: some View {
+        ZStack {
+            LiquidGlassPaper()
+
+            switch phase {
+            case .instructions:
+                instructions
+                    .transition(.opacity)
+            case .enabling, .finished:
+                spinner
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.28), value: phase)
+        // Cannot be swiped away: the only exits are a successful enable or
+        // closing the app, and an accidental dismiss during an attach would
+        // leave the process half-configured.
+        .interactiveDismissDisabled()
+        // The hand-off happens in StikDebug, so the interesting moment is the
+        // user coming back. Without this the guide would keep spinning for
+        // the rest of its timeout even though JIT is already on.
+        .onReceive(NotificationCenter.default.publisher(
+            for: UIApplication.didBecomeActiveNotification)) { _ in
+            guard phase == .enabling, Main.refreshJITAvailability() else { return }
+            Task { await settleAndFinish() }
+        }
+    }
+
+    // MARK: Instructions
+
+    private var instructions: some View {
+        VStack(spacing: 0) {
+            Spacer(minLength: 20)
+
+            LiquidGlassMark(side: 76)
+                .padding(.bottom, 24)
+
+            Text("Enable JIT")
+                .font(.largeTitle.weight(.semibold))
+                .foregroundStyle(.white)
+                .padding(.bottom, 10)
+
+            Text(reason == .newVirtualMachine
+                 ? "Emulating another architecture needs JIT compilation. Without it, virtual machines fall back to a much slower interpreter."
+                 : "This build runs virtual machines through JIT compilation, which iOS only allows when it is switched on from outside the app.")
+                .font(.callout)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.white.opacity(0.82))
+                .padding(.horizontal, 32)
+
+            Spacer(minLength: 20)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    if showsFallbackSteps {
+                        // Reached only after the hand-off failed, so the user
+                        // gets the step-by-step route instead of a dead end.
+                        step(1, "Connect LocalDevVPN",
+                             "StikDebug does not work without the loopback VPN running.",
+                             action: ("Open LocalDevVPN", openLocalDevVPN))
+                        step(2, "Import the pairing file in StikDebug",
+                             "One-time setup. Generate it on a computer with iLoader or iDevicePair.",
+                             action: ("Open StikDebug", openStikDebug))
+                        step(3, "Pick PC on iPhone and start JIT",
+                             "On iOS 26+ StikDebug also needs the UTM debug script assigned.",
+                             action: ("Open StikDebug", openStikDebug))
+                        step(4, "Come back here",
+                             "JIT is detected automatically when the app returns.",
+                             action: nil)
+                    } else {
+                        step(1, "LocalDevVPN must be connected",
+                             "StikDebug needs the loopback VPN. Turn it on first if it is not.",
+                             action: ("Open LocalDevVPN", openLocalDevVPN))
+                        step(2, "Tap below to hand off to StikDebug",
+                             "PC on iPhone asks StikDebug to attach to this very process.",
+                             action: nil)
+                        step(3, "Return to PC on iPhone",
+                             "JIT is detected automatically and the animation finishes.",
+                             action: nil)
+                    }
+
+                    if address != Self.jitStreamerDefault {
+                        HStack(spacing: 10) {
+                            TextField("JitStreamer IP Address", text: $address)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .keyboardType(.URL)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 10)
+                                .background(.white.opacity(0.14),
+                                            in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        }
+                    }
+                }
+                .padding(18)
+                .background(.ultraThinMaterial,
+                            in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .padding(.horizontal, 18)
+            }
+
+            Text("Not installed? StikDebug is the standard way to enable JIT on a sideloaded build.")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.6))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 28)
+                .padding(.top, 10)
+
+            if let failureMessage {
+                Text(failureMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 26)
+                    .padding(.top, 10)
+            }
+
+            Button {
+                Task { await handOffToStikDebug() }
+            } label: {
+                Text(showsFallbackSteps ? "Try Again" : "Turn On JIT")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(.white, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .foregroundStyle(colorScheme == .dark
+                                     ? LiquidGlassMark.glassBottom
+                                     : LiquidGlassMark.glassTop)
+            }
+            .padding(.horizontal, 18)
+            .padding(.top, 16)
+
+            Button(role: .cancel) {
+                onDismiss()
+            } label: {
+                Text("Not Now")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.75))
+            }
+            .padding(.top, 12)
+            .padding(.bottom, 16)
+        }
+        .foregroundStyle(.white)
+    }
+
+    /// A numbered step, optionally carrying the button that performs it.
+    private func step(_ number: Int,
+                      _ title: String,
+                      _ detail: String,
+                      action: (String, () -> Void)?) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Text("\(number)")
+                .font(.footnote.weight(.bold))
+                .foregroundStyle(.white)
+                .frame(width: 22, height: 22)
+                .background(.white.opacity(0.22), in: Circle())
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                Text(detail)
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.72))
+                    .fixedSize(horizontal: false, vertical: true)
+                if let (label, run) = action {
+                    Button(action: run) {
+                        Text(label)
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(.white.opacity(0.18),
+                                        in: Capsule())
+                    }
+                    .padding(.top, 2)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    // MARK: Spinner
+
+    private var spinner: some View {
+        VStack(spacing: 22) {
+            LiquidGlassMark(side: 84,
+                            scatter: settled ? 1 : 0,
+                            spin: .degrees(angle),
+                            showsDot: false)
+                .frame(height: 200)
+                .animation(.spring(response: 0.75, dampingFraction: 0.62), value: settled)
+
+            if phase == .enabling {
+                Text("Turning on JIT…")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
+        }
+        .onAppear { startSpinning() }
+    }
+
+    /// Rotation is driven by a long-running linear animation rather than a
+    /// `.repeatForever` on a boolean: a boolean can only flip once, so
+    /// stopping it (on success or failure) would cut the mark mid-turn with
+    /// no way to restart. A repeating angle animation is re-triggerable.
+    private func startSpinning() {
+        guard !reduceMotion else { return }
+        isSpinning = true
+        angle = 0
+        withAnimation(.linear(duration: 1.1).repeatForever(autoreverses: false)) {
+            angle = 360
+        }
+    }
+
+    /// Stop the mark at a whole turn so it does not jump when the fan-out
+    /// takes over. The repeating animation is cut by removing it, then a
+    /// short linear pass lands exactly on the next boundary.
+    private func stopSpinning() {
+        guard isSpinning else { return }
+        isSpinning = false
+        // Snap the model value to the current on-screen angle's boundary.
+        let boundary = (angle / 360).rounded(.up) * 360
+        angle = boundary
+        withAnimation(.linear(duration: 0.001)) {
+            angle = boundary
+        }
+    }
+
+    private func settleAndFinish() async {
+        // Both the poll loop and the did-become-active observer can land here
+        // in the same second; without this the fan-out would play twice.
+        guard !settled else { return }
+        stopSpinning()
+        settled = true
+        try? await Task.sleep(nanoseconds: 900_000_000)
+        phase = .finished
+        try? await Task.sleep(nanoseconds: 700_000_000)
+        onDismiss()
+    }
+
+    // MARK: Enabling
+
+    /// Hand the process to StikDebug. It attaches a debugger and sets
+    /// CS_DEBUGGED, which is what actually unlocks executable memory.
+    ///
+    /// The URL carries our own bundle id and pid, plus the UTM debug script
+    /// name: on iOS 26+ StikDebug refuses to attach without a script, and
+    /// "UTM" is the name under which it ships the right one. The script is
+    /// resolved inside StikDebug, so a missing assignment there shows up as
+    /// "returned but JIT still off", which the timeout path explains.
+    private func handOffToStikDebug() async {
+        failureMessage = nil
+        phase = .enabling
+
+        guard let url = stikDebugURL else {
+            fail(String(localized: "StikDebug is not installed, or its URL scheme is unavailable."))
+            return
+        }
+
+        await UIApplication.shared.open(url)
+
+        // StikDebug has to be brought to the foreground (and its own setup
+        // completed) for the attach to land. Poll the flag rather than
+        // trusting the round trip: open() succeeding only means iOS found a
+        // handler for the scheme.
+        let deadline = Date().addingTimeInterval(Self.handOffTimeout)
+        while Date() < deadline {
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            if Main.refreshJITAvailability() {
+                await settleAndFinish()
+                return
+            }
+        }
+
+        fail(String(localized: "StikDebug did not manage to attach. Make sure LocalDevVPN is connected and StikDebug has this iPhone's pairing file, then try again."),
+             showFallback: true)
+    }
+
+    /// StikDebug registers `stikjit://`; `stikdebug://` is kept as an alias
+    /// because some guides and older builds use it. We prefer the documented
+    /// one and fall back to the other.
+    private var stikDebugURL: URL? {
+        let bundleID = Bundle.main.bundleIdentifier ?? "com.utmapp.UTM"
+        let pid = ProcessInfo.processInfo.processIdentifier
+        var components = URLComponents()
+        components.scheme = "stikjit"
+        components.host = "enable-jit"
+        components.queryItems = [
+            URLQueryItem(name: "bundle-id", value: bundleID),
+            URLQueryItem(name: "pid", value: "\(pid)"),
+            URLQueryItem(name: "script-name", value: "UTM"),
+        ]
+        return components.url
+    }
+
+    private func openLocalDevVPN() {
+        // LocalDevVPN publishes no URL scheme, so the best we can do is open
+        // its App Store listing or leave the user to the Home Screen. Falling
+        // back to Settings keeps the button from being a dead end.
+        if let url = URL(string: "localdevvpn://"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func openStikDebug() {
+        guard let url = stikDebugURL else { return }
+        UIApplication.shared.open(url)
+    }
+
+    private func fail(_ message: String, showFallback: Bool = false) {
+        isSpinning = false
+        angle = 0
+        settled = false
+        withAnimation(.easeInOut(duration: 0.25)) {
+            failureMessage = message
+            showsFallbackSteps = showFallback
+            phase = .instructions
+        }
+    }
+
+    /// How long to wait for StikDebug to attach before offering the manual
+    /// route. Attaching is usually instant, but the first run also mounts the
+    /// Developer Disk Image, which takes seconds.
+    private static let handOffTimeout: TimeInterval = 60
+}
+
+/// Holds the guide's presentation state above the app's root so both entry
+/// points (launch, new virtual machine) drive the same instance.
+@MainActor final class JITGuideCoordinator: ObservableObject {
+    @Published var isPresented = false
+    var reason: JITGuideReason = .launch
+
+    /// Only meaningful on a build that compiles JIT support in; HV-only and
+    /// macOS builds never present the guide.
+    ///
+    /// Re-reads the live flag rather than caching the launch-time answer: a
+    /// user who enabled JIT from StikDebug mid-session must not be nagged
+    /// again when they tap "new virtual machine".
+    static var isNeeded: Bool {
+        #if os(iOS) && WITH_JIT
+        return !Main.refreshJITAvailability()
+        #else
+        return false
+        #endif
+    }
+
+    func present(reason: JITGuideReason) {
+        guard Self.isNeeded else { return }
+        self.reason = reason
+        isPresented = true
     }
 }
