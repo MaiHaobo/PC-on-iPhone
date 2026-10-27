@@ -243,11 +243,11 @@ struct SplashHost<Content: View>: View {
             content()
 
             if isVisible {
-                SplashView(holdsLastFrame: needsJITGuide, onFinished: {
+                SplashView(onFinished: {
                     withAnimation(.easeOut(duration: 0.28)) {
                         isVisible = false
                     }
-                })
+                }, holdsLastFrame: needsJITGuide)
                 .transition(.opacity)
                 .zIndex(1)
             }
