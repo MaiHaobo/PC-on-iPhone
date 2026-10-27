@@ -418,7 +418,7 @@ enum AlertItem: Identifiable {
         // this is where the JIT guide hooks in. A *separate* notification is
         // used: `.NewVirtualMachine` is the command that calls back into this
         // very method, so re-posting it would loop.
-        NotificationCenter.default.post(name: .NewVirtualMachineRequested, object: nil)
+        NotificationCenter.default.post(name: NSNotification.NewVirtualMachineRequested, object: nil)
         showSettingsModal = false
         showNewVMSheet = true
     }

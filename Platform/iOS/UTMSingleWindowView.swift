@@ -243,11 +243,11 @@ struct SplashHost<Content: View>: View {
             content()
 
             if isVisible {
-                SplashView(holdsLastFrame: needsJITGuide) {
+                SplashView(holdsLastFrame: needsJITGuide, onFinished: {
                     withAnimation(.easeOut(duration: 0.28)) {
                         isVisible = false
                     }
-                }
+                })
                 .transition(.opacity)
                 .zIndex(1)
             }
@@ -272,7 +272,7 @@ struct SplashHost<Content: View>: View {
         }
         // Second entry point: reaching for a new virtual machine. Every "new
         // VM" affordance funnels through `UTMData.newVM`, which posts this.
-        .onReceive(NotificationCenter.default.publisher(for: .NewVirtualMachineRequested)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.NewVirtualMachineRequested)) { _ in
             jitGuide.present(reason: .newVirtualMachine)
         }
     }
