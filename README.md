@@ -51,6 +51,10 @@ open UTM.xcodeproj
 
 > ⚠️ `scripts/build_dependencies.sh` 按需从上游拉取依赖，**不会**从本仓库读取。首次构建耗时较长，需稳定网络。
 
+## 官方网站
+
+[点此前往](https://maihaobo.github.io/PC-on-iPhone-Website/)
+
 ## 相关项目
 
 - [iSH](https://github.com/ish-app/ish) —— 模拟用户态 Linux 终端接口，在 iOS 上运行 x86 Linux 应用
