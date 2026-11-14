@@ -2,7 +2,7 @@
    <img width="217" height="217" src="./Platform/Assets.xcassets/AppIcon.appiconset/Icon.png" alt="Logo">
 </div>
 
-Crowdin Project: Documentation:[maihaobo.github.io](https://maihaobo.github.io/PC-on-iPhone-Website)
+Crowdin Project: (官网:)[maihaobo.github.io](https://maihaobo.github.io/PC-on-iPhone-Website)
 
 # PC on iPhone
 
