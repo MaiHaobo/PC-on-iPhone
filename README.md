@@ -65,10 +65,9 @@ open UTM.xcodeproj
 
 ## 注意
 
-1. PC on iPhone 使用 WorkBuddy 生成，难免会有错误，发现请
-[反馈]（https://maihaobo.github.io/PC-on-iPhone-Website/fandback.html)。
+1. PC on iPhone 使用 WorkBuddy 生成，难免会有错误，发现请[反馈](https://maihaobo.github.io/PC-on-iPhone-Website/fandback.html)。
 
-2.PC on iPhone移除了对MacOS的支持！
+2. PC on iPhone 移除了在 MacOS 运行的能力！，他只能在iPhone和iPad上运行。
 ## 许可
 
 本项目基于 **Apache 2.0** 许可证分发。但它使用了若干 (L)GPL 组件：多数为动态链接，但 GStreamer 插件为静态链接，且部分代码取自 QEMU。若计划重新分发本应用，请留意这一点。
