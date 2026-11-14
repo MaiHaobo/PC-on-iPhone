@@ -2,10 +2,10 @@
   <img width="217" height="217" src="./Platform/Assets.xcassets/AppIcon.appiconset/Icon.png" alt="PC on iPhone Logo">
 </div>
 
-[PC on iPhone](https://maihaobo.github.io/PC-on-iPhone-Website/)（下载、系统画廊、安装与使用教程、常见问题）
 
 
-# PC on iPhone
+
+# [PC on iPhone](https://maihaobo.github.io/PC-on-iPhone-Website/)
 
 PC on iPhone 作为 UTM 的优化版，是专为 iOS 打造的虚拟机（VM）与系统模拟器。它基于 QEMU，让你在 iPhone 和 iPad 上运行 Windows、Linux 等桌面系统。
 
