@@ -2,8 +2,8 @@
   <img width="217" height="217" src="./Platform/Assets.xcassets/AppIcon.appiconset/Icon.png" alt="PC on iPhone Logo">
 </div>
 
-官网：[PC on iPhone](https://maihaobo.github.io/PC-on-iPhone-Website/)（下载、系统画廊、安装与使用教程、常见问题）
-本地化：Crowdin（项目链接待补充）
+[PC on iPhone](https://maihaobo.github.io/PC-on-iPhone-Website/)（下载、系统画廊、安装与使用教程、常见问题）
+
 
 # PC on iPhone
 
