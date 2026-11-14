@@ -1,5 +1,5 @@
 <div align="center">
-   <img width="217" height="217" src="./screenshots/livecontainer_icon.png" alt="Logo">
+   <img width="217" height="217" src="./Platform/Assets.xcassets/AppIcon.appiconset/Icon.png" alt="Logo">
 </div>
 
 # PC on iPhone
