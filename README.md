@@ -65,7 +65,8 @@ open UTM.xcodeproj
 
 ## 注意
 
-1. PC on iPhone 使用 WorkBuddy 生成，难免会有错误，发现请联系[反馈]（https://maihaobo.github.io/PC-on-iPhone-Website/fandback.html)。
+1. PC on iPhone 使用 WorkBuddy 生成，难免会有错误，发现请
+[反馈]（https://maihaobo.github.io/PC-on-iPhone-Website/fandback.html)。
 
 2.PC on iPhone移除了对MacOS的支持！
 ## 许可
