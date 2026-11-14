@@ -3,7 +3,6 @@
    <img width="210" height="210" src="./Platform/Assets.xcassets/AppIcon.appiconset/Icon.png" alt="Logo">
 </div>
 
-[maihaobo.github.io]()
 
 # [PC on iPhone](https://maihaobo.github.io/PC-on-iPhone-Website)
 
@@ -58,9 +57,6 @@ open UTM.xcodeproj
 
 > ⚠️ `scripts/build_dependencies.sh` 按需从上游拉取依赖，**不会**从本仓库读取。首次构建耗时较长，需稳定网络。
 
-## 官方网站
-
-[点此前往](https://maihaobo.github.io/PC-on-iPhone-Website/)
 
 ## 相关项目
 
@@ -69,7 +65,7 @@ open UTM.xcodeproj
 
 ## 注意
 
-1.PC on iPhone使用WorkBuddy生成，难免会有错误，发现请联系3602246802@qq.com。
+1. PC on iPhone 使用 WorkBuddy 生成，难免会有错误，发现请联系[反馈]（https://maihaobo.github.io/PC-on-iPhone-Website/fandback.html)。
 
 2.PC on iPhone移除了对MacOS的支持！
 ## 许可
